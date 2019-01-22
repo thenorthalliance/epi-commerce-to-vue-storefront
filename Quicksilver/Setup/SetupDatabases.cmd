@@ -7,8 +7,8 @@ set user=Quicksilver
 set password=EpiserverCommerce15
 
 :: Determine package folders
-for /F " tokens=*" %%i in ('dir "..\Packages\EPiServer.CMS.Core*" /b /o:d') do (set cms_core=%%i) 
-for /F " tokens=*" %%i in ('dir "..\Packages\EPiServer.Commerce.Core*" /b /o:d') do (set commerce_core=%%i) 
+for /F " tokens=*" %%i in ('dir "..\..\Packages\EPiServer.CMS.Core*" /b /o:d') do (set cms_core=%%i) 
+for /F " tokens=*" %%i in ('dir "..\..\Packages\EPiServer.Commerce.Core*" /b /o:d') do (set commerce_core=%%i) 
 
 if "%cms_core%"=="" (
 	echo CMS Core package is missing. Please build the project before running the setup.
@@ -44,10 +44,10 @@ echo Creating user...
 %sql% -d %commerce_db% -Q "EXEC sp_addrolemember N'db_owner', N'%user%'"
 
 echo Installing CMS database...
-%sql% -d %cms_db% -b -i "..\packages\%cms_core%\tools\EPiServer.Cms.Core.sql" > SetupCmsDb.log
+%sql% -d %cms_db% -b -i "..\..\packages\%cms_core%\tools\EPiServer.Cms.Core.sql" > SetupCmsDb.log
 
 echo Installing Commerce database...
-%sql% -d %commerce_db% -b -i "..\packages\%commerce_core%\tools\EPiServer.Commerce.Core.sql" > SetupCommerceDb.log
+%sql% -d %commerce_db% -b -i "..\..\packages\%commerce_core%\tools\EPiServer.Commerce.Core.sql" > SetupCommerceDb.log
 
 echo Installing ASP.NET Identity...
 %sql% -d %commerce_db% -b -i ".\aspnet_identity.sql" > SetupIdentity.log
