@@ -794,7 +794,9 @@
     <Content Include="modules\_protected\CMS\CMS.zip" />
     <Content Include="modules\_protected\EPiServer.Cms.TinyMce\web.config" />
     <Content Include="modules\_protected\EPiServer.Cms.TinyMce\EPiServer.Cms.TinyMce.zip" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <Content Include="readme.md" />
     <Content Include="Styles\Pages\addressbook.less" />
     <Content Include="Styles\Pages\facets.less" />
@@ -802,6 +804,7 @@
     <Content Include="Views\RegistrationConfirmationMail\Index.cshtml" />
     <Content Include="Views\ProfilePage\EditOptins.cshtml" />
     <Content Include="Views\Login\Unapproved.cshtml" />
+    <Content Include="Views\VsfDataMigration\Index.cshtml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
