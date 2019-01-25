@@ -13,17 +13,17 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
 {
     public class UserController : ApiController
     {
-        private readonly IUserProvider _provider;
+        private readonly IUserAdapter _userAdapter;
 
-        public UserController(IUserProvider provider)
+        public UserController(IUserAdapter userAdapter)
         {
-            _provider = provider;
+            _userAdapter = userAdapter;
         }
 
         [HttpPost]
         public async Task<IHttpActionResult> Login([FromBody]UserLoginModel userLoginModel)
         {
-            var user = await _provider.GetUserByCredentials(userLoginModel.username, userLoginModel.password);
+            var user = await _userAdapter.GetUserByCredentials(userLoginModel.username, userLoginModel.password);
 
             if(user == null)
                 return Ok(new VsfErrorResponse("You did not sign in correctly or your account is temporarily disabled."));
@@ -41,7 +41,7 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
             var tokenProvider = GetTokenProvider();
             var refreshToken = await tokenProvider.GetRefreshToken(userRefreshTokenModel.refreshToken);
 
-            var user = await _provider.GetUserById(refreshToken.UserId);
+            var user = await _userAdapter.GetUserById(refreshToken.UserId);
             var authToken = await tokenProvider.GenerateNewToken(user);
 
             return Ok(new RefreshTokenResponse(authToken));
@@ -71,7 +71,7 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
         [VsfAuthorize]
         public async Task<IHttpActionResult> Me()
         {
-            return Ok(new VsfSuccessResponse<UserModel>(await _provider.GetUserById(
+            return Ok(new VsfSuccessResponse<UserModel>(await _userAdapter.GetUserById(
                 User.Identity.GetUserId())));
         }
 

@@ -184,7 +184,7 @@
     <Compile Include="Authorization\Model\TokenValidationResult.cs" />
     <Compile Include="Authorization\VsfAuthentication.cs" />
     <Compile Include="Authorization\VsfAuthorize.cs" />
-    <Compile Include="User\IUserProvider.cs" />
+    <Compile Include="User\IUserAdapter.cs" />
     <Compile Include="Authorization\JwtUserTokenProvider.cs" />
     <Compile Include="Controllers\OrderHistoryController.cs" />
     <Compile Include="VueStorefrontApiBridgeRegisterEx.cs" />
