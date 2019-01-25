@@ -9,12 +9,12 @@ using Mediachase.Commerce.Customers;
 
 namespace EPiServer.Reference.Commerce.Site.Infrastructure
 {
-    [ServiceConfiguration(typeof(IUserProvider), Lifecycle = ServiceInstanceScope.Transient)]
-    public class QuicksilverUserProivder : IUserProvider
+    [ServiceConfiguration(typeof(IUserAdapter), Lifecycle = ServiceInstanceScope.Transient)]
+    public class QuicksilverUserAdapter : IUserAdapter
     {
         private readonly ApplicationUserManager<SiteUser> _userManager;
 
-        public QuicksilverUserProivder(ApplicationUserManager<SiteUser> userManager)
+        public QuicksilverUserAdapter(ApplicationUserManager<SiteUser> userManager)
         {
             _userManager = userManager;
         }
