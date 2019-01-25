@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace DataMigration.ProductMapper.Model
+namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 {
-    public class Product
+    public class Product : Entity
     {
         [JsonProperty("category_ids")]
         public IEnumerable<string> CategoryIds { get; set; }
@@ -35,9 +34,6 @@ namespace DataMigration.ProductMapper.Model
 
         [JsonProperty("description")]
         public string Description { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
         
         [JsonProperty("image")]
         public string Image { get; set; }

@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace DataMigration.Mapper.Variant.Model
+namespace DataMigration.Output.ElasticSearch.Entity.Attribute.Model
 {
-    public class Variant
+    public class Attribute : Entity
     {
-        [JsonProperty("id")]
-        public int Id { get; set; }
-
         [JsonProperty("position")]
         public int Position { get; set; }
 
@@ -118,7 +115,8 @@ namespace DataMigration.Mapper.Variant.Model
 
         [JsonProperty("backend_type")]
         public IEnumerable<Option> Options { get; set; }
-  
+
+        
     }
 
     public class Option

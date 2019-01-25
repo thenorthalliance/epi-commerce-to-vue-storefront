@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Elasticsearch.Net, Version=6.0.0.0, Culture=neutral, PublicKeyToken=96c599bbe3e70f5d, processorArchitecture=MSIL">
+      <HintPath>..\packages\Elasticsearch.Net.6.4.2\lib\net461\Elasticsearch.Net.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
@@ -44,13 +47,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Mapper\Category\Model\Category.cs" />
-    <Compile Include="Mapper\Product\Model\Product.cs" />
-    <Compile Include="Mapper\Variant\Model\Variant.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\EntityType.cs" />
+    <Compile Include="Output\ElasticSearch\Service\IndexApiService.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\IndexItem\Model\IndexItem.cs" />
+    <Compile Include="Mapper\Category\CategoryMapper.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\Category\Model\Category.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\Entity.cs" />
+    <Compile Include="Input\Episerver\Category\Model\EpiCategory.cs" />
+    <Compile Include="Input\Episerver\Common\Model\CmsObjectBase.cs" />
+    <Compile Include="Mapper\IMapper.cs" />
+    <Compile Include="Mapper\MapperFactory.cs" />
+    <Compile Include="Mapper\Product\ProductMapper.cs" />
+    <Compile Include="Input\Episerver\Product\Model\EpiProduct.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\Product\Model\Product.cs" />
+    <Compile Include="Mapper\Attribute\AttributeMapper.cs" />
+    <Compile Include="Input\Episerver\Attribute\Model\EpiAttribute.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\Attribute\Model\Attribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
