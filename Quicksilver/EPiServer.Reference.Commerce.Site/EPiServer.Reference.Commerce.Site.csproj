@@ -459,7 +459,6 @@
     <Compile Include="Features\Shared\Extensions\UrlResolverExtensions.cs" />
     <Compile Include="Features\Payment\ViewModels\PaymentMethodViewModelBinder.cs" />
     <Compile Include="Features\Payment\PaymentMethods\PaymentMethodBase.cs" />
-    <Compile Include="Infrastructure\QuicksilverUserProivder.cs" />
     <Compile Include="Infrastructure\CurrencySetup.cs" />
     <Compile Include="Features\AddressBook\Services\AddressBookService.cs" />
     <Compile Include="Features\AddressBook\Controllers\AddressBookController.cs" />
@@ -795,9 +794,7 @@
     <Content Include="modules\_protected\CMS\CMS.zip" />
     <Content Include="modules\_protected\EPiServer.Cms.TinyMce\web.config" />
     <Content Include="modules\_protected\EPiServer.Cms.TinyMce\EPiServer.Cms.TinyMce.zip" />
-    <None Include="packages.config">
-      <SubType>Designer</SubType>
-    </None>
+    <None Include="packages.config" />
     <Content Include="readme.md" />
     <Content Include="Styles\Pages\addressbook.less" />
     <Content Include="Styles\Pages\facets.less" />
@@ -928,8 +925,12 @@
     <Content Include="Views\Shared\_Facet.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\DataMigration\DataMigration.csproj">
+      <Project>{07caa40b-7d3f-43a9-88dc-3b5d7bc5c0a0}</Project>
+      <Name>DataMigration</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\EPiServer.VueStorefrontApiBridge\EPiServer.VueStorefrontApiBridge.csproj">
-      <Project>{36F81164-899B-4C3E-8789-8DF923333160}</Project>
+      <Project>{36f81164-899b-4c3e-8789-8df923333160}</Project>
       <Name>EPiServer.VueStorefrontApiBridge</Name>
     </ProjectReference>
     <ProjectReference Include="..\EPiServer.Reference.Commerce.Shared\EPiServer.Reference.Commerce.Shared.csproj">

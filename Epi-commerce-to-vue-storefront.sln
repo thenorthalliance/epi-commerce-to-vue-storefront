@@ -3,13 +3,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMigration", "DataMigration\DataMigration.csproj", "{58D110CF-850B-4823-B72E-B49AB508B548}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Reference.Commerce.Manager", "Quicksilver\EPiServer.Reference.Commerce.Manager\EPiServer.Reference.Commerce.Manager.csproj", "{3DD52DD7-4744-42D1-AE9F-34D441C020B8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Reference.Commerce.Shared", "Quicksilver\EPiServer.Reference.Commerce.Shared\EPiServer.Reference.Commerce.Shared.csproj", "{341C8E14-4EAE-4946-9841-45F9818265A8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Reference.Commerce.Site", "Quicksilver\EPiServer.Reference.Commerce.Site\EPiServer.Reference.Commerce.Site.csproj", "{9AC1DC21-C56D-49EB-A264-9441D8602F1A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMigration", "DataMigration\DataMigration.csproj", "{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.VueStorefrontApiBridge", "EPiServer.VueStorefrontApiBridge\EPiServer.VueStorefrontApiBridge.csproj", "{36F81164-899B-4C3E-8789-8DF923333160}"
 EndProject
@@ -20,12 +20,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{58D110CF-850B-4823-B72E-B49AB508B548}.CA|Any CPU.ActiveCfg = Release|Any CPU
-		{58D110CF-850B-4823-B72E-B49AB508B548}.CA|Any CPU.Build.0 = Release|Any CPU
-		{58D110CF-850B-4823-B72E-B49AB508B548}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{58D110CF-850B-4823-B72E-B49AB508B548}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{58D110CF-850B-4823-B72E-B49AB508B548}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{58D110CF-850B-4823-B72E-B49AB508B548}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3DD52DD7-4744-42D1-AE9F-34D441C020B8}.CA|Any CPU.ActiveCfg = CA|Any CPU
 		{3DD52DD7-4744-42D1-AE9F-34D441C020B8}.CA|Any CPU.Build.0 = CA|Any CPU
 		{3DD52DD7-4744-42D1-AE9F-34D441C020B8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -44,6 +38,12 @@ Global
 		{9AC1DC21-C56D-49EB-A264-9441D8602F1A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AC1DC21-C56D-49EB-A264-9441D8602F1A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AC1DC21-C56D-49EB-A264-9441D8602F1A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}.CA|Any CPU.ActiveCfg = Release|Any CPU
+		{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}.CA|Any CPU.Build.0 = Release|Any CPU
+		{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{36F81164-899B-4C3E-8789-8DF923333160}.CA|Any CPU.ActiveCfg = Release|Any CPU
 		{36F81164-899B-4C3E-8789-8DF923333160}.CA|Any CPU.Build.0 = Release|Any CPU
 		{36F81164-899B-4C3E-8789-8DF923333160}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
