@@ -47,7 +47,7 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Create(UserCreateModel userCreateModel)
         {
-            var newUser = await _userAdapter.CreareUser(userCreateModel);
+            var newUser = await _userAdapter.CreateUser(userCreateModel);
             return Ok(new VsfSuccessResponse<UserModel>(newUser));
         }
 

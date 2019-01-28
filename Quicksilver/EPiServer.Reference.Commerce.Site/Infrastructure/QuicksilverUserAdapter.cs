@@ -32,7 +32,7 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
             return MapUser(await _userManager.FindByIdAsync(userId));
         }
 
-        public async Task<UserModel> CreareUser(UserCreateModel newUser)
+        public async Task<UserModel> CreateUser(UserCreateModel newUser)
         {
             var newUserId = Guid.NewGuid().ToString();
 
