@@ -1,11 +1,8 @@
 ﻿using System;
-using System.IdentityModel.Tokens;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web.Http;
 using EPiServer.VueStorefrontApiBridge.ApiModel;
 using EPiServer.VueStorefrontApiBridge.Authorization;
-using EPiServer.VueStorefrontApiBridge.Authorization.Model;
 using EPiServer.VueStorefrontApiBridge.User;
 using Microsoft.AspNet.Identity;
 
@@ -14,10 +11,12 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
     public class UserController : ApiController
     {
         private readonly IUserAdapter _userAdapter;
+        private readonly IUserTokenProvider _tokenProvider;
 
-        public UserController(IUserAdapter userAdapter)
+        public UserController(IUserAdapter userAdapter, IUserTokenProvider userTokenProvider)
         {
             _userAdapter = userAdapter;
+            _tokenProvider = userTokenProvider;
         }
 
         [HttpPost]
@@ -28,9 +27,8 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
             if(user == null)
                 return Ok(new VsfErrorResponse("You did not sign in correctly or your account is temporarily disabled."));
 
-            var tokenProvider = GetTokenProvider();
-            var authToken = await tokenProvider.GenerateNewToken(user);
-            var refreshToken = await tokenProvider.GenerateNewRefreshToken(user);
+            var authToken = await _tokenProvider.GenerateNewToken(user);
+            var refreshToken = await _tokenProvider.GenerateNewRefreshToken(user);
 
             return Ok(new LoginResponse(authToken, refreshToken));
         }
@@ -38,15 +36,14 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Refresh([FromBody] UserRefreshTokenModel userRefreshTokenModel)
         {
-            var tokenProvider = GetTokenProvider();
-            var refreshToken = await tokenProvider.GetRefreshToken(userRefreshTokenModel.refreshToken);
+            var refreshToken = await _tokenProvider.GetRefreshToken(userRefreshTokenModel.refreshToken);
 
             var user = await _userAdapter.GetUserById(refreshToken.UserId);
-            var authToken = await tokenProvider.GenerateNewToken(user);
+            var authToken = await _tokenProvider.GenerateNewToken(user);
 
             return Ok(new RefreshTokenResponse(authToken));
         }
-
+        
         [HttpPost]
         public IHttpActionResult ResetPassword()
         {
@@ -73,16 +70,6 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
         {
             return Ok(new VsfSuccessResponse<UserModel>(await _userAdapter.GetUserById(
                 User.Identity.GetUserId())));
-        }
-
-        private static JwtUserTokenProvider GetTokenProvider()
-        {
-            return new JwtUserTokenProvider(new AuthTokenOptions
-            {
-                Issuer = "test_issuer",
-                Audience = "http://localhost:50244",
-                SecurityKey = new InMemorySymmetricSecurityKey(Encoding.UTF8.GetBytes("alamakotaalamakotaalamakotaalamakota"))
-            }, new MemoryRefreshTokenRepo());
         }
     }
 }

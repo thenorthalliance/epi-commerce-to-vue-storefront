@@ -557,7 +557,7 @@
     <Compile Include="Infrastructure\Facades\UrlAuthorizationFacade.cs" />
     <Compile Include="Features\Shared\Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Infrastructure\OrderEventListener.cs" />
-    <Compile Include="Infrastructure\QuicksilverUserProivder.cs" />
+    <Compile Include="Infrastructure\QuicksilverUserAdapter.cs" />
     <Compile Include="Infrastructure\SiteImport\CreateOrdersStep.cs" />
     <Compile Include="Infrastructure\SiteImport\Templates.cs" />
     <Compile Include="Infrastructure\SiteImport\ImportSiteContentStep.cs" />
