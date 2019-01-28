@@ -1,27 +1,48 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace EPiServer.VueStorefrontApiBridge.ApiModel
 {
     public class UserModel
     {
-        public string id { get; set; }
-        
-        public string email { get; set; }
-        public string firstname { get; set; }
-        public string lastname { get; set; }
+        [JsonProperty("id")]
+        public string Id { get; set; }
 
-        public DateTime created_at { get; set; }
-        public DateTime updated_at { get; set; }
-        public string created_in { get; set; } = "default store";
+        [JsonProperty("email")]
+        public string Email { get; set; }
 
-        public int store_id { get; set; } = 1;
-        public int website_id { get; set; } = 1;
+        [JsonProperty("firstname")]
+        public string Firstname { get; set; }
 
-        public int group_id { get; set; } = 1;
-        public string default_shipping { get; set; } = "";
+        [JsonProperty("lastname")]
+        public string Lastname { get; set; }
 
-        public List<object> addresses { get; set; } = new List<object>();
-        public int disable_auto_group_change { get; set; } = 0;
+        [JsonProperty("created_at")]
+        public DateTime CreatedAt { get; set; }
+
+        [JsonProperty("updated_at")]
+        public DateTime UpdatedAt { get; set; }
+
+        [JsonProperty("created_in")]
+        public string CreatedIn { get; set; } = "default store";
+
+        [JsonProperty("store_id")]
+        public int StoreId { get; set; } = 1;
+
+        [JsonProperty("website_id")]
+        public int WebsiteId { get; set; } = 1;
+
+        [JsonProperty("group_id")]
+        public int GroupId { get; set; } = 1;
+
+        [JsonProperty("default_shipping")]
+        public string DefaultShipping { get; set; } = "";
+
+        [JsonProperty("addresses")]
+        public List<object> Addresses { get; set; } = new List<object>();
+
+        [JsonProperty("disable_auto_group_change")]
+        public int DisableAutoGroupChange { get; set; } = 0;
     }
 }

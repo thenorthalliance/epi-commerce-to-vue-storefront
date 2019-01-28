@@ -22,7 +22,7 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Login([FromBody]UserLoginModel userLoginModel)
         {
-            var user = await _userAdapter.GetUserByCredentials(userLoginModel.username, userLoginModel.password);
+            var user = await _userAdapter.GetUserByCredentials(userLoginModel.Username, userLoginModel.Password);
 
             if(user == null)
                 return Ok(new VsfErrorResponse("You did not sign in correctly or your account is temporarily disabled."));
@@ -36,7 +36,7 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Refresh([FromBody] UserRefreshTokenModel userRefreshTokenModel)
         {
-            var refreshToken = await _tokenProvider.GetRefreshToken(userRefreshTokenModel.refreshToken);
+            var refreshToken = await _tokenProvider.GetRefreshToken(userRefreshTokenModel.RefreshToken);
 
             var user = await _userAdapter.GetUserById(refreshToken.UserId);
             var authToken = await _tokenProvider.GenerateNewToken(user);

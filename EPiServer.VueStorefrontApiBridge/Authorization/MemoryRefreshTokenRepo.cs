@@ -6,14 +6,14 @@ namespace EPiServer.VueStorefrontApiBridge.Authorization
 {
     public class MemoryRefreshTokenRepo : IRefreshTokenRepo
     {
-        private static readonly object _locker = new object();
-        private static readonly Dictionary<string, RefreshToken> _refreshTokens = new Dictionary<string, RefreshToken>();
+        private static readonly object Locker = new object();
+        private static readonly Dictionary<string, RefreshToken> RefreshTokens = new Dictionary<string, RefreshToken>();
 
         public Task StoreToken(RefreshToken token)
         {
-            lock (_locker)
+            lock (Locker)
             {
-                _refreshTokens.Add(token.TokenId, token);
+                RefreshTokens.Add(token.TokenId, token);
             }
 
             return Task.CompletedTask;
@@ -21,17 +21,17 @@ namespace EPiServer.VueStorefrontApiBridge.Authorization
 
         public Task<RefreshToken> GetToken(string id)
         {
-            lock (_locker)
+            lock (Locker)
             {
-                return Task.FromResult(_refreshTokens[id]);
+                return Task.FromResult(RefreshTokens[id]);
             }
         }
 
         public Task RemoveToken(string id)
         {
-            lock (_locker)
+            lock (Locker)
             {
-                _refreshTokens.Remove(id);
+                RefreshTokens.Remove(id);
             }
 
             return Task.CompletedTask;

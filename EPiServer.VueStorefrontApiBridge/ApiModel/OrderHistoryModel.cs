@@ -1,15 +1,20 @@
 ﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace EPiServer.VueStorefrontApiBridge.ApiModel
 {
     public class OrderHistoryModel
     {
-        public class SearchCriteria
+        public class SearchCriteriaModel
         {
-            public List<object> filter_groups { get; set; }
+            [JsonProperty("filter_groups")]
+            public List<object> FilterGroups { get; set; }
         }
 
-        public List<object> items { get; set; } = new List<object>();
-        public SearchCriteria search_criteria { get; set; } = new SearchCriteria();
+        [JsonProperty("items")]
+        public List<object> Items { get; set; } = new List<object>();
+
+        [JsonProperty("search_criteria")]
+        public SearchCriteriaModel SearchCriteria { get; set; } = new SearchCriteriaModel();
     }
 }

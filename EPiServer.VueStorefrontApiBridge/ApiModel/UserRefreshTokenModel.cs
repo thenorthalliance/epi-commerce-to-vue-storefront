@@ -1,7 +1,10 @@
-﻿namespace EPiServer.VueStorefrontApiBridge.ApiModel
+﻿using Newtonsoft.Json;
+
+namespace EPiServer.VueStorefrontApiBridge.ApiModel
 {
     public class UserRefreshTokenModel
     {
-        public string refreshToken { get; set; }
+        [JsonProperty("refreshToken")]
+        public string RefreshToken { get; set; }
     }
 }

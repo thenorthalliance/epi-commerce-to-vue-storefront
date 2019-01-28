@@ -25,7 +25,7 @@ namespace EPiServer.VueStorefrontApiBridge.Authorization
         {
             var claimsIdentity = new ClaimsIdentity(new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.id)
+                new Claim(ClaimTypes.NameIdentifier, user.Id)
             }, _options.AuthenticationType);
 
             return Task.FromResult(GenerateTokenForClaims(claimsIdentity));
@@ -36,7 +36,7 @@ namespace EPiServer.VueStorefrontApiBridge.Authorization
             var tokenId = Guid.NewGuid().ToString();
             await _refreshTokenRepo.StoreToken(new RefreshToken
             {
-                UserId = user.id,
+                UserId = user.Id,
                 TokenId = tokenId
             });
 

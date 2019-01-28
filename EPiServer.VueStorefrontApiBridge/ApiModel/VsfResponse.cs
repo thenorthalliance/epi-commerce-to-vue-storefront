@@ -1,15 +1,20 @@
-﻿namespace EPiServer.VueStorefrontApiBridge.ApiModel
+﻿using Newtonsoft.Json;
+
+namespace EPiServer.VueStorefrontApiBridge.ApiModel
 {
     public class VsfResponse<T>
     {
         public VsfResponse(int code, T result)
         {
-            this.code = code;
-            this.result = result;
+            this.Code = code;
+            this.Result = result;
         }
 
-        public int code { get; set; }
-        public T result { get; set; }
+        [JsonProperty("code")]
+        public int Code { get; set; }
+
+        [JsonProperty("result")]
+        public T Result { get; set; }
     }
 
     public class VsfSuccessResponse<T> : VsfResponse<T>
@@ -27,18 +32,20 @@
     {
         public class LoginMetadata
         {
-            public string refreshToken { get; set; }
+            [JsonProperty("refreshToken")]
+            public string RefreshToken { get; set; }
         }
 
         public LoginResponse(string token, string refreshToken) : base(token)
         {
-            meta = new LoginMetadata
+            Meta = new LoginMetadata
             {
-                refreshToken = refreshToken
+                RefreshToken = refreshToken
             };
         }
 
-        public LoginMetadata meta { get; set; }
+        [JsonProperty("meta")]
+        public LoginMetadata Meta { get; set; }
     }
 
     public class RefreshTokenResponse : VsfSuccessResponse<string>
