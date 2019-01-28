@@ -28,8 +28,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.WebPages;
-using EPiServer.Personalization.Common;
 using EPiServer.Personalization.Commerce.Tracking;
+using EPiServer.VueStorefrontApiBridge;
 
 namespace EPiServer.Reference.Commerce.Site.Infrastructure
 {
@@ -99,8 +99,10 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
                 config.Formatters.XmlFormatter.UseXmlSerializer = true;
                 config.DependencyResolver = new StructureMapResolver(context.StructureMap());
                 config.MapHttpAttributeRoutes();
-            });
 
+                config.RegisterVueStorefrontBridge();
+            });
+            
 #if IRI_CHARACTERS_IN_URL_FEATURE
             EnableIriCharactersInUrls(context);
 #endif
