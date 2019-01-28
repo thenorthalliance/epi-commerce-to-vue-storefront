@@ -1,19 +1,13 @@
 ﻿using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace DataMigration.Mapper.Category.Model
+namespace DataMigration.Output.ElasticSearch.Entity.Category.Model
 {
-    public class CategoryBase
+    public class CategoryBase : Entity
     {
-        [JsonProperty("id")]
-        public int Id { get; set; }
-
         [JsonProperty("parent_id")]
         public int ParentId { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
-
+        
         [JsonProperty("position")]
         public int Position { get; set; }
 
