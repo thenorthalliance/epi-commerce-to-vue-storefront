@@ -557,6 +557,7 @@
     <Compile Include="Infrastructure\Facades\UrlAuthorizationFacade.cs" />
     <Compile Include="Features\Shared\Extensions\HtmlHelperExtensions.cs" />
     <Compile Include="Infrastructure\OrderEventListener.cs" />
+    <Compile Include="Infrastructure\QuicksilverUserAdapter.cs" />
     <Compile Include="Infrastructure\SiteImport\CreateOrdersStep.cs" />
     <Compile Include="Infrastructure\SiteImport\Templates.cs" />
     <Compile Include="Infrastructure\SiteImport\ImportSiteContentStep.cs" />
@@ -931,6 +932,10 @@
     <ProjectReference Include="..\..\DataMigration\DataMigration.csproj">
       <Project>{07caa40b-7d3f-43a9-88dc-3b5d7bc5c0a0}</Project>
       <Name>DataMigration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EPiServer.VueStorefrontApiBridge\EPiServer.VueStorefrontApiBridge.csproj">
+      <Project>{36f81164-899b-4c3e-8789-8df923333160}</Project>
+      <Name>EPiServer.VueStorefrontApiBridge</Name>
     </ProjectReference>
     <ProjectReference Include="..\EPiServer.Reference.Commerce.Shared\EPiServer.Reference.Commerce.Shared.csproj">
       <Project>{341c8e14-4eae-4946-9841-45f9818265a8}</Project>

@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Reference.Commerc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataMigration", "DataMigration\DataMigration.csproj", "{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.VueStorefrontApiBridge", "EPiServer.VueStorefrontApiBridge\EPiServer.VueStorefrontApiBridge.csproj", "{36F81164-899B-4C3E-8789-8DF923333160}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		CA|Any CPU = CA|Any CPU
@@ -42,6 +44,12 @@ Global
 		{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{36F81164-899B-4C3E-8789-8DF923333160}.CA|Any CPU.ActiveCfg = Release|Any CPU
+		{36F81164-899B-4C3E-8789-8DF923333160}.CA|Any CPU.Build.0 = Release|Any CPU
+		{36F81164-899B-4C3E-8789-8DF923333160}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{36F81164-899B-4C3E-8789-8DF923333160}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{36F81164-899B-4C3E-8789-8DF923333160}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{36F81164-899B-4C3E-8789-8DF923333160}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
