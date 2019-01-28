@@ -43,7 +43,14 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
 
             return Ok(new RefreshTokenResponse(authToken));
         }
-        
+
+        [HttpPost]
+        public async Task<IHttpActionResult> Create(UserCreateModel userCreateModel)
+        {
+            var newUser = await _userAdapter.CreareUser(userCreateModel);
+            return Ok(new VsfSuccessResponse<UserModel>(newUser));
+        }
+
         [HttpPost]
         public IHttpActionResult ResetPassword()
         {

@@ -171,6 +171,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiModel\UserCreateModel.cs" />
     <Compile Include="ApiModel\UserLoginModel.cs" />
     <Compile Include="ApiModel\UserModel.cs" />
     <Compile Include="ApiModel\UserRefreshTokenModel.cs" />
