@@ -13,10 +13,10 @@ namespace EPiServer.VueStorefrontApiBridge.ApiModel
         public string Email { get; set; }
 
         [JsonProperty("firstname")]
-        public string Firstname { get; set; }
+        public string FirstName { get; set; }
 
         [JsonProperty("lastname")]
-        public string Lastname { get; set; }
+        public string LastName { get; set; }
 
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }
@@ -35,9 +35,6 @@ namespace EPiServer.VueStorefrontApiBridge.ApiModel
 
         [JsonProperty("group_id")]
         public int GroupId { get; set; } = 1;
-
-        [JsonProperty("default_shipping")]
-        public string DefaultShipping { get; set; } = "";
 
         [JsonProperty("addresses")]
         public List<object> Addresses { get; set; } = new List<object>();
