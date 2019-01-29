@@ -52,15 +52,23 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
         }
 
         [HttpPost]
-        public IHttpActionResult ResetPassword()
+        [ActionName("reset-password")]
+        public async Task<IHttpActionResult> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
-            throw new NotImplementedException();
+            if (!await _userAdapter.SendResetPasswordEmail(resetPasswordModel.Email))
+                return Ok(new VsfErrorResponse($"No such entity with email = {resetPasswordModel.Email}"));
+            return Ok(new VsfSuccessResponse<string>("Email sent."));
         }
 
-        [HttpPost]
-        public IHttpActionResult ChangePassword()
+        [VsfAuthorize]
+        [ActionName("change-password")]
+        public async Task<IHttpActionResult> ChangePassword(ChangePasswordModel changePasswordModel)
         {
-            throw new NotImplementedException();
+            if (!await _userAdapter.ChangePassword(User.Identity.GetUserId(),
+                changePasswordModel.CurrentPassword, changePasswordModel.NewPassword))
+                return Ok(new VsfErrorResponse("The password doesn't match this account."));
+
+            return Ok(new VsfSuccessResponse<string>("Password changed."));
         }
 
         [HttpGet]
