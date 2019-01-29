@@ -1,10 +1,18 @@
-﻿using DataMigration.Input.Episerver.Common.Model;
+﻿using System.Collections.Generic;
+using DataMigration.Input.Episerver.Common.Model;
 using DataMigration.Output.ElasticSearch.Entity;
+using EPiServer.Commerce.Catalog.ContentTypes;
 
 namespace DataMigration.Input.Episerver.Category.Model
 {
     public class EpiCategory : CmsObjectBase
     {
         public override EntityType EntityType => EntityType.Category;
+        public NodeContent Category { get; set; }
+        public IEnumerable<EpiCategory> Children { get; set; }
+        public int Level { get; set; }
+        public int SortOrder { get; set; }
+        public int ProductsCount { get; set; }
+        public new int Id => Category.ContentLink.ID;
     }
 }

@@ -15,7 +15,7 @@ namespace DataMigration.Output.ElasticSearch.Entity.Category.Model
         public string ChildrenCount { get; set; }
 
         [JsonProperty("children_data")]
-        public IEnumerable<CategoryBase> Children { get; set; }
+        public IEnumerable<Entity> Children { get; set; }
 
         [JsonProperty("include_in_menu")]
         public bool IncludeInMenu { get; set; }
@@ -32,9 +32,6 @@ namespace DataMigration.Output.ElasticSearch.Entity.Category.Model
         [JsonProperty("is_active")]
         public bool IsActive { get; set; }
 
-        [JsonProperty("custom_url")]
-        public string CustomUrl { get; set; }
-
         //1 is a root category
         [JsonProperty("level")]
         public int Level { get; set; }
@@ -44,10 +41,6 @@ namespace DataMigration.Output.ElasticSearch.Entity.Category.Model
 
         [JsonProperty("available_sort_by")]
         public IEnumerable<string> AvailableSortBy { get; set; }
-       
-        [JsonProperty("url_path")]
-        public string UrlPath { get; set; }
     }
-
 }
 
