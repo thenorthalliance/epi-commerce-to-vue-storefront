@@ -13,10 +13,10 @@ namespace EPiServer.VueStorefrontApiBridge.ApiModel
         public string Email { get; set; }
 
         [JsonProperty("firstname")]
-        public string Firstname { get; set; }
+        public string FirstName { get; set; }
 
         [JsonProperty("lastname")]
-        public string Lastname { get; set; }
+        public string LastName { get; set; }
 
         [JsonProperty("created_at")]
         public DateTime CreatedAt { get; set; }

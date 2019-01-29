@@ -66,8 +66,8 @@ namespace EPiServer.VueStorefrontApiBridge.User
             return new UserModel
             {
                 Id = user.Id,
-                Lastname = userContact?.LastName ?? string.Empty,
-                Firstname = userContact?.FirstName ?? string.Empty,
+                LastName = userContact?.LastName ?? string.Empty,
+                FirstName = userContact?.FirstName ?? string.Empty,
                 Email = userContact?.Email ?? string.Empty,
 
                 CreatedAt = user.CreationDate,
