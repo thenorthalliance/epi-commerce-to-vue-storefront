@@ -36,9 +36,6 @@ namespace EPiServer.VueStorefrontApiBridge.ApiModel
         [JsonProperty("group_id")]
         public int GroupId { get; set; } = 1;
 
-        [JsonProperty("default_shipping")]
-        public string DefaultShipping { get; set; } = "";
-
         [JsonProperty("addresses")]
         public List<object> Addresses { get; set; } = new List<object>();
 
