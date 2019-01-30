@@ -9,5 +9,8 @@ namespace EPiServer.VueStorefrontApiBridge.User
         Task<UserModel> GetUserById(string userId);
 
         Task<UserModel> CreateUser(UserCreateModel newUser);
+
+        Task<bool> ChangePassword(string userId, string oldPassword, string newPassword);
+        Task<bool> SendResetPasswordEmail(string userEmail);
     }
 }

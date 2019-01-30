@@ -279,6 +279,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiModel\ChangePasswordModel.cs" />
+    <Compile Include="ApiModel\ResetPasswordModel.cs" />
     <Compile Include="ApiModel\UserCreateModel.cs" />
     <Compile Include="ApiModel\UserLoginModel.cs" />
     <Compile Include="ApiModel\UserModel.cs" />

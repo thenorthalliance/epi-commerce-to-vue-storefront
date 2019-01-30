@@ -11,33 +11,31 @@ namespace EPiServer.VueStorefrontApiBridge.User
 {
     public abstract class UserAdapter<TUser> : IUserAdapter where TUser : ApplicationUser, new()
     {
-        private readonly ApplicationUserManager<TUser> _userManager;
+        protected readonly ApplicationUserManager<TUser> UserManager;
 
         protected UserAdapter(ApplicationUserManager<TUser> userManager)
         {
-            _userManager = userManager;
+            UserManager = userManager;
         }
 
         public async Task<UserModel> GetUserByCredentials(string userLogin, string userPassword)
         {
-            return MapUser(await _userManager.FindAsync(userLogin, userPassword));
+            return MapUser(await UserManager.FindAsync(userLogin, userPassword));
         }
 
         public async Task<UserModel> GetUserById(string userId)
         {
-            return MapUser(await _userManager.FindByIdAsync(userId));
+            return MapUser(await UserManager.FindByIdAsync(userId));
         }
 
         public async Task<UserModel> CreateUser(UserCreateModel newUser)
         {
-            var appUser = CreateNewUser(newUser.Customer.Email);
-            var result = await _userManager.CreateAsync(appUser, newUser.Password);
+            var appUser = await CreateNewUser(newUser.Customer.Email);
+            var result = await UserManager.CreateAsync(appUser, newUser.Password);
 
             if (!result.Succeeded)
             {
-                LogManager.GetLogger(GetType()).Information(
-                    $"CreateUser failed: {string.Join(Environment.NewLine, result.Errors)}");
-
+                LogDebugErrors("CreateUser failed", result.Errors);
                 return null;
             }
             
@@ -50,11 +48,34 @@ namespace EPiServer.VueStorefrontApiBridge.User
             newContact.Email = newUser.Customer.Email;
             newContact.SaveChanges();
 
-            var user = await _userManager.FindByIdAsync(appUser.Id);
+            var user = await UserManager.FindByIdAsync(appUser.Id);
             return MapUser(user);
         }
 
-        protected abstract TUser CreateNewUser(string userEmail);
+        public async Task<bool> ChangePassword(string userId, string oldPassword, string newPassword)
+        {
+            var result = await UserManager.ChangePasswordAsync(userId, oldPassword, newPassword);
+            if (!result.Succeeded)
+            {
+                LogDebugErrors($"Change password for user '{userId}' failed", result.Errors);
+                return false;
+            }
+
+            return true;
+        }
+
+        public abstract Task<bool> SendResetPasswordEmail(string userEmail);
+
+        protected abstract Task<TUser> CreateNewUser(string userEmail);
+        
+        protected void LogDebugErrors(string message, IEnumerable<string> errors = null)
+        {
+            var errorMessage = errors != null ? 
+                    $"{message}:{Environment.NewLine}{string.Join(Environment.NewLine, errors)}" :
+                    message;
+
+            LogManager.GetLogger(GetType()).Debug(errorMessage);
+        }
 
         private UserModel MapUser(ApplicationUser user)
         {
