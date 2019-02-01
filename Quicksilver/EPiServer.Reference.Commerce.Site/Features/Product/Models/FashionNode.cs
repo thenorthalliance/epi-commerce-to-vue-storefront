@@ -1,5 +1,7 @@
-﻿using EPiServer.Commerce.Catalog.ContentTypes;
+﻿using System.ComponentModel.DataAnnotations;
+using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Commerce.Catalog.DataAnnotations;
+using EPiServer.Core;
 using EPiServer.DataAnnotations;
 using EPiServer.Reference.Commerce.Site.Features.Product.Models;
 
@@ -20,6 +22,11 @@ namespace EPiServer.Reference.Commerce.Site.Features.Product.Models
     })]
     public class FashionNode : NodeContent
     {
-
+        [Searchable]
+        [CultureSpecific]
+        [Tokenize]
+        [IncludeInDefaultSearch]
+        [Display(Name = "Description", Order = 2)]
+        public virtual XhtmlString Description { get; set; }
     }
 }

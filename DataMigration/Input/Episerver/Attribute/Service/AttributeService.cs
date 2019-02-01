@@ -8,7 +8,7 @@ namespace DataMigration.Input.Episerver.Attribute.Service
 {
     public class AttributeService: ContentService
     {
-        public override IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level)
+        public override IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo)
         {
             throw new System.NotImplementedException();
         }

@@ -5,16 +5,12 @@ using DataMigration.Input.Episerver.Common.Model;
 using EPiServer;
 using EPiServer.Core;
 using EPiServer.ServiceLocation;
-using Mediachase.Commerce.Catalog;
 
 namespace DataMigration.Input.Episerver.Common.Service
 {
     public abstract class ContentService
     {
-        private readonly IContentLoader _contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
-        private readonly ReferenceConverter _referenceConverter = ServiceLocator.Current.GetInstance<ReferenceConverter>();
-
-        public abstract IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level); 
+        public abstract IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo); 
 
         internal IEnumerable<T> GetEntriesRecursive<T>(ContentReference parentLink, CultureInfo defaultCulture) where T : IContent
         {
@@ -34,10 +30,11 @@ namespace DataMigration.Input.Episerver.Common.Service
 
         internal IEnumerable<T> LoadChildrenBatched<T>(ContentReference parentLink, CultureInfo defaultCulture) where T : IContent
         {
+            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
             var start = 0;
             while (true)
             {
-                var batch = _contentLoader.GetChildren<T>(parentLink, defaultCulture, start, 50);
+                var batch = contentLoader.GetChildren<T>(parentLink, defaultCulture, start, 50);
                 var enumerable = batch.ToList();
                 if (!enumerable.Any())
                 {

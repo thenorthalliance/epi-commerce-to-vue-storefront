@@ -222,6 +222,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\VsfOptionAttribute.cs" />
+    <Compile Include="Helpers\InventoryHelper.cs" />
+    <Compile Include="Helpers\PriceHelper.cs" />
+    <Compile Include="Helpers\UrlHelper.cs" />
+    <Compile Include="Helpers\ContentHelper.cs" />
     <Compile Include="Input\Episerver\Attribute\Service\AttributeService.cs" />
     <Compile Include="Input\Episerver\Category\Service\CategoryService.cs" />
     <Compile Include="Input\Episerver\Common\Service\ContentService.cs" />
@@ -253,9 +258,7 @@
     <None Include="packages.config" />
     <Content Include="AdminTools\VsfDataMigrationTool\Views\VsfDataMigration\Index.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy "$(ProjectDir)AdminTools\VsfDataMigrationTool\Views\VsfDataMigration\Index.cshtml" "$(SolutionDir)Quicksilver\EPiServer.Reference.Commerce.Site\Views\VsfDataMigration\" /Y /I</PostBuildEvent>

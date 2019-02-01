@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using DataMigration.Attributes;
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Commerce.Catalog.DataAnnotations;
 using EPiServer.Core;
@@ -13,6 +14,7 @@ namespace EPiServer.Reference.Commerce.Site.Features.Product.Models
         Description = "Display fashion variant")]
     public class FashionVariant : VariationContent
     {
+        [VsfOption]
         [Searchable]
         [Tokenize]
         [IncludeInDefaultSearch]
@@ -20,6 +22,7 @@ namespace EPiServer.Reference.Commerce.Site.Features.Product.Models
         [Display(Name = "Size", Order = 1)]
         public virtual string Size { get; set; }
 
+        [VsfOption]
         [Searchable]
         [CultureSpecific]
         [Tokenize]
