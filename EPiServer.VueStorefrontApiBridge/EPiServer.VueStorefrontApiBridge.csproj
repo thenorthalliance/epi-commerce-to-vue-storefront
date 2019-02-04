@@ -281,10 +281,12 @@
   <ItemGroup>
     <Compile Include="ApiModel\ChangePasswordModel.cs" />
     <Compile Include="ApiModel\ResetPasswordModel.cs" />
+    <Compile Include="ApiModel\UserAddressModel.cs" />
     <Compile Include="ApiModel\UserCreateModel.cs" />
     <Compile Include="ApiModel\UserLoginModel.cs" />
     <Compile Include="ApiModel\UserModel.cs" />
     <Compile Include="ApiModel\UserRefreshTokenModel.cs" />
+    <Compile Include="ApiModel\UserUpdateModel.cs" />
     <Compile Include="ApiModel\VsfResponse.cs" />
     <Compile Include="ApiModel\OrderHistoryModel.cs" />
     <Compile Include="Authorization\IRefreshTokenRepo.cs" />
@@ -299,6 +301,7 @@
     <Compile Include="Authorization\JwtUserTokenProvider.cs" />
     <Compile Include="Controllers\VsfCartController.cs" />
     <Compile Include="User\UserAdapter.cs" />
+    <Compile Include="Utils\ResourceLocker.cs" />
     <Compile Include="VueStorefrontApiBridgeRegisterEx.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

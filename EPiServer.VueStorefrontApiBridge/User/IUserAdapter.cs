@@ -12,5 +12,6 @@ namespace EPiServer.VueStorefrontApiBridge.User
 
         Task<bool> ChangePassword(string userId, string oldPassword, string newPassword);
         Task<bool> SendResetPasswordEmail(string userEmail);
+        Task<bool> UpdateUser(string userId, UserModel user);
     }
 }

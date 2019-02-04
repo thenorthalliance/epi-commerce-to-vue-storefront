@@ -37,9 +37,18 @@ namespace EPiServer.VueStorefrontApiBridge.ApiModel
         public int GroupId { get; set; } = 1;
 
         [JsonProperty("addresses")]
-        public List<object> Addresses { get; set; } = new List<object>();
+        public List<UserAddressModel> Addresses { get; set; } = new List<UserAddressModel>();
 
         [JsonProperty("disable_auto_group_change")]
         public int DisableAutoGroupChange { get; set; } = 0;
+
+
+        [JsonProperty("default_shipping", NullValueHandling = NullValueHandling.Ignore)]
+        // public string DefaultShippingId { get; set; }
+        public int? DefaultShippingId { get; set; }  // Temporary workaround. Vue-Storefront issue #2356
+
+        [JsonProperty("default_billing", NullValueHandling = NullValueHandling.Ignore)]
+        // public string DefaultShippingId { get; set; }
+        public int? DefaultBillingId { get; set; }  // Temporary workaround. Vue-Storefront issue #2356
     }
 }
