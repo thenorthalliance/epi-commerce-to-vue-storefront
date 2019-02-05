@@ -14,8 +14,7 @@ namespace EPiServer.VueStorefrontApiBridge.ApiModel
         [JsonProperty("id")]
         //       public string Id { get; set; } 
         public int Id { get; set; } // Temporary workaround. Vue-Storefront issue #2356
-
-
+        
         [JsonProperty("customer_id")]
         public string CustomerId { get; set; }
 

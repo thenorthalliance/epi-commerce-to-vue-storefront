@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using EPiServer.Cms.UI.AspNetIdentity;
+using EPiServer.Logging;
 using EPiServer.Reference.Commerce.Shared.Identity;
 using EPiServer.Reference.Commerce.Shared.Services;
 using EPiServer.ServiceLocation;
@@ -11,21 +13,23 @@ using Microsoft.AspNet.Identity;
 
 namespace EPiServer.Reference.Commerce.Site.Infrastructure
 {
+  
     [ServiceConfiguration(typeof(IUserAdapter), Lifecycle = ServiceInstanceScope.Transient)]
-    public class QuickSilverUserAdapter : UserAdapter<SiteUser>
+    [ServiceConfiguration(typeof(IResetPasswordEmailSender), Lifecycle = ServiceInstanceScope.Transient)]
+    public class QuickSilverUserAdapter : UserAdapter<SiteUser>, IResetPasswordEmailSender
     {
         private readonly MailService _mailService;
         private readonly UrlHelper _urlHelper;
 
-        public QuickSilverUserAdapter(ApplicationUserManager<SiteUser> userManager, MailService mailService, UrlHelper urlHelper) : base(userManager)
+        public QuickSilverUserAdapter(MailService mailService, UrlHelper urlHelper, ApplicationUserManager<SiteUser> appUserManager) : base(appUserManager)
         {
             _mailService = mailService;
             _urlHelper = urlHelper;
         }
 
-        protected override Task<SiteUser> CreateNewUser(string userEmail)
+        public override Task<ApplicationUser> CreateNewUserObject(string userEmail)
         {
-            return Task.FromResult(new SiteUser
+            return Task.FromResult((ApplicationUser)new SiteUser
             {
                 Id = Guid.NewGuid().ToString(),
                 Username = userEmail,
@@ -37,22 +41,22 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
             });
         }
 
-        public override async Task<bool> SendResetPasswordEmail(string userEmail)
+        async Task<bool> IResetPasswordEmailSender.Send(string userEmail)
         {
             //TEST RESETPASWORD EMAIL SENDING
-            var user = await UserManager.FindByEmailAsync(userEmail);
+            var user = await AppUserManager.FindByEmailAsync(userEmail);
             if (user == null)
             {
                 LogDebugErrors($"SendResetPasswordEmail: User '{userEmail}' not found");
                 return false;
             }
 
-            var token = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
+            var token = await AppUserManager.GeneratePasswordResetTokenAsync(user.Id);
             var passwordResetUrl = _urlHelper.Action("ResetPassword", "ResetPassword", new { userId = user.Id, code = HttpUtility.UrlEncode(token), language = "en"}, "http");
             
             var body = $@"Reset password: <a href='{passwordResetUrl}'> Reset </a>";
     
-            await UserManager.SendEmailAsync(user.Id, "Vuestorefront password reset.", body);
+            await AppUserManager.SendEmailAsync(user.Id, "Vuestorefront password reset.", body);
             await _mailService.SendAsync(new IdentityMessage
             {
                 Destination = user.Email,
@@ -61,6 +65,15 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
             });
 
             return true;
+        }
+
+        protected void LogDebugErrors(string message, IEnumerable<string> errors = null)
+        {
+            var errorMessage = errors != null ?
+                $"{message}:{Environment.NewLine}{string.Join(Environment.NewLine, errors)}" :
+                message;
+
+            LogManager.GetLogger(GetType()).Debug(errorMessage);
         }
     }
 }

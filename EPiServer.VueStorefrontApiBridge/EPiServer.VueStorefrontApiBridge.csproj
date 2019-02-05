@@ -297,10 +297,17 @@
     <Compile Include="Authorization\Model\TokenValidationResult.cs" />
     <Compile Include="Authorization\VsfAuthentication.cs" />
     <Compile Include="Authorization\VsfAuthorize.cs" />
+    <Compile Include="User\Invoice\IInvoiceAdapter.cs" />
+    <Compile Include="User\Invoice\Model\InvoiceInformation.cs" />
+    <Compile Include="User\IResetPasswordEmailSender.cs" />
     <Compile Include="User\IUserAdapter.cs" />
     <Compile Include="Authorization\JwtUserTokenProvider.cs" />
     <Compile Include="Controllers\VsfCartController.cs" />
+    <Compile Include="User\IUserManager.cs" />
+    <Compile Include="User\IUserMapper.cs" />
     <Compile Include="User\UserAdapter.cs" />
+    <Compile Include="User\DefaultUserManager.cs" />
+    <Compile Include="User\DefaultUserMapper.cs" />
     <Compile Include="Utils\ResourceLocker.cs" />
     <Compile Include="VueStorefrontApiBridgeRegisterEx.cs" />
     <Compile Include="Controllers\UserController.cs" />
@@ -314,5 +321,6 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

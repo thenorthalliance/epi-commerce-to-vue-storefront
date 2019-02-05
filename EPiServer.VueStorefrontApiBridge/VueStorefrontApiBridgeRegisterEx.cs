@@ -7,6 +7,8 @@ using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
 using EPiServer.VueStorefrontApiBridge.Authorization;
 using EPiServer.VueStorefrontApiBridge.Authorization.Model;
+using EPiServer.VueStorefrontApiBridge.User;
+using EPiServer.VueStorefrontApiBridge.User.Invoice;
 
 namespace EPiServer.VueStorefrontApiBridge
 {
@@ -23,6 +25,17 @@ namespace EPiServer.VueStorefrontApiBridge
                 Audience = "http://localhost:50244",
                 SecurityKey = new InMemorySymmetricSecurityKey(Encoding.UTF8.GetBytes("alamakotaalamakotaalamakotaalamakota"))
             }, new MemoryRefreshTokenRepo()));
+
+            if (!context.Services.Contains(typeof(IUserMapper)))
+                context.Services.Add(typeof(IUserMapper), typeof(DefaultUserMapper), ServiceInstanceScope.Singleton);
+
+            if (!context.Services.Contains(typeof(IUserManager)))
+                context.Services.Add(typeof(IUserManager), typeof(DefaultUserManager), ServiceInstanceScope.Transient);
+
+
+            context.Services.Add(typeof(IInvoiceAdapter), typeof(MockedInvoiceAdapter), ServiceInstanceScope.Singleton);
+
+            
         }
 
         public void Initialize(InitializationEngine context)

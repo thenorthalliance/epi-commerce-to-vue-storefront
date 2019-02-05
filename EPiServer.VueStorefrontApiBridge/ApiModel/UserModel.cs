@@ -44,11 +44,11 @@ namespace EPiServer.VueStorefrontApiBridge.ApiModel
 
 
         [JsonProperty("default_shipping", NullValueHandling = NullValueHandling.Ignore)]
-        // public string DefaultShippingId { get; set; }
-        public int? DefaultShippingId { get; set; }  // Temporary workaround. Vue-Storefront issue #2356
+        public string DefaultShippingId { get; set; }
+//        public int? DefaultShippingId { get; set; }  // Temporary workaround. Vue-Storefront issue #2356
 
         [JsonProperty("default_billing", NullValueHandling = NullValueHandling.Ignore)]
-        // public string DefaultShippingId { get; set; }
-        public int? DefaultBillingId { get; set; }  // Temporary workaround. Vue-Storefront issue #2356
+        public string DefaultBillingId { get; set; }
+//        public int? DefaultBillingId { get; set; }  // Temporary workaround. Vue-Storefront issue #2356
     }
 }

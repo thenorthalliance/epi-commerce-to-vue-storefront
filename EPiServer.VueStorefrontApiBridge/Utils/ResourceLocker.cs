@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 namespace EPiServer.VueStorefrontApiBridge.Utils
 {
-    //TODO ResourceLocker should be updated so that we synchronize call related to same resourceId. Right now we synchronize call to all resources.
     public class UserLocker : ResourceLocker<string>
     {
         public UserLocker(string resourceId) : base(resourceId)
@@ -33,8 +32,7 @@ namespace EPiServer.VueStorefrontApiBridge.Utils
                 ThreadsWaiting--;
             }
         }
-
-
+        
         private static readonly object Locker = new object();
         private static readonly Dictionary<T, ResourceSemaphore> Semaphores = new Dictionary<T, ResourceSemaphore>();
 

@@ -1,17 +1,20 @@
 ﻿using System.Threading.Tasks;
-using EPiServer.VueStorefrontApiBridge.ApiModel;
+using EPiServer.Cms.UI.AspNetIdentity;
+using Microsoft.AspNet.Identity;
 
 namespace EPiServer.VueStorefrontApiBridge.User
 {
     public interface IUserAdapter
     {
-        Task<UserModel> GetUserByCredentials(string userLogin, string userPassword);
-        Task<UserModel> GetUserById(string userId);
+        Task<ApplicationUser> CreateNewUserObject(string userEmail);
 
-        Task<UserModel> CreateUser(UserCreateModel newUser);
+        Task<IdentityResult> CreateAsync(ApplicationUser user, string password);
 
-        Task<bool> ChangePassword(string userId, string oldPassword, string newPassword);
-        Task<bool> SendResetPasswordEmail(string userEmail);
-        Task<bool> UpdateUser(string userId, UserModel user);
+        Task<IdentityResult> UpdateAsync(ApplicationUser user);
+
+        Task<IdentityResult> ChangePasswordAsync(string userId, string oldPassword, string newPassword);
+
+        Task<ApplicationUser> FindAsync(string userLogin, string userPassword);
+        Task<ApplicationUser> FindByIdAsync(string id);
     }
 }
