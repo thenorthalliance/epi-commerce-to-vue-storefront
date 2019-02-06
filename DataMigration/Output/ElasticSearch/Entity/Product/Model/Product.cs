@@ -111,7 +111,7 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
         public JObject[] ConfigurableChildren { get; set; }
 
         [JsonProperty("configurable_options")]
-        public Option[] ConfigurableOptions { get; set; }
+        public ConfigurableOption[] ConfigurableOptions { get; set; }
     }
 
     public class Media
@@ -147,7 +147,7 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
         public string Name { get; set; }
     }
 
-    public class Option
+    public class ConfigurableOption
     {
         [JsonProperty("id")]
         public int Id { get; set; }
@@ -168,10 +168,10 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
         public string FrontentLabel { get; set; }
 
         [JsonProperty("values")]
-        public List<OptionValue> Values { get; set; }
+        public List<ConfigurableOptionValue> Values { get; set; }
     }
 
-    public class OptionValue
+    public class ConfigurableOptionValue
     {
         [JsonProperty("label")]
         public string Label { get; set; }
@@ -183,7 +183,7 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
         public int Order { get; set; }
 
         [JsonProperty("value_index")]
-        public int ValueIndex { get; set; }
+        public string ValueIndex { get; set; }
 
         [JsonProperty("value_data")]
         public string ValueData { get; set; }

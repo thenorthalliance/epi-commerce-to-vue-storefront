@@ -231,6 +231,7 @@
     <Compile Include="Input\Episerver\Category\Service\CategoryService.cs" />
     <Compile Include="Input\Episerver\Common\Service\ContentService.cs" />
     <Compile Include="Input\Episerver\ContentServiceFactory.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\Attribute\Helper\AttributeHelper.cs" />
     <Compile Include="Output\ElasticSearch\Entity\EntityType.cs" />
     <Compile Include="Output\ElasticSearch\Service\IndexApiService.cs" />
     <Compile Include="Output\ElasticSearch\Entity\IndexItem\Model\IndexItem.cs" />

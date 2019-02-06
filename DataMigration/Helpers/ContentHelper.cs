@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using DataMigration.Attributes;
 using EPiServer;
@@ -31,11 +32,11 @@ namespace DataMigration.Helpers
             return variations.Select(x => contentLoader.Get<VariationContent>(x.Child));
         }
 
-        public static Dictionary<string, string> GetVariantOptions(ContentReference variantReference)
+        public static IEnumerable<PropertyData> GetVariantVsfProperties(ContentReference variantReference)
         {
             var variant = GetContent<VariationContent>(variantReference);
-            var properties = variant.GetType().GetProperties().Where(x => System.Attribute.IsDefined(x, typeof(VsfOptionAttribute)));
-            return properties.Select(x => x).ToDictionary(x => x.Name, x => x.GetValue(variant, null)?.ToString());
+            var propertiesNames = variant.GetType().GetProperties().Where(x => Attribute.IsDefined(x, typeof(VsfOptionAttribute))).Select(x => x.Name);
+            return variant.Property.Where(x => propertiesNames.Contains(x.Name));
         }
     }
 }

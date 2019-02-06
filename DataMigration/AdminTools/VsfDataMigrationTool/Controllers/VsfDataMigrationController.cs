@@ -32,12 +32,25 @@ namespace DataMigration.AdminTools.VsfDataMigrationTool.Controllers
             return View(model);
         }
 
-        public ActionResult MigrateData()
+        public ActionResult MigrateCategories()
         {
             var catalogs = _contentLoader.GetChildren<CatalogContent>(_referenceConverter.GetRootLink()).ToList();
-//            var mappedCategories = GetMappedEntites(catalogs[0].ContentLink, EntityType.Category);
+            var mappedCategories = GetMappedEntites(catalogs[0].ContentLink, EntityType.Category);
+            var json = JsonConvert.SerializeObject(mappedCategories);
+            return Content(json, "application/json", Encoding.UTF8);
+        }
+        public ActionResult MigrateProducts()
+        {
+            var catalogs = _contentLoader.GetChildren<CatalogContent>(_referenceConverter.GetRootLink()).ToList();
             var mappedProducts = GetMappedEntites(catalogs[0].ContentLink, EntityType.Product);
             var json = JsonConvert.SerializeObject(mappedProducts);
+            return Content(json, "application/json", Encoding.UTF8);
+        }
+        public ActionResult MigrateAttributes()
+        {
+            var catalogs = _contentLoader.GetChildren<CatalogContent>(_referenceConverter.GetRootLink()).ToList();
+            var mappedAttributes = GetMappedEntites(catalogs[0].ContentLink, EntityType.Attribute);
+            var json = JsonConvert.SerializeObject(mappedAttributes);
             return Content(json, "application/json", Encoding.UTF8);
         }
 

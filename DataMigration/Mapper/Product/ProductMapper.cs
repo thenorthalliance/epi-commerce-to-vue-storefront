@@ -4,6 +4,7 @@ using DataMigration.Helpers;
 using DataMigration.Input.Episerver.Common.Model;
 using DataMigration.Input.Episerver.Product.Model;
 using DataMigration.Output.ElasticSearch.Entity;
+using DataMigration.Output.ElasticSearch.Entity.Attribute.Helper;
 using DataMigration.Output.ElasticSearch.Entity.Product.Model;
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Core;
@@ -47,35 +48,38 @@ namespace DataMigration.Mapper.Product
             };
         }
 
-        private static IEnumerable<Option> GetProductConfigurableOptions(ProductContent product)
+        private static IEnumerable<ConfigurableOption> GetProductConfigurableOptions(ProductContent product)
         {
-            var options = new List<Option>();
+            var options = new List<ConfigurableOption>();
             var variants = ContentHelper.GetVariants(product.ContentLink);
             foreach (var variant in variants)
             {
-                var variantOptions = ContentHelper.GetVariantOptions(variant.ContentLink);
-                foreach (var variantOption in variantOptions)
+                var variantProperties = ContentHelper.GetVariantVsfProperties(variant.ContentLink);
+                foreach (var variantProperty in variantProperties)
                 {
-                    var optionValue = new OptionValue
+                    if (variantProperty.Value == null)
                     {
-                        DefaultLabel = variantOption.Value,
-                        Label = variantOption.Value,
+                        continue;
+                    }
+                    var optionValue = new ConfigurableOptionValue
+                    {
+                        DefaultLabel = variantProperty.Value.ToString(),
+                        Label = variantProperty.Value.ToString(),
                         Order = 0,
-                        ValueData = null,
-                        ValueIndex = 0 
+                        ValueIndex = AttributeHelper.CreateValueIndex(variantProperty.PropertyDefinitionID, variantProperty.Value.ToString())  
                     };
-                    var currentOption = options.FirstOrDefault(x => x.Label.Equals(variantOption.Key));
+                    var currentOption = options.FirstOrDefault(x => x.Label.Equals(variantProperty.Name));
                     if (currentOption == null)
                     {
-                        options.Add(new Option
+                        options.Add(new ConfigurableOption
                         {
-                            Id = 0, //TODO set when attibutes will be ready
+                            Id = variantProperty.PropertyDefinitionID,
                             Position = options.Count == 0 ? 0 : options.Count + 1,
-                            Label = variantOption.Key, 
-                            AttributeCode = "prodopt-" + variantOption.Key, //TODO set to id when attributes will be ready
-                            FrontentLabel = variantOption.Key,
+                            Label = variantProperty.Name, 
+                            AttributeCode = "prodopt-" + variantProperty.Name.Replace(" ","_").ToLower(),
+                            FrontentLabel = variantProperty.Name,
                             ProductId = product.ContentLink.ID,
-                            Values = new List<OptionValue>()
+                            Values = new List<ConfigurableOptionValue>()
                             {
                                 optionValue
                             }
@@ -83,7 +87,7 @@ namespace DataMigration.Mapper.Product
                     }
                     else
                     {
-                        var isValue = currentOption.Values.FirstOrDefault(x => x.Label == variantOption.Value) != null;
+                        var isValue = currentOption.Values.FirstOrDefault(x => x.Label == variantProperty.Value.ToString()) != null;
                         if (isValue) continue;
                         optionValue.Order = currentOption.Values.Count + 1;
                         currentOption.Values.Add(optionValue);
@@ -102,10 +106,14 @@ namespace DataMigration.Mapper.Product
                 ProductId = productId
             };
             var resultVariantWithOptions = JObject.FromObject(variant);
-            var options = ContentHelper.GetVariantOptions(variation.ContentLink);
-            foreach (var option in options)
+            var variantProperties = ContentHelper.GetVariantVsfProperties(variation.ContentLink);
+            foreach (var variantProperty in variantProperties)
             {
-                resultVariantWithOptions.Add(new JProperty(option.Key, option.Value));
+                if (variantProperty.Value == null)
+                {
+                    continue;
+                }
+                resultVariantWithOptions.Add(new JProperty(variantProperty.Name, variantProperty.Value.ToString()));
             }
             return resultVariantWithOptions;
         }

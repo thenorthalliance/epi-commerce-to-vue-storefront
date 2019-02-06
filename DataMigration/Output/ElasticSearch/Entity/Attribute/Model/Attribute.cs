@@ -113,10 +113,8 @@ namespace DataMigration.Output.ElasticSearch.Entity.Attribute.Model
         [JsonProperty("frontend_model")]
         public string FrontendModel { get; set; }
 
-        [JsonProperty("backend_type")]
+        [JsonProperty("options")]
         public IEnumerable<Option> Options { get; set; }
-
-        
     }
 
     public class Option
