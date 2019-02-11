@@ -1,40 +1,41 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using DataMigration.Helpers;
-using DataMigration.Input.Episerver.Attribute.Model;
+using DataMigration.Input.Episerver.Common.Helpers;
 using DataMigration.Input.Episerver.Common.Model;
 using DataMigration.Input.Episerver.Common.Service;
+using DataMigration.Input.Episerver.ContentProperty.Model;
 using DataMigration.Input.Episerver.Product.Model;
 using DataMigration.Output.ElasticSearch.Entity;
+using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Core;
 
-namespace DataMigration.Input.Episerver.Attribute.Service
+namespace DataMigration.Input.Episerver.ContentProperty.Service
 {
-    public class AttributeService: ContentService
+//    public class PropertyService: ContentService<IContent>
+    public class PropertyService: ContentService
     {
-        public override IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo)
+        public override IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level = 2)
         {
-            var attributes = new List<EpiAttribute>();
+            var properties = new List<EpiContentProperty>();
             var productsService = ContentServiceFactory.Create(EntityType.Product);
             var products = (IEnumerable<EpiProduct>) productsService.GetAll(parentReference, cultureInfo);
             foreach (var product in products)
             {
-                var variants = ContentHelper.GetVariants(product.ProductContent.ContentLink);
-                
+                var variants = product.ProductContent.GetVariants();
                 foreach (var variant in variants)
                 {
-                    var variantProperties = ContentHelper.GetVariantVsfProperties(variant.ContentLink);
+                    var variantProperties = ContentHelper.GetVariantVsfProperties(variant);
                     foreach (var variantProperty in variantProperties)
                     {
                         if (variantProperty.Value == null)
                         {
                             continue;
                         }
-                        var attribute = attributes.FirstOrDefault(x => x.Id == variantProperty.PropertyDefinitionID);
-                        if (attribute == null)
+                        var existingProperty = properties.FirstOrDefault(x => x.Id == variantProperty.PropertyDefinitionID);
+                        if (existingProperty == null)
                         {
-                            attributes.Add(new EpiAttribute
+                            properties.Add(new EpiContentProperty
                             {
                                 Name = variantProperty.Name,
                                 Id = variantProperty.PropertyDefinitionID,
@@ -43,16 +44,16 @@ namespace DataMigration.Input.Episerver.Attribute.Service
                         }
                         else
                         {
-                            if (!attribute.Values.Contains(variantProperty.Value))
+                            if (!existingProperty.Values.Contains(variantProperty.Value))
                             {
-                                attribute.Values.Add(variantProperty.Value.ToString());
+                                existingProperty.Values.Add(variantProperty.Value.ToString());
                             }
                         }
                     }
                 }
             }
 
-            return attributes;
+            return properties;
         }
     }
 }

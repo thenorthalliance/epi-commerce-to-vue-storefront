@@ -2,7 +2,7 @@
 using EPiServer.ServiceLocation;
 using EPiServer.Web.Routing;
 
-namespace DataMigration.Helpers
+namespace DataMigration.Input.Episerver.Common.Helpers
 {
     public class UrlHelper
     {

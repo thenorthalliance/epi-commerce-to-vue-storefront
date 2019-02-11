@@ -1,6 +1,6 @@
-﻿using DataMigration.Input.Episerver.Attribute.Service;
-using DataMigration.Input.Episerver.Category.Service;
+﻿using DataMigration.Input.Episerver.Category.Service;
 using DataMigration.Input.Episerver.Common.Service;
+using DataMigration.Input.Episerver.ContentProperty.Service;
 using DataMigration.Input.Episerver.Product.Service;
 using DataMigration.Output.ElasticSearch.Entity;
 
@@ -17,7 +17,7 @@ namespace DataMigration.Input.Episerver
                 case EntityType.Product:
                     return new ProductService();
                 case EntityType.Attribute:
-                    return new AttributeService();
+                    return new PropertyService();
                 default:
                     return null;
             }

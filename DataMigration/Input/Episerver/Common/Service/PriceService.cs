@@ -3,9 +3,9 @@ using EPiServer.Core;
 using EPiServer.ServiceLocation;
 using Mediachase.Commerce.Pricing;
 
-namespace DataMigration.Helpers
+namespace DataMigration.Input.Episerver.Common.Service
 {
-    public class PriceHelper
+    public class PriceService
     {
         public static int GetPrice(ContentReference priceReference)
         {

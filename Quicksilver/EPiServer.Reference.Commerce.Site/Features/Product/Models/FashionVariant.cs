@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using DataMigration.Attributes;
+using DataMigration.Input.Episerver.Common.Attributes;
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Commerce.Catalog.DataAnnotations;
 using EPiServer.Core;

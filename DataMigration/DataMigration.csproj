@@ -222,17 +222,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Attributes\VsfOptionAttribute.cs" />
-    <Compile Include="Helpers\InventoryHelper.cs" />
-    <Compile Include="Helpers\PriceHelper.cs" />
-    <Compile Include="Helpers\UrlHelper.cs" />
-    <Compile Include="Helpers\ContentHelper.cs" />
-    <Compile Include="Input\Episerver\Attribute\Service\AttributeService.cs" />
+    <Compile Include="Input\Episerver\Common\Attributes\VsfOptionAttribute.cs" />
+    <Compile Include="Input\Episerver\Common\Service\InventoryService.cs" />
+    <Compile Include="Input\Episerver\Common\Service\PriceService.cs" />
+    <Compile Include="Input\Episerver\Common\Helpers\UrlHelper.cs" />
+    <Compile Include="Input\Episerver\Common\Helpers\ContentHelper.cs" />
+    <Compile Include="Input\Episerver\ContentProperty\Service\PropertyService.cs" />
     <Compile Include="Input\Episerver\Category\Service\CategoryService.cs" />
     <Compile Include="Input\Episerver\Common\Service\ContentService.cs" />
     <Compile Include="Input\Episerver\ContentServiceFactory.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Attribute\Helper\AttributeHelper.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\Attribute\Model\Option.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\Category\Model\CategoryBase.cs" />
     <Compile Include="Output\ElasticSearch\Entity\EntityType.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\Product\Model\CategoryListItem.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\Product\Model\ConfigurableOption.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\Product\Model\ConfigurableOptionValue.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\Product\Model\Media.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\Product\Model\ProductBase.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\Product\Model\Stock.cs" />
+    <Compile Include="Output\ElasticSearch\Entity\Product\Model\Variant.cs" />
     <Compile Include="Output\ElasticSearch\Service\IndexApiService.cs" />
     <Compile Include="Output\ElasticSearch\Entity\IndexItem\Model\IndexItem.cs" />
     <Compile Include="Mapper\Category\CategoryMapper.cs" />
@@ -246,7 +255,7 @@
     <Compile Include="Input\Episerver\Product\Model\EpiProduct.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Product\Model\Product.cs" />
     <Compile Include="Mapper\Attribute\AttributeMapper.cs" />
-    <Compile Include="Input\Episerver\Attribute\Model\EpiAttribute.cs" />
+    <Compile Include="Input\Episerver\ContentProperty\Model\EpiContentProperty.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Attribute\Model\Attribute.cs" />
     <Compile Include="AdminTools\VsfDataMigrationTool\Controllers\VsfDataMigrationController.cs" />
     <Compile Include="AdminTools\VsfDataMigrationTool\Initialization\VsfDataMigrationInitialization.cs" />

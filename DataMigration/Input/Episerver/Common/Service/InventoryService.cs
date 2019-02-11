@@ -2,9 +2,9 @@
 using EPiServer.ServiceLocation;
 using Mediachase.Commerce.InventoryService;
 
-namespace DataMigration.Helpers
+namespace DataMigration.Input.Episerver.Common.Service
 {
-    public class InventoryHelper
+    public class InventoryService
     {
         public static decimal GetTotalInventoryByEntry(string code)
         {

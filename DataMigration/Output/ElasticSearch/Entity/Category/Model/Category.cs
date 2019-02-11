@@ -1,31 +1,36 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using DataMigration.Input.Episerver.Category.Model;
+using EPiServer.Core;
 using Newtonsoft.Json;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Category.Model
 {
-    public class CategoryBase : Entity
-    {
-        [JsonProperty("parent_id")]
-        public int ParentId { get; set; }
-        
-        [JsonProperty("position")]
-        public int Position { get; set; }
-
-        [JsonProperty("children_count")]
-        public string ChildrenCount { get; set; }
-
-        [JsonProperty("children_data")]
-        public IEnumerable<Entity> Children { get; set; }
-
-        [JsonProperty("include_in_menu")]
-        public bool IncludeInMenu { get; set; }
-
-        [JsonProperty("url_key")]
-        public string UrlKey { get; set; }
-
-    }
     public class Category : CategoryBase
     {
+        public Category(EpiCategory epiCategory)
+        {
+            var isPublished = epiCategory.Category.Status.Equals(VersionStatus.Published);
+            Id = epiCategory.Id;
+            Name = epiCategory.Category.DisplayName;
+            AvailableSortBy = null;
+            ParentId = epiCategory.Category.ParentLink.ID;
+            Description = GetDescription(epiCategory);
+            IsActive = isPublished;
+            IncludeInMenu = isPublished;
+            UrlKey = epiCategory.Category.RouteSegment;
+            Position = epiCategory.SortOrder;
+            Level = epiCategory.Level;
+            Children = epiCategory.Children.Select(x => new Category(x));
+            ChildrenCount = epiCategory.Children.Count().ToString();
+            ProductCount = epiCategory.ProductsCount;
+        }
+
+        private static string GetDescription(EpiCategory category)
+        {
+            return category.Category.GetType().GetProperty("Description")?.GetValue(category.Category, null)?.ToString();
+        }
+
         [JsonProperty("description")]
         public string Description { get; set; }
 

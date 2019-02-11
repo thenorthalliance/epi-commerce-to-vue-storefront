@@ -2,9 +2,9 @@
 using DataMigration.Input.Episerver.Common.Model;
 using DataMigration.Output.ElasticSearch.Entity;
 
-namespace DataMigration.Input.Episerver.Attribute.Model
+namespace DataMigration.Input.Episerver.ContentProperty.Model
 {
-    public class EpiAttribute : CmsObjectBase
+    public class EpiContentProperty : CmsObjectBase
     {
         public override EntityType EntityType => EntityType.Attribute;
         public string Name { get; set; }

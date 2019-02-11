@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace DataMigration.Attributes
+namespace DataMigration.Input.Episerver.Common.Attributes
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public class VsfOptionAttribute : Attribute

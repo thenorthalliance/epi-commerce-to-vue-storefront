@@ -1,10 +1,57 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using DataMigration.Input.Episerver.ContentProperty.Model;
+using DataMigration.Output.ElasticSearch.Entity.Attribute.Helper;
 using Newtonsoft.Json;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Attribute.Model
 {
     public class Attribute : Entity
     {
+        public Attribute(EpiContentProperty source)
+        {
+            Id = source.Id;
+            EntityTypeId = 4;
+            AttributeModel = null;
+            BackendModel = null;
+            BackendType = "int";
+            BackendTable = null;
+            FrontendModel = null;
+            FrontendClass = null;
+            SourceModel = "eav/entity_attribute_source_table";
+            IsRequired = false;
+            IsUserDefined = true;
+            DefaultValue = "";
+            IsUnique = false;
+            Note = null;
+            AttributeId = source.Id;
+            FrontendInputRenderer = null;
+            IsGlobal = true;
+            IsVisible = true;
+            IsSearchable = true;
+            IsFilterable = true;
+            IsComparable = false;
+            IsVisibleOnFront = false;
+            IsHtmlAllowedOnFront = true;
+            IsUsedForPriceRules = false;
+            IsFilterableInSearch = false;
+            UsedInProductListing = 0;
+            UsedForSortBy = 0;
+            IsConfigurable = true;
+            ApplyTo = new[] {"simple", "grouped", "configurable"};
+            IsVisibleInAdvancedSearch = false;
+            Position = 0;
+            IsWysiwygEnabled = false;
+            IsUsedForPromoRules = false;
+            SearchWeight = 1;
+            FrontendInput = "select";
+            Name = source.Name;
+            FrontendLabel = source.Name;
+            AttributeCode = source.Name.Replace(" ", "_").ToLower();
+            Options = source.Values.Select(x =>
+                new Option {Name = x, Value = AttributeHelper.CreateValueIndex(source.Id, x)});
+        }
+
         [JsonProperty("position")]
         public int Position { get; set; }
 
@@ -115,14 +162,5 @@ namespace DataMigration.Output.ElasticSearch.Entity.Attribute.Model
 
         [JsonProperty("options")]
         public IEnumerable<Option> Options { get; set; }
-    }
-
-    public class Option
-    {
-        [JsonProperty("label")]
-        public string Name { get; set; }
-
-        [JsonProperty("value")]
-        public string  Value { get; set; }
     }
 }
