@@ -10,9 +10,9 @@ using EPiServer.Core;
 
 namespace DataMigration.Input.Episerver.Category.Service
 {
-    public class CategoryService: ContentService 
+    public class CategoryService: IContentService 
     {
-        public override IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level = 2)
+        public IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level = 2)
         {
             return ContentHelper.LoadChildrenBatched<NodeContent>(parentReference, cultureInfo)
                 .Select((nodeContent, index) => new EpiCategory(nodeContent, index, level, (IEnumerable<EpiCategory>)GetAll(nodeContent.ContentLink, cultureInfo, level + 1), cultureInfo))

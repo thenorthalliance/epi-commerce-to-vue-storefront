@@ -8,7 +8,7 @@ namespace DataMigration.Input.Episerver
 {
     public static class ContentServiceFactory
     {
-        public static ContentService Create(EntityType entityType)
+        public static IContentService Create(EntityType entityType)
         {
             switch (entityType)
             {

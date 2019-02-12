@@ -12,10 +12,9 @@ using EPiServer.Core;
 
 namespace DataMigration.Input.Episerver.ContentProperty.Service
 {
-//    public class PropertyService: ContentService<IContent>
-    public class PropertyService: ContentService
+    public class PropertyService: IContentService
     {
-        public override IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level = 2)
+        public IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level = 2)
         {
             var properties = new List<EpiContentProperty>();
             var productsService = ContentServiceFactory.Create(EntityType.Product);

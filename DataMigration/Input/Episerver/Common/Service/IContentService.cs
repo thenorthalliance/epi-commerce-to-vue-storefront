@@ -5,8 +5,8 @@ using EPiServer.Core;
 
 namespace DataMigration.Input.Episerver.Common.Service
 {
-    public abstract class ContentService
+    public interface IContentService
     {
-        public abstract IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level = 2); 
+        IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level = 2); 
     }
 }

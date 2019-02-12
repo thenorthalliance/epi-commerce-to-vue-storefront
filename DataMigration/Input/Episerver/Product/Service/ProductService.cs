@@ -10,9 +10,9 @@ using EPiServer.Core;
 
 namespace DataMigration.Input.Episerver.Product.Service
 {
-    public class ProductService : ContentService
+    public class ProductService : IContentService
     {
-        public override IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level = 2)
+        public IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level = 2)
         {
             var categories = ContentHelper.GetEntriesRecursive<NodeContent>(parentReference, cultureInfo);
             var resultProducts = new List<EpiProduct>();
