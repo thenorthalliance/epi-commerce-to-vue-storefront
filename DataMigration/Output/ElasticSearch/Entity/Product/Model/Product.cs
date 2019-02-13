@@ -1,20 +1,103 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using DataMigration.Input.Episerver.Common.Helpers;
+using DataMigration.Input.Episerver.Product.Model;
+using DataMigration.Output.ElasticSearch.Entity.Attribute.Helper;
+using EPiServer.Commerce.Catalog.ContentTypes;
+using EPiServer.Core;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 {
-    public class Product : Entity
+    public class Product : ProductBase
     {
+        public Product(EpiProduct epiProduct) : base(epiProduct.ProductContent)
+        {
+            var configurableOptions = GetProductConfigurableOptions(epiProduct.ProductContent).ToArray();
+            var productVariations = epiProduct.ProductContent.GetVariants();
+
+            Id = epiProduct.Id;
+            Description = epiProduct.ProductContent.GetType().GetProperty("Description")
+                ?.GetValue(epiProduct.ProductContent, null)?.ToString();
+            Name = epiProduct.ProductContent.DisplayName;
+            TypeId = "configurable";
+            SpecialPrice = null;
+            NewsFromDate = null;
+            NewsToDate = null;
+            SpecialFromDate = null;
+            SpecialToDate = null;
+            CategoryIds = epiProduct.ProductContent.GetCategories().Select(x => x.ID.ToString());
+            Category = epiProduct.ProductContent.GetCategories().Select(x =>
+                new CategoryListItem {Id = x.ID, Name = ContentHelper.GetContent<NodeContent>(x).DisplayName});
+            Status = 1;
+            Visibility = epiProduct.ProductContent.Status.Equals(VersionStatus.Published) ? 4 : 0;
+            Weight = 1;
+            ConfigurableChildren = productVariations.Select(x => MapVariant(ContentHelper.GetContent<VariationContent>(x), epiProduct.Id)).ToArray();
+            HasOptions = configurableOptions.Length > 1 ? "1" : "0";
+            RequiredOptions = "0";
+            ConfigurableOptions = configurableOptions;
+        }
+
+        private static IEnumerable<ConfigurableOption> GetProductConfigurableOptions(ProductContent product)
+        {
+            var options = new List<ConfigurableOption>();
+            var variants = product.GetVariants();
+            foreach (var variant in variants)
+            {
+                var variantProperties = ContentHelper.GetVariantVsfProperties(variant);
+                foreach (var variantProperty in variantProperties)
+                {
+                    if (variantProperty.Value == null)
+                    {
+                        continue;
+                    }
+                    var optionValue = new ConfigurableOptionValue(variantProperty);
+                    var currentOption = options.FirstOrDefault(x => x.Label.Equals(variantProperty.Name));
+                    if (currentOption == null)
+                    {
+                        var position = options.Count == 0 ? 0 : options.Count + 1;
+                        var values = new List<ConfigurableOptionValue>()
+                        {
+                            optionValue
+                        };
+                        options.Add(new ConfigurableOption(variantProperty, position, product.ContentLink.ID, values));
+                    }
+                    else
+                    {
+                        var isValue = currentOption.Values.FirstOrDefault(x => x.Label == variantProperty.Value.ToString()) != null;
+                        if (isValue) continue;
+                        optionValue.Order = currentOption.Values.Count + 1;
+                        currentOption.Values.Add(optionValue);
+                    }
+                }
+            }
+
+            return options;
+        }
+
+        private static JObject MapVariant(VariationContent variation, int productId)
+        {
+            var variant = new Variant(variation, productId);
+            var resultVariantWithOptions = JObject.FromObject(variant);
+            var variantProperties = ContentHelper.GetVariantVsfProperties(variation.ContentLink);
+            foreach (var variantProperty in variantProperties)
+            {
+                if (variantProperty.Value == null)
+                {
+                    continue;
+                }
+                resultVariantWithOptions.Add(new JProperty(variantProperty.Name, variantProperty.Value.ToString()));
+            }
+            return resultVariantWithOptions;
+        }
+
         [JsonProperty("category_ids")]
         public IEnumerable<string> CategoryIds { get; set; }
 
-        //simple is default
         [JsonProperty("type_id")]
         public string TypeId { get; set; }
-
-        [JsonProperty("sku")]
-        public string Sku { get; set; }
 
         [JsonProperty("has_options")]
         public string HasOptions { get; set; }
@@ -29,39 +112,12 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
         [JsonProperty("visibility")]
         public int Visibility { get; set; }
 
-        [JsonProperty("tax_class_id")]
-        public string TaxClassId { get; set; }
-
         [JsonProperty("description")]
         public string Description { get; set; }
-        
-        [JsonProperty("image")]
-        public string Image { get; set; }
-
-        [JsonProperty("thumbnail")]
-        public string Thumbnail { get; set; }
-
-        [JsonProperty("media_gallery")]
-        public IEnumerable<Media> MediaGallery { get; set; }
-
-        [JsonProperty("url_key")]
-        public string UrlKey { get; set; }
-
-        [JsonProperty("url_path")]
-        public string UrlPath { get; set; }
-
-        [JsonProperty("price")]
-        public int Price { get; set; }
 
         //nullable
         [JsonProperty("special_price")]
-        public int SpecialPrice { get; set; }
-
-        [JsonProperty("id")]
-        public int Id { get; set; }
-
-        [JsonProperty("stock")]
-        public Stock IsInStock { get; set; }
+        public int? SpecialPrice { get; set; }
 
         [JsonProperty("category")]
         public IEnumerable<CategoryListItem> Category { get; set; }
@@ -71,49 +127,24 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 
         //nullable
         [JsonProperty("news_from_date")]
-        public DateTime NewsFromDate { get; set; }
+        public DateTime? NewsFromDate { get; set; }
 
         //nullable
         [JsonProperty("news_to_date")]
-        public DateTime NewsToDate { get; set; }
+        public DateTime? NewsToDate { get; set; }
 
         //nullable
         [JsonProperty("special_from_date")]
-        public DateTime SpecialFromDate { get; set; }
+        public DateTime? SpecialFromDate { get; set; }
 
         //nullable
         [JsonProperty("special_to_date")]
-        public DateTime SpecialToDate { get; set; }
-    }
+        public DateTime? SpecialToDate { get; set; }
 
+        [JsonProperty("configurable_children")]
+        public JObject[] ConfigurableChildren { get; set; }
 
-    public class Media
-    {
-        [JsonProperty("image")]
-        public string Image { get; set; }
-        [JsonProperty("pos")]
-        public int Position { get; set; }
-        [JsonProperty("typ")]
-        public string Type { get; set; }
-        [JsonProperty("lab")]
-        public string Label { get; set; }
-    }
-
-    public class Stock
-    {
-        [JsonProperty("is_in_stock")]
-        public bool IsInStock { get; set; }
-
-        [JsonProperty("qty")]
-        public int Quantity { get; set; }
-    }
-
-    public class CategoryListItem
-    {
-        [JsonProperty("category_id")]
-        public int Id { get; set; }
-
-        [JsonProperty("name")]
-        public string Name { get; set; }
+        [JsonProperty("configurable_options")]
+        public ConfigurableOption[] ConfigurableOptions { get; set; }
     }
 }

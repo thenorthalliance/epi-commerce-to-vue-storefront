@@ -1,6 +1,9 @@
-﻿@inherits System.Web.Mvc.WebViewPage<DataMigration.AdminTools.VsfDataMigrationTool.ViewModels.VsfDataMigrationViewModel>
+﻿@using System.Web.Mvc.Html
+@inherits System.Web.Mvc.WebViewPage<DataMigration.AdminTools.VsfDataMigrationTool.ViewModels.VsfDataMigrationViewModel>
 @{
     Layout = null;
 }
 
 <h1>@Model.Text</h1>
+
+@Html.ActionLink("Migrate Categories", "MigrateCategories", "VsfDataMigration")

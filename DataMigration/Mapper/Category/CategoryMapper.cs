@@ -6,15 +6,14 @@ namespace DataMigration.Mapper.Category
 {
     public class CategoryMapper : IMapper
     {
-
         public Entity Map(CmsObjectBase cmsObject)
         {
-            var source = cmsObject as EpiCategory;
-           return new Output.ElasticSearch.Entity.Category.Model.Category()
-           {
-               Id = cmsObject.Id
-           };
-            
+            if (!(cmsObject is EpiCategory source))
+            {
+                return null;
+            }
+
+            return new Output.ElasticSearch.Entity.Category.Model.Category(source);
         }
     }
 }

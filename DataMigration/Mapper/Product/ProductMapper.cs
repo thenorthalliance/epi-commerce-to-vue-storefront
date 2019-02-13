@@ -8,11 +8,12 @@ namespace DataMigration.Mapper.Product
     {
         public Entity Map(CmsObjectBase cmsObject)
         {
-            var source = cmsObject as EpiProduct;
-            return new Output.ElasticSearch.Entity.Product.Model.Product()
+            if (!(cmsObject is EpiProduct source))
             {
-                Id = cmsObject.Id
-            };
+                return null;
+            }
+
+            return new Output.ElasticSearch.Entity.Product.Model.Product(source);
         }
     }
 }
