@@ -1,10 +1,22 @@
 ﻿using System.Collections.Generic;
+using EPiServer.Core;
 using Newtonsoft.Json;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 {
     public class ConfigurableOption
     {
+        public ConfigurableOption(PropertyData variantProperty, int position, int productId, List<ConfigurableOptionValue> values)
+        {
+            Id = variantProperty.PropertyDefinitionID;
+            Position = position;
+            Label = variantProperty.Name;
+            AttributeCode = "prodopt-" + variantProperty.Name.Replace(" ", "_").ToLower();
+            FrontentLabel = variantProperty.Name;
+            ProductId = productId;
+            Values = values;
+        }
+
         [JsonProperty("id")]
         public int Id { get; set; }
 

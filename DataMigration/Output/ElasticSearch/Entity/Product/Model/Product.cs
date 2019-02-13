@@ -53,29 +53,16 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
                     {
                         continue;
                     }
-                    var optionValue = new ConfigurableOptionValue
-                    {
-                        DefaultLabel = variantProperty.Value.ToString(),
-                        Label = variantProperty.Value.ToString(),
-                        Order = 0,
-                        ValueIndex = AttributeHelper.CreateValueIndex(variantProperty.PropertyDefinitionID, variantProperty.Value.ToString())
-                    };
+                    var optionValue = new ConfigurableOptionValue(variantProperty);
                     var currentOption = options.FirstOrDefault(x => x.Label.Equals(variantProperty.Name));
                     if (currentOption == null)
                     {
-                        options.Add(new ConfigurableOption
+                        var position = options.Count == 0 ? 0 : options.Count + 1;
+                        var values = new List<ConfigurableOptionValue>()
                         {
-                            Id = variantProperty.PropertyDefinitionID,
-                            Position = options.Count == 0 ? 0 : options.Count + 1,
-                            Label = variantProperty.Name,
-                            AttributeCode = "prodopt-" + variantProperty.Name.Replace(" ", "_").ToLower(),
-                            FrontentLabel = variantProperty.Name,
-                            ProductId = product.ContentLink.ID,
-                            Values = new List<ConfigurableOptionValue>()
-                            {
-                                optionValue
-                            }
-                        });
+                            optionValue
+                        };
+                        options.Add(new ConfigurableOption(variantProperty, position, product.ContentLink.ID, values));
                     }
                     else
                     {
