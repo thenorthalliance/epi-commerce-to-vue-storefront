@@ -18,7 +18,7 @@ namespace EPiServer.VueStorefrontApiBridge.Mapper.User
 
         public UserModel MapUser(ApplicationUser user)
         {
-            if (user == null)
+            if (user == null || !user.IsApproved)
                 return null;
 
             var userContact = CustomerContext.Current.GetContactById(Guid.Parse(user.Id));
