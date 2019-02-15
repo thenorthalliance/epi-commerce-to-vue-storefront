@@ -1,6 +1,4 @@
-﻿using Mediachase.Commerce.Customers;
-
-namespace EPiServer.VueStorefrontApiBridge.User.Invoice.Model
+﻿namespace EPiServer.VueStorefrontApiBridge.Model.Invoice
 {
     public class InvoiceInformation
     {

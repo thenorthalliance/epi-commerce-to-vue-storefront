@@ -2,7 +2,7 @@
 using EPiServer.Cms.UI.AspNetIdentity;
 using Microsoft.AspNet.Identity;
 
-namespace EPiServer.VueStorefrontApiBridge.User
+namespace EPiServer.VueStorefrontApiBridge.Adapter.User
 {
     public interface IUserAdapter
     {

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace EPiServer.VueStorefrontApiBridge.User
+namespace EPiServer.VueStorefrontApiBridge.Utils
 {
     public interface IResetPasswordEmailSender
     {

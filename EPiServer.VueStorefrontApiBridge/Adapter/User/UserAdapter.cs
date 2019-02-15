@@ -2,7 +2,7 @@
 using EPiServer.Cms.UI.AspNetIdentity;
 using Microsoft.AspNet.Identity;
 
-namespace EPiServer.VueStorefrontApiBridge.User
+namespace EPiServer.VueStorefrontApiBridge.Adapter.User
 {
     public abstract class UserAdapter<TUser> : IUserAdapter where TUser : ApplicationUser, new()
     {
@@ -14,7 +14,6 @@ namespace EPiServer.VueStorefrontApiBridge.User
         }
 
         public abstract Task<ApplicationUser> CreateNewUserObject(string userEmail);
-
 
         public Task<IdentityResult> CreateAsync(ApplicationUser user, string password)
         {

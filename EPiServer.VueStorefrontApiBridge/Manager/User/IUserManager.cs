@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using EPiServer.VueStorefrontApiBridge.ApiModel;
 
-namespace EPiServer.VueStorefrontApiBridge.User
+namespace EPiServer.VueStorefrontApiBridge.Manager.User
 {
     public interface IUserManager
     {

@@ -1,14 +1,8 @@
-﻿using EPiServer.VueStorefrontApiBridge.User.Invoice.Model;
+﻿using EPiServer.VueStorefrontApiBridge.Model.Invoice;
 using Mediachase.Commerce.Customers;
 
-
-namespace EPiServer.VueStorefrontApiBridge.User.Invoice
+namespace EPiServer.VueStorefrontApiBridge.Adapter.Invoice
 {
-    public interface IInvoiceAdapter
-    {
-        InvoiceInformation GetInvoiceInformation(CustomerContact customerContact, CustomerAddress address);
-    }
-
     public class MockedInvoiceAdapter : IInvoiceAdapter
     {
         public InvoiceInformation GetInvoiceInformation(CustomerContact customerContact, CustomerAddress address)

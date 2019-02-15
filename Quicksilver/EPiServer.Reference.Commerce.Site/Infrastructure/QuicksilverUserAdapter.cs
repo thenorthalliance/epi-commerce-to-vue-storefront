@@ -8,7 +8,8 @@ using EPiServer.Logging;
 using EPiServer.Reference.Commerce.Shared.Identity;
 using EPiServer.Reference.Commerce.Shared.Services;
 using EPiServer.ServiceLocation;
-using EPiServer.VueStorefrontApiBridge.User;
+using EPiServer.VueStorefrontApiBridge.Adapter.User;
+using EPiServer.VueStorefrontApiBridge.Utils;
 using Microsoft.AspNet.Identity;
 
 namespace EPiServer.Reference.Commerce.Site.Infrastructure

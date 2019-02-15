@@ -2,7 +2,7 @@
 using System.Web.Http;
 using EPiServer.VueStorefrontApiBridge.ApiModel;
 using EPiServer.VueStorefrontApiBridge.Authorization;
-using EPiServer.VueStorefrontApiBridge.User;
+using EPiServer.VueStorefrontApiBridge.Manager.User;
 using EPiServer.VueStorefrontApiBridge.Utils;
 using Microsoft.AspNet.Identity;
 

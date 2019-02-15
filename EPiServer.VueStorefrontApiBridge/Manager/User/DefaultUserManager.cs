@@ -2,23 +2,29 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EPiServer.Logging;
+using EPiServer.VueStorefrontApiBridge.Adapter.User;
 using EPiServer.VueStorefrontApiBridge.ApiModel;
+using EPiServer.VueStorefrontApiBridge.Manager.Contact;
+using EPiServer.VueStorefrontApiBridge.Mapper.User;
+using EPiServer.VueStorefrontApiBridge.Utils;
 using Mediachase.BusinessFoundation.Data;
 using Mediachase.Commerce.Customers;
 
-namespace EPiServer.VueStorefrontApiBridge.User
+namespace EPiServer.VueStorefrontApiBridge.Manager.User
 {
     public class DefaultUserManager : IUserManager
     {        
         protected readonly IUserMapper UserMapper;
         protected readonly IUserAdapter UserAdapter;
         protected readonly IResetPasswordEmailSender ResetPasswordEmailSender;
+        protected readonly ICustomerContactManager CustomerContactManager;
         
-        public DefaultUserManager(IUserMapper userMapper, IUserAdapter userAdapter, IResetPasswordEmailSender resetPasswordEmailSender)
+        public DefaultUserManager(IUserMapper userMapper, IUserAdapter userAdapter, IResetPasswordEmailSender resetPasswordEmailSender, ICustomerContactManager customerContactManager)
         {
             UserMapper = userMapper;
             UserAdapter = userAdapter;
             ResetPasswordEmailSender = resetPasswordEmailSender;
+            CustomerContactManager = customerContactManager;
         }
 
         public async Task<UserModel> GetUserByCredentials(string userLogin, string userPassword)
@@ -61,21 +67,14 @@ namespace EPiServer.VueStorefrontApiBridge.User
             user.UserName = updatedUser.Email;
             user.Email = updatedUser.Email;
 
-            var result = await UserAdapter.UpdateAsync(user);
-            if (!result.Succeeded)
+            var identity = await UserAdapter.UpdateAsync(user);
+            if (!identity.Succeeded)
             {
-                LogDebugErrors("UpdateUser failed", result.Errors);
+                LogDebugErrors("UpdateUser failed", identity.Errors);
                 return false;
             }
 
-            var currentContant = CustomerContext.Current.GetContactById(new Guid(userId));
-            currentContant.FirstName = updatedUser.FirstName;
-            currentContant.LastName = updatedUser.LastName;
-            currentContant.Email = updatedUser.Email;
-            currentContant.UserId = "String:" + updatedUser.Email; //See UserService.cs:124  
-            currentContant.SaveChanges();
-
-            return true;
+            return CustomerContactManager.UpdateCustomerContact(userId, updatedUser);
         }
 
         public async Task<bool> ChangePassword(string userId, string oldPassword, string newPassword)
