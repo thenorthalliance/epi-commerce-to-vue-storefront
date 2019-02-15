@@ -37,9 +37,15 @@ namespace EPiServer.VueStorefrontApiBridge.ApiModel
         public int GroupId { get; set; } = 1;
 
         [JsonProperty("addresses")]
-        public List<object> Addresses { get; set; } = new List<object>();
+        public List<UserAddressModel> Addresses { get; set; } = new List<UserAddressModel>();
 
         [JsonProperty("disable_auto_group_change")]
-        public int DisableAutoGroupChange { get; set; } = 0;
+        public int DisableAutoGroupChange { get; set; }
+
+        [JsonProperty("default_shipping", NullValueHandling = NullValueHandling.Ignore)]
+        public string DefaultShippingId { get; set; }
+
+        [JsonProperty("default_billing", NullValueHandling = NullValueHandling.Ignore)]
+        public string DefaultBillingId { get; set; }
     }
 }

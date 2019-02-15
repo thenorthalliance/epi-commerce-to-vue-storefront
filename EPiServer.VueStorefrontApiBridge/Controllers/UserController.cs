@@ -1,36 +1,40 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web.Http;
 using EPiServer.VueStorefrontApiBridge.ApiModel;
 using EPiServer.VueStorefrontApiBridge.Authorization;
-using EPiServer.VueStorefrontApiBridge.User;
+using EPiServer.VueStorefrontApiBridge.Manager.User;
+using EPiServer.VueStorefrontApiBridge.Utils;
 using Microsoft.AspNet.Identity;
 
 namespace EPiServer.VueStorefrontApiBridge.Controllers
 {
     public class UserController : ApiController
     {
-        private readonly IUserAdapter _userAdapter;
+        private readonly IUserManager _userManager;
         private readonly IUserTokenProvider _tokenProvider;
 
-        public UserController(IUserAdapter userAdapter, IUserTokenProvider userTokenProvider)
+        public UserController(IUserManager userManager, IUserTokenProvider userTokenProvider)
         {
-            _userAdapter = userAdapter;
+            _userManager = userManager;
             _tokenProvider = userTokenProvider;
         }
 
         [HttpPost]
         public async Task<IHttpActionResult> Login([FromBody]UserLoginModel userLoginModel)
         {
-            var user = await _userAdapter.GetUserByCredentials(userLoginModel.Username, userLoginModel.Password);
+            var user = await _userManager.GetUserByCredentials(userLoginModel.Username, userLoginModel.Password);
 
-            if(user == null)
-                return Ok(new VsfErrorResponse("You did not sign in correctly or your account is temporarily disabled."));
+            if (user == null)
+                return Ok(new VsfErrorResponse(
+                    "You did not sign in correctly or your account is temporarily disabled."));
 
-            var authToken = await _tokenProvider.GenerateNewToken(user);
-            var refreshToken = await _tokenProvider.GenerateNewRefreshToken(user);
+            using (await UserLocker.LockAsync(user.Id))
+            {
+                var authToken = await _tokenProvider.GenerateNewToken(user);
+                var refreshToken = await _tokenProvider.GenerateNewRefreshToken(user);
 
-            return Ok(new LoginResponse(authToken, refreshToken));
+                return Ok(new LoginResponse(authToken, refreshToken));
+            }
         }
 
         [HttpPost]
@@ -38,7 +42,7 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
         {
             var refreshToken = await _tokenProvider.GetRefreshToken(userRefreshTokenModel.RefreshToken);
 
-            var user = await _userAdapter.GetUserById(refreshToken.UserId);
+            var user = await _userManager.GetUserById(refreshToken.UserId);
             var authToken = await _tokenProvider.GenerateNewToken(user);
 
             return Ok(new RefreshTokenResponse(authToken));
@@ -47,7 +51,10 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
         [HttpPost]
         public async Task<IHttpActionResult> Create(UserCreateModel userCreateModel)
         {
-            var newUser = await _userAdapter.CreateUser(userCreateModel);
+            var newUser = await _userManager.CreateUser(userCreateModel);
+            if (newUser == null)
+                return Ok(new VsfErrorResponse("User not created. TODO ADD INFO!"));
+
             return Ok(new VsfSuccessResponse<UserModel>(newUser));
         }
 
@@ -55,7 +62,7 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
         [ActionName("reset-password")]
         public async Task<IHttpActionResult> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
-            if (!await _userAdapter.SendResetPasswordEmail(resetPasswordModel.Email))
+            if (!await _userManager.SendResetPasswordEmail(resetPasswordModel.Email))
                 return Ok(new VsfErrorResponse($"No such entity with email = {resetPasswordModel.Email}"));
             return Ok(new VsfSuccessResponse<string>("Email sent."));
         }
@@ -64,11 +71,16 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
         [ActionName("change-password")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordModel changePasswordModel)
         {
-            if (!await _userAdapter.ChangePassword(User.Identity.GetUserId(),
-                changePasswordModel.CurrentPassword, changePasswordModel.NewPassword))
-                return Ok(new VsfErrorResponse("The password doesn't match this account."));
+            var userId = User.Identity.GetUserId();
 
-            return Ok(new VsfSuccessResponse<string>("Password changed."));
+            using (await UserLocker.LockAsync(userId))
+            {
+                if (!await _userManager.ChangePassword(userId, 
+                    changePasswordModel.CurrentPassword, changePasswordModel.NewPassword))
+                    return Ok(new VsfErrorResponse("The password doesn't match this account."));
+
+                return Ok(new VsfSuccessResponse<string>("Password changed."));
+            }
         }
 
         [HttpGet]
@@ -81,10 +93,33 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
 
         [HttpGet]
         [VsfAuthorize]
-        public async Task<IHttpActionResult> Me()
+        [ActionName("me")]
+        public async Task<IHttpActionResult> GetUser()
         {
-            return Ok(new VsfSuccessResponse<UserModel>(await _userAdapter.GetUserById(
-                User.Identity.GetUserId())));
+            var userId = User.Identity.GetUserId();
+            using (await UserLocker.LockAsync(userId))
+            {
+                return Ok(new VsfSuccessResponse<UserModel>(await _userManager.GetUserById(userId)));
+            }
+        }
+
+        [HttpPost]
+        [VsfAuthorize]
+        [ActionName("me")]
+        public async Task<IHttpActionResult> UpdateUser(UserUpdateModel updateModel)
+        {
+            var userId = User.Identity.GetUserId();
+
+            using (await UserLocker.LockAsync(userId))
+            {
+                if (await _userManager.UpdateUser(userId, updateModel.Customer))
+                {
+                    return Ok(new VsfSuccessResponse<UserModel>(await _userManager.GetUserById(
+                        User.Identity.GetUserId())));
+                }
+
+                return Ok(new VsfErrorResponse("User update failed."));
+            }
         }
     }
 }
