@@ -6,6 +6,7 @@ using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
 using EPiServer.VueStorefrontApiBridge.Adapter.Invoice;
+using EPiServer.VueStorefrontApiBridge.Adapter.Cart;
 using EPiServer.VueStorefrontApiBridge.Authorization;
 using EPiServer.VueStorefrontApiBridge.Authorization.Model;
 using EPiServer.VueStorefrontApiBridge.Manager.Address;
@@ -42,6 +43,11 @@ namespace EPiServer.VueStorefrontApiBridge
                 context.Services.Add(typeof(ICustomerAddressManager), typeof(DefaultCustomerAddressManager), ServiceInstanceScope.Transient);
 
             context.Services.Add(typeof(IInvoiceAdapter), typeof(MockedInvoiceAdapter), ServiceInstanceScope.Singleton);
+
+            if (!context.Services.Contains(typeof(ICartAdapter)))
+            {
+                context.Services.Add(typeof(ICartAdapter), typeof(CartAdapter), ServiceInstanceScope.Transient);
+            }
         }
 
         public void Initialize(InitializationEngine context)

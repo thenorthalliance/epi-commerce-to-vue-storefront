@@ -279,7 +279,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Adapter\Cart\CartAdapter.cs" />
+    <Compile Include="Adapter\Cart\ICartAdapter.cs" />
     <Compile Include="Adapter\Invoice\MockedInvoiceAdapter.cs" />
+    <Compile Include="Adapter\User\UserAdapter.cs" />
+    <Compile Include="ApiModel\Cart\CartItem.cs" />
+    <Compile Include="ApiModel\Cart\CartRequest.cs" />
+    <Compile Include="ApiModel\Cart\ConfigurableItemOption.cs" />
+    <Compile Include="ApiModel\Cart\ExtensionAttributes.cs" />
+    <Compile Include="ApiModel\Cart\PaymentMethod.cs" />
+    <Compile Include="ApiModel\Cart\ProductOption.cs" />
+    <Compile Include="ApiModel\Cart\ShipmentMethodRequest.cs" />
+    <Compile Include="ApiModel\Cart\ShippingMethod.cs" />
+    <Compile Include="ApiModel\Cart\Total.cs" />
+    <Compile Include="ApiModel\Cart\TotalItem.cs" />
+    <Compile Include="ApiModel\Cart\TotalSegment.cs" />
+    <Compile Include="ApiModel\Cart\TotalSegmentExtensionAttributes.cs" />
     <Compile Include="ApiModel\ChangePasswordModel.cs" />
     <Compile Include="ApiModel\ResetPasswordModel.cs" />
     <Compile Include="ApiModel\UserAddressModel.cs" />
@@ -303,16 +318,15 @@
     <Compile Include="Manager\Contact\DefaultCustomerContactManager.cs" />
     <Compile Include="Manager\Contact\ICustomerContactManager.cs" />
     <Compile Include="Adapter\Invoice\IInvoiceAdapter.cs" />
+    <Compile Include="Manager\User\DefaultUserManager.cs" />
+    <Compile Include="Manager\User\IUserManager.cs" />
+    <Compile Include="Mapper\User\DefaultUserMapper.cs" />
+    <Compile Include="Mapper\User\IUserMapper.cs" />
     <Compile Include="Model\Invoice\InvoiceInformation.cs" />
     <Compile Include="Utils\IResetPasswordEmailSender.cs" />
     <Compile Include="Adapter\User\IUserAdapter.cs" />
     <Compile Include="Authorization\JwtUserTokenProvider.cs" />
-    <Compile Include="Controllers\VsfCartController.cs" />
-    <Compile Include="Manager\User\IUserManager.cs" />
-    <Compile Include="Mapper\User\IUserMapper.cs" />
-    <Compile Include="Adapter\User\UserAdapter.cs" />
-    <Compile Include="Manager\User\DefaultUserManager.cs" />
-    <Compile Include="Mapper\User\DefaultUserMapper.cs" />
+    <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Utils\ResourceLocker.cs" />
     <Compile Include="VueStorefrontApiBridgeRegisterEx.cs" />
     <Compile Include="Controllers\UserController.cs" />
