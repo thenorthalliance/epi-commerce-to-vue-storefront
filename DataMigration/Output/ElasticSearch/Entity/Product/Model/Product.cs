@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using DataMigration.Input.Episerver.Common.Helpers;
 using DataMigration.Input.Episerver.Product.Model;
-using DataMigration.Output.ElasticSearch.Entity.Attribute.Helper;
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Core;
 using Newtonsoft.Json;
@@ -38,23 +37,38 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
             HasOptions = configurableOptions.Length > 1 ? "1" : "0";
             RequiredOptions = "0";
             ConfigurableOptions = configurableOptions;
+            UpdatedAt = epiProduct.ProductContent.Changed;
+            foreach (var option in configurableOptions) //TODO how to make it better, color_options etc are needed to filetering in category view and it is needed to be a number
+            {
+                if (option.Label.Equals("color"))
+                {
+                    ColorOptions = option.Values.Select(x => x.ValueIndex);
+                }
+
+                if (option.Label.Equals("size"))
+                {
+                    SizeOptions = option.Values.Select(x => x.ValueIndex);
+                }
+            }
         }
 
         private static IEnumerable<ConfigurableOption> GetProductConfigurableOptions(ProductContent product)
         {
             var options = new List<ConfigurableOption>();
             var variants = product.GetVariants();
+            var index = 0;
             foreach (var variant in variants)
             {
                 var variantProperties = ContentHelper.GetVariantVsfProperties(variant);
+
                 foreach (var variantProperty in variantProperties)
                 {
                     if (variantProperty.Value == null)
                     {
                         continue;
                     }
-                    var optionValue = new ConfigurableOptionValue(variantProperty);
-                    var currentOption = options.FirstOrDefault(x => x.Label.Equals(variantProperty.Name));
+                    var optionValue = new ConfigurableOptionValue(variantProperty, index);
+                    var currentOption = options.FirstOrDefault(x => x.Label.Equals(variantProperty.Name.ToLower()));
                     if (currentOption == null)
                     {
                         var position = options.Count == 0 ? 0 : options.Count + 1;
@@ -71,6 +85,8 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
                         optionValue.Order = currentOption.Values.Count + 1;
                         currentOption.Values.Add(optionValue);
                     }
+
+                    index = index + 1;
                 }
             }
 
@@ -88,13 +104,19 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
                 {
                     continue;
                 }
-                resultVariantWithOptions.Add(new JProperty(variantProperty.Name, variantProperty.Value.ToString()));
+                resultVariantWithOptions.Add(new JProperty(variantProperty.Name.ToLower(), variantProperty.Value.ToString()));
             }
             return resultVariantWithOptions;
         }
 
         [JsonProperty("category_ids")]
         public IEnumerable<string> CategoryIds { get; set; }
+
+        [JsonProperty("color_options")]
+        public IEnumerable<int> ColorOptions { get; set; }
+
+        [JsonProperty("size_options")]
+        public IEnumerable<int> SizeOptions { get; set; }
 
         [JsonProperty("type_id")]
         public string TypeId { get; set; }
@@ -127,7 +149,11 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 
         //nullable
         [JsonProperty("news_from_date")]
-        public DateTime? NewsFromDate { get; set; }
+        public DateTime? NewsFromDate { get; set; }       
+        
+        //nullable
+        [JsonProperty("updated_at")]
+        public DateTime? UpdatedAt { get; set; }
 
         //nullable
         [JsonProperty("news_to_date")]

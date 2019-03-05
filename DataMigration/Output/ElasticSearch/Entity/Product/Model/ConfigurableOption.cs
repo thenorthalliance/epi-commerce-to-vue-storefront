@@ -8,11 +8,12 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
     {
         public ConfigurableOption(PropertyData variantProperty, int position, int productId, List<ConfigurableOptionValue> values)
         {
+            var variantPropertyName = variantProperty.Name.ToLower(); //TODO filtering not working
             Id = variantProperty.PropertyDefinitionID;
             Position = position;
-            Label = variantProperty.Name;
-            AttributeCode = "prodopt-" + variantProperty.Name.Replace(" ", "_").ToLower();
-            FrontentLabel = variantProperty.Name;
+            Label = variantPropertyName;
+            AttributeCode = variantPropertyName.Replace(" ", "_");
+            FrontentLabel = variantPropertyName;
             ProductId = productId;
             Values = values;
         }

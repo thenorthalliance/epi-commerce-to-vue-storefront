@@ -17,13 +17,13 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 
             Name = contentBase.DisplayName;
             Id = contentBase.ContentLink.ID;
-            UrlKey = contentBase.RouteSegment;
-            UrlPath = contentBase.SeoUri;
-            IsInStock = new Stock {IsInStock = variantQuantity > 0, Quantity = (int) variantQuantity};
-            Sku = contentBase.Code;
+            UrlKey = contentBase.RouteSegment.Replace("-","");
+            UrlPath = contentBase.SeoUri.Replace("-", "");
+            IsInStock = new Stock {IsInStock = true, Quantity = (int) variantQuantity};
+            Sku = contentBase.Code.Replace("-", "");
             TaxClassId = null; //TODO We don't have taxes yet,
             MediaGallery =
-                contentBase.CommerceMediaCollection.Select(x => new Media {Image = UrlHelper.GetUrl(x.AssetLink)});
+                GetGallery(contentBase as ProductContent);
             Image = imageUrl ?? "";
             Thumbnail = imageUrl ?? "";
             Price = PriceService.GetPrice(contentBase.ContentLink);
@@ -55,5 +55,26 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 
         [JsonProperty("stock")]
         public Stock IsInStock { get; set; }
+
+        private static IEnumerable<Media> GetGallery(ProductContent content)
+        {
+            if (content == null)
+            {
+                return null;
+            }
+            var result = new List<Media>();
+            var variants = content.GetVariants();
+            foreach (var variant in variants)
+            {
+                var imageReference = ContentHelper.GetContent<VariationContent>(variant).CommerceMediaCollection
+                    .Select(x => x.AssetLink).FirstOrDefault();
+                result.Add(new Media
+                {
+                    Image = UrlHelper.GetUrl(imageReference)
+                });
+            }
+
+            return result;
+        }
     }
 }
