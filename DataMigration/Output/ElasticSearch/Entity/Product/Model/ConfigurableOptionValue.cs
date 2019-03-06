@@ -1,18 +1,16 @@
-﻿using DataMigration.Output.ElasticSearch.Entity.Attribute.Helper;
-using EPiServer.Core;
+﻿using EPiServer.Core;
 using Newtonsoft.Json;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 {
     public class ConfigurableOptionValue
     {
-        public ConfigurableOptionValue(PropertyData variantProperty)
+        public ConfigurableOptionValue(PropertyData variantProperty, int order)
         {
             DefaultLabel = variantProperty.Value.ToString();
             Label = variantProperty.Value.ToString();
-            Order = 0;
-            ValueIndex = AttributeHelper.CreateValueIndex(variantProperty.PropertyDefinitionID,
-                variantProperty.Value.ToString());
+            Order = order;
+            ValueIndex = int.Parse(variantProperty.PropertyDefinitionID.ToString() + Order); //TODO filters displays on category page but not in the product page
         }
 
         [JsonProperty("label")]
@@ -25,9 +23,9 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
         public int Order { get; set; }
 
         [JsonProperty("value_index")]
-        public string ValueIndex { get; set; }
+        public int ValueIndex { get; set; }
 
-        [JsonProperty("value_data")]
+        [JsonProperty("value_data", NullValueHandling = NullValueHandling.Ignore)]
         public string ValueData { get; set; }
     }
 }

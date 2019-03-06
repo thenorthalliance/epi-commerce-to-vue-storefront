@@ -8,6 +8,9 @@ namespace DataMigration.Output.ElasticSearch.Entity.Category.Model
 {
     public class Category : CategoryBase
     {
+        public Category()
+        {
+        }
         public Category(EpiCategory epiCategory)
         {
             var isPublished = epiCategory.Category.Status.Equals(VersionStatus.Published);
@@ -18,7 +21,7 @@ namespace DataMigration.Output.ElasticSearch.Entity.Category.Model
             Description = GetDescription(epiCategory);
             IsActive = isPublished;
             IncludeInMenu = isPublished;
-            UrlKey = epiCategory.Category.RouteSegment;
+            UrlKey = epiCategory.Category.RouteSegment.Replace("-",""); //TODO menu sidebar doesn't work when dashes are, check it again
             Position = epiCategory.SortOrder;
             Level = epiCategory.Level;
             Children = epiCategory.Children.Select(x => new Category(x));

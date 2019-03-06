@@ -19,7 +19,7 @@ namespace EPiServer.Reference.Commerce.Site.Features.Product.Models
         [Tokenize]
         [IncludeInDefaultSearch]
         [BackingType(typeof(PropertyString))]
-        [Display(Name = "Size", Order = 1)]
+        [Display(Name = "Size", Order = 2)]
         public virtual string Size { get; set; }
 
         [VsfOption]
@@ -28,7 +28,7 @@ namespace EPiServer.Reference.Commerce.Site.Features.Product.Models
         [Tokenize]
         [IncludeInDefaultSearch]
         [BackingType(typeof(PropertyString))]
-        [Display(Name = "Color", Order = 2)]
+        [Display(Name = "Color", Order = 1)]
         public virtual string Color { get; set; }
     }
 }
