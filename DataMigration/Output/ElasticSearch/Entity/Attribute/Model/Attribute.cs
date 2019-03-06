@@ -48,8 +48,7 @@ namespace DataMigration.Output.ElasticSearch.Entity.Attribute.Model
             Name = source.Name;
             FrontendLabel = source.Name;
             AttributeCode = source.Name.Replace(" ", "_").ToLower();
-            Options = source.Values.Select(x =>
-                new Option {Name = x, Value = AttributeHelper.CreateValueIndex(source.Id, x)});
+            Options = source.Values.Select(x => AttributeHelper.Instance.GetAttributeOption(source.Id, x));
         }
 
         [JsonProperty("position")]

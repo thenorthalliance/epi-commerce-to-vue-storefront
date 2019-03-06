@@ -1,4 +1,5 @@
-﻿using EPiServer.Core;
+﻿using DataMigration.Output.ElasticSearch.Entity.Attribute.Helper;
+using EPiServer.Core;
 using Newtonsoft.Json;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
@@ -10,7 +11,7 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
             DefaultLabel = variantProperty.Value.ToString();
             Label = variantProperty.Value.ToString();
             Order = order;
-            ValueIndex = int.Parse(variantProperty.PropertyDefinitionID.ToString() + Order); //TODO filters displays on category page but not in the product page
+            ValueIndex = AttributeHelper.Instance.GetAttributeOption(variantProperty.PropertyDefinitionID, Label).Value; 
         }
 
         [JsonProperty("label")]
