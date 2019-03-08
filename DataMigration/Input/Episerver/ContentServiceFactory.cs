@@ -2,25 +2,25 @@
 using DataMigration.Input.Episerver.Common.Service;
 using DataMigration.Input.Episerver.ContentProperty.Service;
 using DataMigration.Input.Episerver.Product.Service;
-using DataMigration.Output.ElasticSearch.Entity;
 
 namespace DataMigration.Input.Episerver
 {
     public static class ContentServiceFactory
     {
-        public static IContentService Create(EntityType entityType)
+        public static IContentService Create<T>() where T: class
         {
-            switch (entityType)
-            {
-                case EntityType.Category:
-                    return new CategoryService();
-                case EntityType.Product:
-                    return new ProductService();
-                case EntityType.Attribute:
-                    return new PropertyService();
-                default:
-                    return null;
-            }
+            var entityType = typeof(T);
+
+            if(entityType == typeof(Output.ElasticSearch.Entity.Category.Model.Category))
+                return new CategoryService();
+
+            if (entityType == typeof(Output.ElasticSearch.Entity.Product.Model.Product))
+                return new ProductService();
+
+            if (entityType == typeof(DataMigration.Output.ElasticSearch.Entity.Attribute.Model.Attribute))
+                return new PropertyService();
+
+            return null;
         }
     }
 }

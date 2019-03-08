@@ -1,19 +1,19 @@
-﻿using Newtonsoft.Json;
+﻿using Nest;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 {
     public class Media
     {
-        [JsonProperty("image")]
+        [PropertyName("image")]
         public string Image { get; set; }
 
-        [JsonProperty("pos")]
+        [PropertyName("pos")]
         public int Position { get; set; }
 
-        [JsonProperty("typ")]
+        [PropertyName("typ")]
         public string Type { get; set; }
 
-        [JsonProperty("lab")]
+        [PropertyName("lab")]
         public string Label { get; set; }
     }
 }

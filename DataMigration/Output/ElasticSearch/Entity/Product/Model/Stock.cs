@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using Nest;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 {
     public class Stock
     {
-        [JsonProperty("is_in_stock")]
+        [PropertyName("is_in_stock")]
         public bool IsInStock { get; set; }
 
-        [JsonProperty("qty")]
+        [PropertyName("qty")]
         public int Quantity { get; set; }
     }
 }

@@ -3,11 +3,11 @@ using System.Linq;
 using DataMigration.Input.Episerver.Common.Helpers;
 using DataMigration.Input.Episerver.Common.Service;
 using EPiServer.Commerce.Catalog.ContentTypes;
-using Newtonsoft.Json;
+using Nest;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 {
-    public class ProductBase : Entity
+    public class ProductBase
     {
         public ProductBase(EntryContentBase contentBase)
         {
@@ -29,31 +29,37 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
             Price = PriceService.GetPrice(contentBase.ContentLink);
         }
 
-        [JsonProperty("sku")]
+        [PropertyName("id")]
+        public int Id { get; set; }
+
+        [PropertyName("name")]
+        public string Name { get; set; }
+
+        [Keyword(Name="sku")]
         public string Sku { get; set; }
 
-        [JsonProperty("tax_class_id")]
+        [PropertyName("tax_class_id")]
         public string TaxClassId { get; set; }
 
-        [JsonProperty("image")]
+        [PropertyName("image")]
         public string Image { get; set; }
 
-        [JsonProperty("thumbnail")]
+        [PropertyName("thumbnail")]
         public string Thumbnail { get; set; }
 
-        [JsonProperty("media_gallery")]
+        [PropertyName("media_gallery")]
         public IEnumerable<Media> MediaGallery { get; set; }
 
-        [JsonProperty("url_key")]
+        [PropertyName("url_key")]
         public string UrlKey { get; set; }
 
-        [JsonProperty("url_path")]
+        [PropertyName("url_path")]
         public string UrlPath { get; set; }
 
-        [JsonProperty("price")]
+        [PropertyName("price")]
         public int Price { get; set; }
 
-        [JsonProperty("stock")]
+        [PropertyName("stock")]
         public Stock IsInStock { get; set; }
 
         private static IEnumerable<Media> GetGallery(ProductContent content)

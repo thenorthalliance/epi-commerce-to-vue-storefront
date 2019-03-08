@@ -6,7 +6,7 @@ using DataMigration.Input.Episerver.Product.Model;
 using DataMigration.Output.ElasticSearch.Entity.Attribute.Helper;
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Core;
-using Newtonsoft.Json;
+using Nest;
 using Newtonsoft.Json.Linq;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
@@ -110,68 +110,68 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
             return resultVariantWithOptions;
         }
 
-        [JsonProperty("category_ids")]
+        [PropertyName("category_ids")]
         public IEnumerable<string> CategoryIds { get; set; }
 
-        [JsonProperty("color_options")]
+        [PropertyName("color_options")]
         public IEnumerable<int> ColorOptions { get; set; }
 
-        [JsonProperty("size_options")]
+        [PropertyName("size_options")]
         public IEnumerable<int> SizeOptions { get; set; }
 
-        [JsonProperty("type_id")]
+        [PropertyName("type_id")]
         public string TypeId { get; set; }
 
-        [JsonProperty("has_options")]
+        [PropertyName("has_options")]
         public string HasOptions { get; set; }
 
-        [JsonProperty("required_options")]
+        [PropertyName("required_options")]
         public string RequiredOptions { get; set; }
 
-        [JsonProperty("status")]
+        [PropertyName("status")]
         public int Status { get; set; }
 
         // 4 -> visible, 0 -> invisible
-        [JsonProperty("visibility")]
+        [PropertyName("visibility")]
         public int Visibility { get; set; }
 
-        [JsonProperty("description")]
+        [PropertyName("description")]
         public string Description { get; set; }
 
         //nullable
-        [JsonProperty("special_price")]
+        [PropertyName("special_price")]
         public int? SpecialPrice { get; set; }
 
-        [JsonProperty("category")]
+        [PropertyName("category")]
         public IEnumerable<CategoryListItem> Category { get; set; }
 
-        [JsonProperty("weight")]
+        [PropertyName("weight")]
         public int Weight { get; set; }
 
         //nullable
-        [JsonProperty("news_from_date")]
+        [PropertyName("news_from_date")]
         public DateTime? NewsFromDate { get; set; }       
         
         //nullable
-        [JsonProperty("updated_at")]
+        [PropertyName("updated_at")]
         public DateTime? UpdatedAt { get; set; }
 
         //nullable
-        [JsonProperty("news_to_date")]
+        [PropertyName("news_to_date")]
         public DateTime? NewsToDate { get; set; }
 
         //nullable
-        [JsonProperty("special_from_date")]
+        [PropertyName("special_from_date")]
         public DateTime? SpecialFromDate { get; set; }
 
         //nullable
-        [JsonProperty("special_to_date")]
+        [PropertyName("special_to_date")]
         public DateTime? SpecialToDate { get; set; }
 
-        [JsonProperty("configurable_children")]
+        [PropertyName("configurable_children")]
         public JObject[] ConfigurableChildren { get; set; }
 
-        [JsonProperty("configurable_options")]
+        [PropertyName("configurable_options")]
         public ConfigurableOption[] ConfigurableOptions { get; set; }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using DataMigration.Output.ElasticSearch.Entity.Attribute.Helper;
 using EPiServer.Core;
-using Newtonsoft.Json;
+using Nest;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 {
@@ -14,19 +14,20 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
             ValueIndex = AttributeHelper.Instance.GetAttributeOption(variantProperty.PropertyDefinitionID, Label).Value; 
         }
 
-        [JsonProperty("label")]
+        [PropertyName("label")]
         public string Label { get; set; }
 
-        [JsonProperty("default_label")]
+        [PropertyName("default_label")]
         public string DefaultLabel { get; set; }
 
-        [JsonProperty("order")]
+        [PropertyName("order")]
         public int Order { get; set; }
 
-        [JsonProperty("value_index")]
+        [PropertyName("value_index")]
         public int ValueIndex { get; set; }
 
-        [JsonProperty("value_data", NullValueHandling = NullValueHandling.Ignore)]
-        public string ValueData { get; set; }
+//        [JsonProperty("value_data", NullValueHandling = NullValueHandling.Ignore)]
+//        [Text(Name = "value_data")]
+//        public string ValueData { get; set; }
     }
 }

@@ -1,25 +1,25 @@
-﻿using DataMigration.Mapper.Attribute;
-using DataMigration.Mapper.Category;
-using DataMigration.Mapper.Product;
-using DataMigration.Output.ElasticSearch.Entity;
+﻿using DataMigration.Output.ElasticSearch.Entity.Attribute.Model;
+using DataMigration.Output.ElasticSearch.Entity.Category.Model;
+using DataMigration.Output.ElasticSearch.Entity.Product.Model;
 
 namespace DataMigration.Mapper
 {
     public class MapperFactory
     {
-        public static IMapper Create(EntityType entityType)
+        public static IMapper<T> Create<T>() where T: class
         {
-            switch (entityType)
-            {
-                case EntityType.Category:
-                    return new CategoryMapper();
-                case EntityType.Product:
-                    return new ProductMapper();
-                case EntityType.Attribute:
-                    return new AttributeMapper();
-                default:
-                    return null;
-            }
+            var docType = typeof(T);
+
+            if (docType == typeof(Product))
+                return (IMapper<T>) new ProductMapper();
+
+            if (docType == typeof(Category))
+                return (IMapper<T>)new CategoryMapper();
+
+            if (docType == typeof(Attribute))
+                return (IMapper<T>)new AttributeMapper();
+
+            return null;
         }
     }
 }

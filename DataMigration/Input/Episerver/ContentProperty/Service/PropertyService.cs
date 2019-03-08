@@ -6,7 +6,6 @@ using DataMigration.Input.Episerver.Common.Model;
 using DataMigration.Input.Episerver.Common.Service;
 using DataMigration.Input.Episerver.ContentProperty.Model;
 using DataMigration.Input.Episerver.Product.Model;
-using DataMigration.Output.ElasticSearch.Entity;
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Core;
 
@@ -17,7 +16,7 @@ namespace DataMigration.Input.Episerver.ContentProperty.Service
         public IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level = 2)
         {
             var properties = new List<EpiContentProperty>();
-            var productsService = ContentServiceFactory.Create(EntityType.Product);
+            var productsService = ContentServiceFactory.Create<Output.ElasticSearch.Entity.Product.Model.Product>();
             var products = (IEnumerable<EpiProduct>) productsService.GetAll(parentReference, cultureInfo);
             foreach (var product in products)
             {

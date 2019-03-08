@@ -1,26 +1,32 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using Nest;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Category.Model
 {
-    public class CategoryBase : Entity
+    public class CategoryBase
     {
-        [JsonProperty("parent_id")]
+        [PropertyName("id")]
+        public int Id { get; set; }
+
+        [PropertyName("name")]
+        public string Name { get; set; }
+
+        [PropertyName("parent_id")]
         public int ParentId { get; set; }
         
-        [JsonProperty("position")]
+        [PropertyName("position")]
         public int Position { get; set; }
 
-        [JsonProperty("children_count")]
+        [PropertyName("children_count")]
         public string ChildrenCount { get; set; }
 
-        [JsonProperty("children_data")]
-        public IEnumerable<Entity> Children { get; set; }
+        [PropertyName("children_data")]
+        public IEnumerable<CategoryBase> Children { get; set; }
 
-        [JsonProperty("include_in_menu")]
+        [PropertyName("include_in_menu")]
         public bool IncludeInMenu { get; set; }
 
-        [JsonProperty("url_key")]
+        [PropertyName("url_key")]
         public string UrlKey { get; set; }
 
     }

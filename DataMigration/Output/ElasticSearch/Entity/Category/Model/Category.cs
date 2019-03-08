@@ -2,6 +2,7 @@
 using System.Linq;
 using DataMigration.Input.Episerver.Category.Model;
 using EPiServer.Core;
+using Nest;
 using Newtonsoft.Json;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Category.Model
@@ -34,20 +35,20 @@ namespace DataMigration.Output.ElasticSearch.Entity.Category.Model
             return category.Category.GetType().GetProperty("Description")?.GetValue(category.Category, null)?.ToString();
         }
 
-        [JsonProperty("description")]
+        [PropertyName("description")]
         public string Description { get; set; }
 
-        [JsonProperty("is_active")]
+        [PropertyName("is_active")]
         public bool IsActive { get; set; }
 
         //1 is a root category
-        [JsonProperty("level")]
+        [PropertyName("level")]
         public int Level { get; set; }
 
-        [JsonProperty("product_count")]
+        [PropertyName("product_count")]
         public int ProductCount { get; set; }
 
-        [JsonProperty("available_sort_by")]
+        [PropertyName("available_sort_by")]
         public IEnumerable<string> AvailableSortBy { get; set; }
     }
 }

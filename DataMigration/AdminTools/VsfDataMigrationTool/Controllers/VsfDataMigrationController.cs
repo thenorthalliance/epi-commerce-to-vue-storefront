@@ -7,7 +7,9 @@ using DataMigration.AdminTools.VsfDataMigrationTool.ViewModels;
 using DataMigration.Input.Episerver;
 using DataMigration.Input.Episerver.Common.Model;
 using DataMigration.Mapper;
-using DataMigration.Output.ElasticSearch.Entity;
+using DataMigration.Output.ElasticSearch.Entity.Attribute.Model;
+using DataMigration.Output.ElasticSearch.Entity.Category.Model;
+using DataMigration.Output.ElasticSearch.Entity.Product.Model;
 using DataMigration.Output.ElasticSearch.Service;
 using EPiServer;
 using EPiServer.Commerce.Catalog.ContentTypes;
@@ -29,72 +31,87 @@ namespace DataMigration.AdminTools.VsfDataMigrationTool.Controllers
     {
         private readonly IContentLoader _contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
         private readonly ReferenceConverter _referenceConverter = ServiceLocator.Current.GetInstance<ReferenceConverter>();
+        private readonly IndexApiService _indexService = new IndexApiService("epi_catalog3", "http://localhost:9200");
+
         public ActionResult Index()
         {
             var model = new VsfDataMigrationViewModel {Text = "Data migration's admin plugin for Vue Store Front"};
             return View(model);
         }
 
-        public async Task<ActionResult> MigrateAttributes()
+        public async Task<ActionResult> MigrateAll()
         {
-            return Content(await MigrateEntities(EntityType.Attribute), "application/json", Encoding.UTF8);
+            await _indexService.CreateIndex();
+
+            var results = await Task.WhenAll(
+                MigrateEntities<Attribute>(),
+                MigrateEntities<Category>(),
+                MigrateEntities<Product>());
+
+            return Json(results, JsonRequestBehavior.AllowGet);
         }
 
-        public async Task<ActionResult> MigrateCategories()
-        {
-            return Content(await MigrateEntities(EntityType.Category), "application/json", Encoding.UTF8);
-        }
-
-        public async Task<ActionResult> MigrateProducts()
-        {
-            return Content(await MigrateEntities(EntityType.Product), "application/json", Encoding.UTF8);
-        }
+//        public async Task<ActionResult> MigrateAttributes()
+//        {
+//            return Content(await MigrateEntities<Attribute>(), "application/json", Encoding.UTF8);
+//        }
+//
+//        public async Task<ActionResult> MigrateCategories()
+//        {
+//            return Content(await MigrateEntities<Category>(), "application/json", Encoding.UTF8);
+//        }
+//
+//        public async Task<ActionResult> MigrateProducts()
+//        {
+//            return Content(await MigrateEntities<Product>(), "application/json", Encoding.UTF8);
+//        }
 
         public ActionResult GetCategories()
         {
             var catalogs = _contentLoader.GetChildren<CatalogContent>(_referenceConverter.GetRootLink()).ToList();
-            var mappedCategories = GetMappedEntites(catalogs[0].ContentLink, EntityType.Category);
+            var mappedCategories = GetMappedEntites<Category>(catalogs[0].ContentLink);
             var json = JsonConvert.SerializeObject(mappedCategories);
             return Content(json, "application/json", Encoding.UTF8);
         }
+
         public ActionResult GetProducts()
         {
             var catalogs = _contentLoader.GetChildren<CatalogContent>(_referenceConverter.GetRootLink()).ToList();
-            var mappedProducts = GetMappedEntites(catalogs[0].ContentLink, EntityType.Product);
+            var mappedProducts = GetMappedEntites<Product>(catalogs[0].ContentLink);
             var json = JsonConvert.SerializeObject(mappedProducts);
             return Content(json, "application/json", Encoding.UTF8);
         }
+
         public ActionResult GetAttributes()
         {
             var catalogs = _contentLoader.GetChildren<CatalogContent>(_referenceConverter.GetRootLink()).ToList();
-            var mappedAttributes = GetMappedEntites(catalogs[0].ContentLink, EntityType.Attribute);
+            var mappedAttributes = GetMappedEntites<Attribute>(catalogs[0].ContentLink);
             var json = JsonConvert.SerializeObject(mappedAttributes);
             return Content(json, "application/json", Encoding.UTF8);
         }
 
-        private async Task<string> MigrateEntities(EntityType entityType)
+        private async Task<dynamic[]> MigrateEntities<T>() where T:class
         {
             var catalogs = _contentLoader.GetChildren<CatalogContent>(_referenceConverter.GetRootLink()).ToList();
-            var products = GetMappedEntites(catalogs[0].ContentLink, entityType);
-            var result = await Migrate(products, entityType.DisplayName());
-            return JsonConvert.SerializeObject(result);
+            var products = GetMappedEntites<T>(catalogs[0].ContentLink);
+            return await Migrate(products);
         }
 
-        private static async Task<dynamic[]> Migrate(IEnumerable<Entity> entities, string type)
+        
+        private async Task<dynamic[]> Migrate<T>(IEnumerable<T> entities) where T: class
         {
-            var indexService = new IndexApiService("epi_catalog3");
-            return await indexService.SendAsync(entities, type);
+            return await _indexService.IndexMany(entities);
         }
 
-        private static IEnumerable<Entity> GetMappedEntites(ContentReference catalogReference, EntityType entityType)
+        private static IEnumerable<T> GetMappedEntites<T>(ContentReference catalogReference) where T: class
         {
-            var mapper = MapperFactory.Create(entityType);
-            return GetEntites(catalogReference, entityType).Select(mapper.Map);
+            var mapper = MapperFactory.Create<T>();
+            return GetEntites<T>(catalogReference).Select(mapper.Map);
         }
 
-        private static IEnumerable<CmsObjectBase> GetEntites(ContentReference catalogReference, EntityType entityType)
+        private static IEnumerable<CmsObjectBase> GetEntites<T>(ContentReference catalogReference) where T:class
         {
-            var contentService = ContentServiceFactory.Create(entityType);
+            var contentService = ContentServiceFactory.Create<T>();
             var content = contentService.GetAll(catalogReference, ContentLanguage.PreferredCulture);
             return content;
         }

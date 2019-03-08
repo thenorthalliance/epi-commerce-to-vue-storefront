@@ -1,10 +1,9 @@
 ﻿using DataMigration.Input.Episerver.Common.Model;
-using DataMigration.Output.ElasticSearch.Entity;
 
 namespace DataMigration.Mapper
 {
-    public interface IMapper
+    public interface IMapper<T> where T:class
     {
-        Entity Map(CmsObjectBase cmsObject);
+        T Map(CmsObjectBase cmsObject);
     }
 }

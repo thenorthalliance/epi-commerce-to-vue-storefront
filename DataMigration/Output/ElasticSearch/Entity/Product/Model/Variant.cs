@@ -1,5 +1,5 @@
 ﻿using EPiServer.Commerce.Catalog.ContentTypes;
-using Newtonsoft.Json;
+using Nest;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 {
@@ -10,7 +10,7 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
             ProductId = productId;
         }
 
-        [JsonProperty("product_id")]
+        [PropertyName("product_id")]
         public int ProductId { get; set; }
     }
 }
