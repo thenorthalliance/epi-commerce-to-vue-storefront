@@ -28,6 +28,15 @@ namespace DataMigration.Output.ElasticSearch.Service
             _client.Map<Product>(c => c.AutoMap());
             _client.Map<Attribute>(c => c.AutoMap());
             _client.Map<Category>(c => c.AutoMap());
+            //            _client.Map<Category>(c => c.AutoMap().Properties(ps => 
+            //                    ps
+            //                        .Object<object>(s => s.Name("configurable_children").Properties(ps2 => 
+            //                            ps2.Keyword(kw => kw.Name("color"))
+            //                                .Keyword(kw => kw.Name("size"))
+            //                                .Keyword(kw => kw.Name("sku"))
+            //                            ))
+            //                ));
+            //            _client.LowLevel.IndicesPutMapping<>()
         }
 
         public async Task<dynamic> IndexSingel<T>(T doc) where T: class
