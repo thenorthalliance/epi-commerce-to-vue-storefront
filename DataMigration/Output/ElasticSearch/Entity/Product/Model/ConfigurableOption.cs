@@ -6,6 +6,7 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 {
     public class ConfigurableOption
     {
+        // TODO I think we shouldn't make ConfigurableOptiuon be dependent upon other components
         public ConfigurableOption(PropertyData variantProperty, int position, int productId, List<ConfigurableOptionValue> values)
         {
             Id = variantProperty.PropertyDefinitionID;

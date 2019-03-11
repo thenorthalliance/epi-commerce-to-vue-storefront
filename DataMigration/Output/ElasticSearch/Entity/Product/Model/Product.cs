@@ -1,13 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using DataMigration.Input.Episerver.Common.Helpers;
-using DataMigration.Input.Episerver.Product.Model;
-using DataMigration.Output.ElasticSearch.Entity.Attribute.Helper;
-using EPiServer.Commerce.Catalog.ContentTypes;
-using EPiServer.Core;
 using Nest;
-using Newtonsoft.Json.Linq;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 {
@@ -43,17 +36,24 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
         [PropertyName("price")]
         public int Price { get; set; }
 
+        [PropertyName("final_price")]
+        public int FinalPrice { get; set; }
+
+        //nullable
+        [PropertyName("special_price")]
+        public int? SpecialPrice { get; set; }
+
         [PropertyName("stock")]
         public Stock IsInStock { get; set; }
 
         [PropertyName("category_ids")]
         public IEnumerable<string> CategoryIds { get; set; }
 
-        [PropertyName("color_options")]
-        public IEnumerable<int> ColorOptions { get; set; }
+        [Keyword(Name = "color_options")]
+        public IEnumerable<string> ColorOptions { get; set; }
 
-        [PropertyName("size_options")]
-        public IEnumerable<int> SizeOptions { get; set; }
+        [Keyword(Name = "size_options")]
+        public IEnumerable<string> SizeOptions { get; set; }
 
         [PropertyName("type_id")]
         public string TypeId { get; set; }
@@ -73,10 +73,6 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 
         [PropertyName("description")]
         public string Description { get; set; }
-
-        //nullable
-        [PropertyName("special_price")]
-        public int? SpecialPrice { get; set; }
 
         [PropertyName("category")]
         public IEnumerable<CategoryListItem> Category { get; set; }

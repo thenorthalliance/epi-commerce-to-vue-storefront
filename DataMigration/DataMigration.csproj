@@ -247,7 +247,6 @@
     <Compile Include="Output\ElasticSearch\Entity\IndexItem\Model\IndexItem.cs" />
     <Compile Include="Mapper\CategoryMapper.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Category\Model\Category.cs" />
-    <Compile Include="Output\ElasticSearch\Entity\Entity.cs" />
     <Compile Include="Input\Episerver\Category\Model\EpiCategory.cs" />
     <Compile Include="Input\Episerver\Common\Model\CmsObjectBase.cs" />
     <Compile Include="Mapper\IMapper.cs" />

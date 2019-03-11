@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DataMigration.Output.ElasticSearch.Entity.Category.Model;
@@ -18,6 +19,7 @@ namespace DataMigration.Output.ElasticSearch.Service
             _indexName = indexName;
             var settings = new ConnectionSettings(new Uri(serverUri)).DefaultIndex(indexName);
             _client = new ElasticClient(settings);
+            
         }
 
         public async Task CreateIndex()
@@ -32,15 +34,20 @@ namespace DataMigration.Output.ElasticSearch.Service
         {
             var response = await _client.IndexDocumentAsync(doc);
             return new {Status = response.Result.ToString("g"), Error = response.OriginalException?.ToString()};
-
-            // var clientResponse = await _client.IndexAsync<StringResponse>(_indexName, type, entity.Id.ToString(), PostData.String(JsonConvert.SerializeObject(entity))
-            // clientResponse.Success ? new { EntityId = entity.Id, Status = "Success", Exception = string.Empty } : new { EntityId = entity.Id, Status = "Failed", Exception = clientResponse.OriginalException.Message };
         }
 
         public async Task<dynamic[]> IndexMany<T>(IEnumerable<T> items) where T:class
         {
             var entities = items.Select(item => IndexSingel(item)).ToList();
             return await Task.WhenAll(entities);
+        }
+
+        public Stream Serialize<T>(T document) where T: class
+        {
+            var memoryStream = new MemoryStream();
+            _client.SourceSerializer.Serialize(document, memoryStream);
+            memoryStream.Position = 0;
+            return memoryStream;
         }
     }
 }

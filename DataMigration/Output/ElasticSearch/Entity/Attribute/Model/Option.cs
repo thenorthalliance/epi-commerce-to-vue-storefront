@@ -1,5 +1,4 @@
 ﻿using Nest;
-using Newtonsoft.Json;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Attribute.Model
 {
@@ -8,7 +7,7 @@ namespace DataMigration.Output.ElasticSearch.Entity.Attribute.Model
         [PropertyName("label")]
         public string Name { get; set; }
 
-        [PropertyName("value")]
-        public int Value { get; set; }
+        [Keyword(Name = "value")]
+        public string Value { get; set; }
     }
 }

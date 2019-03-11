@@ -58,7 +58,7 @@ namespace DataMigration.Mapper
                 Name = source.Name,
                 FrontendLabel = source.Name,
                 AttributeCode = source.Name.Replace(" ", "_").ToLower(),
-                Options = source.Values.Select(x => AttributeHelper.Instance.GetAttributeOption(source.Id, x))
+                Options = source.Values.Select(x => AttributeHelper.GetAttributeOption(source.Id, x))
             };
             
             return attr;

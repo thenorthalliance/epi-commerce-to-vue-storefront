@@ -11,7 +11,8 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
             DefaultLabel = variantProperty.Value.ToString();
             Label = variantProperty.Value.ToString();
             Order = order;
-            ValueIndex = AttributeHelper.Instance.GetAttributeOption(variantProperty.PropertyDefinitionID, Label).Value; 
+            //TODO this should happen outside this class 
+            ValueIndex = variantProperty.AsAttributeValue(); 
         }
 
         [PropertyName("label")]
@@ -23,8 +24,8 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
         [PropertyName("order")]
         public int Order { get; set; }
 
-        [PropertyName("value_index")]
-        public int ValueIndex { get; set; }
+        [Keyword(Name = "value_index")]
+        public string ValueIndex { get; set; }
 
 //        [JsonProperty("value_data", NullValueHandling = NullValueHandling.Ignore)]
 //        [Text(Name = "value_data")]

@@ -11,6 +11,7 @@ using EPiServer.Core;
 
 namespace DataMigration.Mapper
 {
+    //TODO this class is to BIG. We should split it into smaller pieces.
     public class ProductMapper : IMapper<Product>
     {
         public Product Map(CmsObjectBase cmsObject)
@@ -49,6 +50,7 @@ namespace DataMigration.Mapper
             var variantQuantity = InventoryService.GetTotalInventoryByEntry(epiProductProductContent.Code);
             var configurableOptions = GetProductConfigurableOptions(epiProduct.ProductContent).ToList();
             var productVariations = epiProduct.ProductContent.GetVariants();
+            var productPrice = PriceService.GetPrice(epiProductProductContent.ContentLink);
 
             var product = new Product
             {
@@ -62,7 +64,8 @@ namespace DataMigration.Mapper
                 MediaGallery = GetGallery(epiProductProductContent as ProductContent),
                 Image = imageUrl ?? "",
                 Thumbnail = imageUrl ?? "",
-                Price = PriceService.GetPrice(epiProductProductContent.ContentLink),
+                FinalPrice = productPrice,
+                Price = productPrice,
                 Description = epiProduct.ProductContent.GetType().GetProperty("Description") ?.GetValue(epiProduct.ProductContent, null)?.ToString(),
                 TypeId = "configurable",
                 SpecialPrice = null,
@@ -100,7 +103,7 @@ namespace DataMigration.Mapper
             return product;
         }
 
-
+        //TODO we should have a separated class for this 
         private static IEnumerable<ConfigurableOption> GetProductConfigurableOptions(ProductContent product)
         {
             var options = new List<ConfigurableOption>();
@@ -116,10 +119,11 @@ namespace DataMigration.Mapper
                     {
                         continue;
                     }
-                    var optionValue = new ConfigurableOptionValue(variantProperty, index);
+                    var optionValue = new ConfigurableOptionValue(variantProperty, order: index);
                     var currentOption = options.FirstOrDefault(x => x.Label.Equals(variantProperty.Name));
                     if (currentOption == null)
                     {
+                        //TODO this will produce a position sequence like this: 0, 2, 3, ... is this intended ?
                         var position = options.Count == 0 ? 0 : options.Count + 1;
                         var values = new List<ConfigurableOptionValue>()
                         {
@@ -170,7 +174,9 @@ namespace DataMigration.Mapper
             foreach (var variantProperty in variantProperties.Where(p => p.Value != null))
             {
                 var name = variantProperty.Name.ToLower();
-                var value = AttributeHelper.Instance.GetAttributeOption(variantProperty.PropertyDefinitionID, variantProperty.Value.ToString()).Value;
+                var value = variantProperty.AsAttributeValue();
+
+                //AttributeHelper.GetAttributeOption(variantProperty.PropertyDefinitionID, variantProperty.Value.ToString()).Value;
 
                 if (!output.ContainsKey(name))
                     output.Add(name, value);

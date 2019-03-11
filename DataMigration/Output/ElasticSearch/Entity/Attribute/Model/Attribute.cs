@@ -1,7 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using DataMigration.Input.Episerver.ContentProperty.Model;
-using DataMigration.Output.ElasticSearch.Entity.Attribute.Helper;
 using Nest;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Attribute.Model

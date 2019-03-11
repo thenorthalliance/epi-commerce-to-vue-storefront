@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -70,24 +71,21 @@ namespace DataMigration.AdminTools.VsfDataMigrationTool.Controllers
         {
             var catalogs = _contentLoader.GetChildren<CatalogContent>(_referenceConverter.GetRootLink()).ToList();
             var mappedCategories = GetMappedEntites<Category>(catalogs[0].ContentLink);
-            var json = JsonConvert.SerializeObject(mappedCategories);
-            return Content(json, "application/json", Encoding.UTF8);
+            return new FileStreamResult(_indexService.Serialize(mappedCategories), "application/json");
         }
 
         public ActionResult GetProducts()
         {
             var catalogs = _contentLoader.GetChildren<CatalogContent>(_referenceConverter.GetRootLink()).ToList();
             var mappedProducts = GetMappedEntites<Product>(catalogs[0].ContentLink);
-            var json = JsonConvert.SerializeObject(mappedProducts);
-            return Content(json, "application/json", Encoding.UTF8);
+            return new FileStreamResult(_indexService.Serialize(mappedProducts), "application/json");
         }
 
         public ActionResult GetAttributes()
         {
             var catalogs = _contentLoader.GetChildren<CatalogContent>(_referenceConverter.GetRootLink()).ToList();
             var mappedAttributes = GetMappedEntites<Attribute>(catalogs[0].ContentLink);
-            var json = JsonConvert.SerializeObject(mappedAttributes);
-            return Content(json, "application/json", Encoding.UTF8);
+            return new FileStreamResult(_indexService.Serialize(mappedAttributes), "application/json");
         }
 
         private async Task<dynamic[]> MigrateEntities<T>() where T:class

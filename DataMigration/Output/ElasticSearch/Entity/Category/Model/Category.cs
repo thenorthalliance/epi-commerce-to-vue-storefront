@@ -1,9 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
-using DataMigration.Input.Episerver.Category.Model;
-using EPiServer.Core;
 using Nest;
-using Newtonsoft.Json;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Category.Model
 {
