@@ -242,9 +242,7 @@
     <Compile Include="Output\ElasticSearch\Entity\Product\Model\ConfigurableOption.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Product\Model\ConfigurableOptionValue.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Product\Model\Media.cs" />
-    <Compile Include="Output\ElasticSearch\Entity\Product\Model\ProductBase.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Product\Model\Stock.cs" />
-    <Compile Include="Output\ElasticSearch\Entity\Product\Model\Variant.cs" />
     <Compile Include="Output\ElasticSearch\Service\IndexApiService.cs" />
     <Compile Include="Output\ElasticSearch\Entity\IndexItem\Model\IndexItem.cs" />
     <Compile Include="Mapper\CategoryMapper.cs" />

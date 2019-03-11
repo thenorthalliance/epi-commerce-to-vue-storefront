@@ -11,104 +11,40 @@ using Newtonsoft.Json.Linq;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 {
-    public class Product : ProductBase
+    public class Product 
     {
-        public Product(EpiProduct epiProduct) : base(epiProduct.ProductContent)
-        {
-            var configurableOptions = GetProductConfigurableOptions(epiProduct.ProductContent).ToArray();
-            var productVariations = epiProduct.ProductContent.GetVariants();
+        [PropertyName("id")]
+        public int Id { get; set; }
 
-            Id = epiProduct.Id;
-            Description = epiProduct.ProductContent.GetType().GetProperty("Description")
-                ?.GetValue(epiProduct.ProductContent, null)?.ToString();
-            Name = epiProduct.ProductContent.DisplayName;
-            TypeId = "configurable";
-            SpecialPrice = null;
-            NewsFromDate = null;
-            NewsToDate = null;
-            SpecialFromDate = null;
-            SpecialToDate = null;
-            CategoryIds = epiProduct.ProductContent.GetCategories().Select(x => x.ID.ToString());
-            Category = epiProduct.ProductContent.GetCategories().Select(x =>
-                new CategoryListItem {Id = x.ID, Name = ContentHelper.GetContent<NodeContent>(x).DisplayName});
-            Status = 1;
-            Visibility = epiProduct.ProductContent.Status.Equals(VersionStatus.Published) ? 4 : 0;
-            Weight = 1;
-            ConfigurableChildren = productVariations.Select(x => MapVariant(ContentHelper.GetContent<VariationContent>(x), epiProduct.Id)).ToArray();
-            HasOptions = configurableOptions.Length > 1 ? "1" : "0";
-            RequiredOptions = "0";
-            ConfigurableOptions = configurableOptions;
-            UpdatedAt = epiProduct.ProductContent.Changed;
-            foreach (var option in configurableOptions) //TODO how to make it better, color_options etc are needed to filetering in category view and it is needed to be a number
-            {
-                if (option.Label.Equals("Color"))
-                {
-                    ColorOptions = option.Values.Select(x => x.ValueIndex);
-                }
+        [PropertyName("name")]
+        public string Name { get; set; }
 
-                if (option.Label.Equals("Size"))
-                {
-                    SizeOptions = option.Values.Select(x => x.ValueIndex);
-                }
-            }
-        }
+        [Keyword(Name = "sku")]
+        public string Sku { get; set; }
 
-        private static IEnumerable<ConfigurableOption> GetProductConfigurableOptions(ProductContent product)
-        {
-            var options = new List<ConfigurableOption>();
-            var variants = product.GetVariants();
-            var index = 0;
-            foreach (var variant in variants)
-            {
-                var variantProperties = ContentHelper.GetVariantVsfProperties(variant);
+        [PropertyName("tax_class_id")]
+        public string TaxClassId { get; set; }
 
-                foreach (var variantProperty in variantProperties)
-                {
-                    if (variantProperty.Value == null)
-                    {
-                        continue;
-                    }
-                    var optionValue = new ConfigurableOptionValue(variantProperty, index);
-                    var currentOption = options.FirstOrDefault(x => x.Label.Equals(variantProperty.Name));
-                    if (currentOption == null)
-                    {
-                        var position = options.Count == 0 ? 0 : options.Count + 1;
-                        var values = new List<ConfigurableOptionValue>()
-                        {
-                            optionValue
-                        };
-                        options.Add(new ConfigurableOption(variantProperty, position, product.ContentLink.ID, values));
-                    }
-                    else
-                    {
-                        var isValue = currentOption.Values.FirstOrDefault(x => x.Label == variantProperty.Value.ToString()) != null;
-                        if (isValue) continue;
-                        optionValue.Order = currentOption.Values.Count + 1;
-                        currentOption.Values.Add(optionValue);
-                    }
+        [PropertyName("image")]
+        public string Image { get; set; }
 
-                    index = index + 1;
-                }
-            }
+        [PropertyName("thumbnail")]
+        public string Thumbnail { get; set; }
 
-            return options;
-        }
+        [PropertyName("media_gallery")]
+        public IEnumerable<Media> MediaGallery { get; set; }
 
-        private static JObject MapVariant(VariationContent variation, int productId)
-        {
-            var variant = new Variant(variation, productId);
-            var resultVariantWithOptions = JObject.FromObject(variant);
-            var variantProperties = ContentHelper.GetVariantVsfProperties(variation.ContentLink);
-            foreach (var variantProperty in variantProperties)
-            {
-                if (variantProperty.Value == null)
-                {
-                    continue;
-                }
-                resultVariantWithOptions.Add(new JProperty(variantProperty.Name.ToLower(), AttributeHelper.Instance.GetAttributeOption(variantProperty.PropertyDefinitionID, variantProperty.Value.ToString()).Value));
-            }
-            return resultVariantWithOptions;
-        }
+        [PropertyName("url_key")]
+        public string UrlKey { get; set; }
+
+        [PropertyName("url_path")]
+        public string UrlPath { get; set; }
+
+        [PropertyName("price")]
+        public int Price { get; set; }
+
+        [PropertyName("stock")]
+        public Stock IsInStock { get; set; }
 
         [PropertyName("category_ids")]
         public IEnumerable<string> CategoryIds { get; set; }
@@ -145,6 +81,7 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
         [PropertyName("category")]
         public IEnumerable<CategoryListItem> Category { get; set; }
 
+        
         [PropertyName("weight")]
         public int Weight { get; set; }
 
@@ -169,9 +106,9 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
         public DateTime? SpecialToDate { get; set; }
 
         [PropertyName("configurable_children")]
-        public JObject[] ConfigurableChildren { get; set; }
+        public IEnumerable<Dictionary<string , object>> ConfigurableChildren { get; set; }
 
         [PropertyName("configurable_options")]
-        public ConfigurableOption[] ConfigurableOptions { get; set; }
+        public IEnumerable<ConfigurableOption> ConfigurableOptions { get; set; }
     }
 }

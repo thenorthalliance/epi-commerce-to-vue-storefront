@@ -31,7 +31,7 @@ namespace DataMigration.AdminTools.VsfDataMigrationTool.Controllers
     {
         private readonly IContentLoader _contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
         private readonly ReferenceConverter _referenceConverter = ServiceLocator.Current.GetInstance<ReferenceConverter>();
-        private readonly IndexApiService _indexService = new IndexApiService("epi_catalog3", "http://localhost:9200");
+        private readonly IndexApiService _indexService = new IndexApiService("epi_catalog4", "http://localhost:9200");
 
         public ActionResult Index()
         {
