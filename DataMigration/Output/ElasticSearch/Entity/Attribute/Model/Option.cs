@@ -8,6 +8,6 @@ namespace DataMigration.Output.ElasticSearch.Entity.Attribute.Model
         public string Name { get; set; }
 
         [JsonProperty("value")]
-        public string  Value { get; set; }
+        public int Value { get; set; }
     }
 }

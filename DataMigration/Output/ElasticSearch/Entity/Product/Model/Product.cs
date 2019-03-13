@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DataMigration.Input.Episerver.Common.Helpers;
 using DataMigration.Input.Episerver.Product.Model;
+using DataMigration.Output.ElasticSearch.Entity.Attribute.Helper;
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Core;
 using Newtonsoft.Json;
@@ -40,12 +41,12 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
             UpdatedAt = epiProduct.ProductContent.Changed;
             foreach (var option in configurableOptions) //TODO how to make it better, color_options etc are needed to filetering in category view and it is needed to be a number
             {
-                if (option.Label.Equals("color"))
+                if (option.Label.Equals("Color"))
                 {
                     ColorOptions = option.Values.Select(x => x.ValueIndex);
                 }
 
-                if (option.Label.Equals("size"))
+                if (option.Label.Equals("Size"))
                 {
                     SizeOptions = option.Values.Select(x => x.ValueIndex);
                 }
@@ -68,7 +69,7 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
                         continue;
                     }
                     var optionValue = new ConfigurableOptionValue(variantProperty, index);
-                    var currentOption = options.FirstOrDefault(x => x.Label.Equals(variantProperty.Name.ToLower()));
+                    var currentOption = options.FirstOrDefault(x => x.Label.Equals(variantProperty.Name));
                     if (currentOption == null)
                     {
                         var position = options.Count == 0 ? 0 : options.Count + 1;
@@ -104,7 +105,7 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
                 {
                     continue;
                 }
-                resultVariantWithOptions.Add(new JProperty(variantProperty.Name.ToLower(), variantProperty.Value.ToString()));
+                resultVariantWithOptions.Add(new JProperty(variantProperty.Name.ToLower(), AttributeHelper.Instance.GetAttributeOption(variantProperty.PropertyDefinitionID, variantProperty.Value.ToString()).Value));
             }
             return resultVariantWithOptions;
         }

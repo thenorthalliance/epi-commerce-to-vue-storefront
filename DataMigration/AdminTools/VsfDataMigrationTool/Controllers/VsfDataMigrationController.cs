@@ -82,7 +82,7 @@ namespace DataMigration.AdminTools.VsfDataMigrationTool.Controllers
 
         private static async Task<dynamic[]> Migrate(IEnumerable<Entity> entities, string type)
         {
-            var indexService = new IndexApiService("epi_catalog");
+            var indexService = new IndexApiService("epi_catalog3");
             return await indexService.SendAsync(entities, type);
         }
 
