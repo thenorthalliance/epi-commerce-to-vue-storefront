@@ -1,6 +1,6 @@
-﻿using DataMigration.Output.ElasticSearch.Entity.Attribute.Model;
-using DataMigration.Output.ElasticSearch.Entity.Category.Model;
-using DataMigration.Output.ElasticSearch.Entity.Product.Model;
+﻿using DataMigration.Mapper.Attribute;
+using DataMigration.Mapper.Category;
+using DataMigration.Mapper.Product;
 
 namespace DataMigration.Mapper
 {
@@ -10,13 +10,13 @@ namespace DataMigration.Mapper
         {
             var docType = typeof(T);
 
-            if (docType == typeof(Product))
+            if (docType == typeof(Output.ElasticSearch.Entity.Product.Model.Product))
                 return (IMapper<T>) new ProductMapper();
 
-            if (docType == typeof(Category))
+            if (docType == typeof(Output.ElasticSearch.Entity.Category.Model.Category))
                 return (IMapper<T>)new CategoryMapper();
 
-            if (docType == typeof(Attribute))
+            if (docType == typeof(Output.ElasticSearch.Entity.Attribute.Model.Attribute))
                 return (IMapper<T>)new AttributeMapper();
 
             return null;

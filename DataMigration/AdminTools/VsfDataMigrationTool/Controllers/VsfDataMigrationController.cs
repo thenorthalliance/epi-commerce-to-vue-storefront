@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using DataMigration.AdminTools.VsfDataMigrationTool.ViewModels;
@@ -19,7 +17,6 @@ using EPiServer.Globalization;
 using EPiServer.PlugIn;
 using EPiServer.ServiceLocation;
 using Mediachase.Commerce.Catalog;
-using Newtonsoft.Json;
 
 namespace DataMigration.AdminTools.VsfDataMigrationTool.Controllers
 {
@@ -32,6 +29,8 @@ namespace DataMigration.AdminTools.VsfDataMigrationTool.Controllers
     {
         private readonly IContentLoader _contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
         private readonly ReferenceConverter _referenceConverter = ServiceLocator.Current.GetInstance<ReferenceConverter>();
+
+        //TODO this has to change. DI ?
         private readonly IndexApiService _indexService = new IndexApiService("epi_catalog4", "http://localhost:9200");
 
         public ActionResult Index()
@@ -52,20 +51,20 @@ namespace DataMigration.AdminTools.VsfDataMigrationTool.Controllers
             return Json(results, JsonRequestBehavior.AllowGet);
         }
 
-//        public async Task<ActionResult> MigrateAttributes()
-//        {
-//            return Content(await MigrateEntities<Attribute>(), "application/json", Encoding.UTF8);
-//        }
-//
-//        public async Task<ActionResult> MigrateCategories()
-//        {
-//            return Content(await MigrateEntities<Category>(), "application/json", Encoding.UTF8);
-//        }
-//
-//        public async Task<ActionResult> MigrateProducts()
-//        {
-//            return Content(await MigrateEntities<Product>(), "application/json", Encoding.UTF8);
-//        }
+        public async Task<ActionResult> MigrateAttributes()
+        {
+            return Json(await MigrateEntities<Attribute>(), JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<ActionResult> MigrateCategories()
+        {
+            return Json(await MigrateEntities<Category>(), JsonRequestBehavior.AllowGet);
+        }
+
+        public async Task<ActionResult> MigrateProducts()
+        {
+            return Json(await MigrateEntities<Product>(), JsonRequestBehavior.AllowGet);
+        }
 
         public ActionResult GetCategories()
         {
@@ -110,8 +109,7 @@ namespace DataMigration.AdminTools.VsfDataMigrationTool.Controllers
         private static IEnumerable<CmsObjectBase> GetEntites<T>(ContentReference catalogReference) where T:class
         {
             var contentService = ContentServiceFactory.Create<T>();
-            var content = contentService.GetAll(catalogReference, ContentLanguage.PreferredCulture);
-            return content;
+            return contentService.GetAll(catalogReference, ContentLanguage.PreferredCulture);
         }
     }
 }

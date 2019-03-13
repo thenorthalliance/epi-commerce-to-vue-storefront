@@ -3,9 +3,9 @@ using Nest;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Attribute.Model
 {
+    //TODO Can we change this name to something that does not get confused with System.Attribute ? :) 
     public class Attribute
     {
-        
         [PropertyName("id")]
         public int Id { get; set; }
 

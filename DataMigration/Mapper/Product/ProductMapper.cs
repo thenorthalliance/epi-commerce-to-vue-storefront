@@ -9,82 +9,56 @@ using DataMigration.Output.ElasticSearch.Entity.Product.Model;
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Core;
 
-namespace DataMigration.Mapper
+namespace DataMigration.Mapper.Product
 {
-    //TODO this class is to BIG. We should split it into smaller pieces.
-    public class ProductMapper : IMapper<Product>
+    public class ProductMapper : IMapper<Output.ElasticSearch.Entity.Product.Model.Product>
     {
-        public Product Map(CmsObjectBase cmsObject)
+        public Output.ElasticSearch.Entity.Product.Model.Product Map(CmsObjectBase cmsObject)
         {
             if (!(cmsObject is EpiProduct source))
                 return null;
 
-            return NewProduct(source);
-        }
-        
-        private static IEnumerable<Media> GetGallery(ProductContent content)
-        {
-            if (content == null)
-            {
-                return null;
-            }
-            var result = new List<Media>();
-            var variants = content.GetVariants();
-            foreach (var variant in variants)
-            {
-                var imageReference = ContentHelper.GetContent<VariationContent>(variant).CommerceMediaCollection
-                    .Select(x => x.AssetLink).FirstOrDefault();
-                result.Add(new Media
-                {
-                    Image = UrlHelper.GetUrl(imageReference)
-                });
-            }
-
-            return result;
-        }
-
-        private static Product NewProduct(EpiProduct epiProduct)
-        {
-            var epiProductProductContent = epiProduct.ProductContent;
-            var imageUrl = epiProductProductContent.CommerceMediaCollection.Select(x => UrlHelper.GetUrl(x.AssetLink)).FirstOrDefault();
+            var epiProductProductContent = source.ProductContent;
+            var imageUrl = epiProductProductContent.CommerceMediaCollection.FirstOrDefault()?.AssetLink.GetUrl();
+            var thumbnail = UrlHelper.GetAsThumbnailUrl(imageUrl);
             var variantQuantity = InventoryService.GetTotalInventoryByEntry(epiProductProductContent.Code);
-            var configurableOptions = GetProductConfigurableOptions(epiProduct.ProductContent).ToList();
-            var productVariations = epiProduct.ProductContent.GetVariants();
+            var configurableOptions = GetProductConfigurableOptions(source.ProductContent).ToList();
+            var productVariations = source.ProductContent.GetVariants();
             var productPrice = PriceService.GetPrice(epiProductProductContent.ContentLink);
 
-            var product = new Product
+            var product = new Output.ElasticSearch.Entity.Product.Model.Product
             {
-                Id = epiProduct.Id,
-                Name = epiProduct.ProductContent.DisplayName,
+                Id = source.Id,
+                Name = source.ProductContent.DisplayName,
                 UrlKey = epiProductProductContent.RouteSegment.Replace("-", ""),
                 UrlPath = epiProductProductContent.SeoUri.Replace("-", ""),
                 IsInStock = new Stock {IsInStock = true, Quantity = (int) variantQuantity},
                 Sku = epiProductProductContent.Code.Replace("-", ""),
                 TaxClassId = null,
-                MediaGallery = GetGallery(epiProductProductContent as ProductContent),
+                MediaGallery = GetGallery(epiProductProductContent),
                 Image = imageUrl ?? "",
-                Thumbnail = imageUrl ?? "",
+                Thumbnail = thumbnail,
                 FinalPrice = productPrice,
                 Price = productPrice,
-                Description = epiProduct.ProductContent.GetType().GetProperty("Description") ?.GetValue(epiProduct.ProductContent, null)?.ToString(),
+                Description = source.ProductContent.GetType().GetProperty("Description") ?.GetValue(source.ProductContent, null)?.ToString(),
                 TypeId = "configurable",
                 SpecialPrice = null,
                 NewsFromDate = null,
                 NewsToDate = null,
                 SpecialFromDate = null,
                 SpecialToDate = null,
-                CategoryIds = epiProduct.ProductContent.GetCategories().Select(x => x.ID.ToString()),
-                Category = epiProduct.ProductContent.GetCategories().Select(x => new CategoryListItem {Id = x.ID, Name = ContentHelper.GetContent<NodeContent>(x).DisplayName}),
+                CategoryIds = source.ProductContent.GetCategories().Select(x => x.ID.ToString()),
+                Category = source.ProductContent.GetCategories().Select(x => new CategoryListItem {Id = x.ID, Name = ContentHelper.GetContent<NodeContent>(x).DisplayName}),
                 Status = 1,
-                Visibility = epiProduct.ProductContent.Status.Equals(VersionStatus.Published) ? 4 : 0,
+                Visibility = source.ProductContent.Status.Equals(VersionStatus.Published) ? 4 : 0,
                 Weight = 1,
                 HasOptions = configurableOptions.Count > 1 ? "1" : "0",
                 RequiredOptions = "0",
                 ConfigurableOptions = configurableOptions,
-                UpdatedAt = epiProduct.ProductContent.Changed
+                UpdatedAt = source.ProductContent.Changed
             };
 
-            product.ConfigurableChildren = productVariations.Select(x => MapVariant(product, ContentHelper.GetContent<VariationContent>(x))).ToList();
+            product.ConfigurableChildren = productVariations.Select(v => MapVariant(product, ContentHelper.GetContent<VariationContent>(v))).ToList();
 
             //TODO how to make it better, color_options etc are needed to filetering in category view and it is needed to be a number
             foreach (var option in configurableOptions) 
@@ -102,8 +76,28 @@ namespace DataMigration.Mapper
 
             return product;
         }
+        
+        private static IEnumerable<Media> GetGallery(ProductContent content)
+        {
+            if (content == null)
+                return null;
 
-        //TODO we should have a separated class for this 
+            var result = new List<Media>();
+            var variants = content.GetVariants();
+            foreach (var variant in variants)
+            {
+                var imageReference = ContentHelper.GetContent<VariationContent>(variant).CommerceMediaCollection
+                    .Select(x => x.AssetLink).FirstOrDefault();
+                result.Add(new Media
+                {
+                    Image = imageReference.GetUrl()
+                });
+            }
+
+            return result;
+        }
+
+        //TODO we should have a separated class for this - probably...
         private static IEnumerable<ConfigurableOption> GetProductConfigurableOptions(ProductContent product)
         {
             var options = new List<ConfigurableOption>();
@@ -116,20 +110,19 @@ namespace DataMigration.Mapper
                 foreach (var variantProperty in variantProperties)
                 {
                     if (variantProperty.Value == null)
-                    {
                         continue;
-                    }
-                    var optionValue = new ConfigurableOptionValue(variantProperty, order: index);
+
+                    var optionValue = MapConfigurableOptionValue(variantProperty, order: index);
                     var currentOption = options.FirstOrDefault(x => x.Label.Equals(variantProperty.Name));
                     if (currentOption == null)
                     {
                         //TODO this will produce a position sequence like this: 0, 2, 3, ... is this intended ?
                         var position = options.Count == 0 ? 0 : options.Count + 1;
-                        var values = new List<ConfigurableOptionValue>()
+                        var values = new List<ConfigurableOptionValue>
                         {
                             optionValue
                         };
-                        options.Add(new ConfigurableOption(variantProperty, position, product.ContentLink.ID, values));
+                        options.Add(MapConfigurableOption(variantProperty, position, product.ContentLink.ID, values));
                     }
                     else
                     {
@@ -146,21 +139,46 @@ namespace DataMigration.Mapper
             return options;
         }
 
-        private static Dictionary<string, object> MapVariant(Product product, VariationContent variation)
+        private static ConfigurableOptionValue MapConfigurableOptionValue(PropertyData variantProperty, int order)
+        {
+            return new ConfigurableOptionValue
+            {
+                DefaultLabel = variantProperty.Value.ToString(),
+                Label = variantProperty.Value.ToString(),
+                Order = order,
+                ValueIndex = variantProperty.AsAttributeValue()
+            };
+        }
+
+        private static ConfigurableOption MapConfigurableOption(PropertyData variantProperty, int position, int productId, List<ConfigurableOptionValue> values)
+        {
+            return new ConfigurableOption
+            {
+                Id = variantProperty.PropertyDefinitionID,
+                Position = position,
+                Label = variantProperty.Name,
+                AttributeCode = variantProperty.Name.ToLower().Replace(" ", "_"),
+                FrontentLabel = variantProperty.Name.ToLower(),
+                ProductId = productId,
+                Values = values
+            };
+        }
+
+        private static ConfigurableChild MapVariant(Output.ElasticSearch.Entity.Product.Model.Product product, VariationContent variation)
         {
             var variantQuantity = InventoryService.GetTotalInventoryByEntry(variation.Code);
-            var imageUrl = variation.CommerceMediaCollection.Select(x => UrlHelper.GetUrl(x.AssetLink))
-                .FirstOrDefault();
+            var imageUrl = variation.CommerceMediaCollection.FirstOrDefault()?.AssetLink.GetUrl();
+            var thumbnail = UrlHelper.GetAsThumbnailUrl(imageUrl);
             var price = PriceService.GetPrice(variation.ContentLink);
 //            var media_gallery = null;//GetGallery(variation as ProductContent);
 
-            var output = new Dictionary<string, object>
+            var output = new ConfigurableChild
             {
                 { "id", variation.ContentLink.ID},
                 { "product_id", product.Id},
-                { "sku", variation.Code.Replace("-", "")},
+                { "sku", variation.Code.Replace("-", "")}, //TODO this repeats a lot !
                 { "tax_class_id", null},
-                { "thumbnail", imageUrl},
+                { "thumbnail", thumbnail},
                 { "image", imageUrl},
                 { "media_gallery", null},
                 { "url_key", variation.RouteSegment.Replace("-", "")},
@@ -175,8 +193,6 @@ namespace DataMigration.Mapper
             {
                 var name = variantProperty.Name.ToLower();
                 var value = variantProperty.AsAttributeValue();
-
-                //AttributeHelper.GetAttributeOption(variantProperty.PropertyDefinitionID, variantProperty.Value.ToString()).Value;
 
                 if (!output.ContainsKey(name))
                     output.Add(name, value);

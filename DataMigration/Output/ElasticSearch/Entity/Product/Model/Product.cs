@@ -102,7 +102,7 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
         public DateTime? SpecialToDate { get; set; }
 
         [PropertyName("configurable_children")]
-        public IEnumerable<Dictionary<string , object>> ConfigurableChildren { get; set; }
+        public IEnumerable<ConfigurableChild> ConfigurableChildren { get; set; }
 
         [PropertyName("configurable_options")]
         public IEnumerable<ConfigurableOption> ConfigurableOptions { get; set; }
