@@ -17,7 +17,7 @@ namespace DataMigration.Input.Episerver
             if (entityType == typeof(Output.ElasticSearch.Entity.Product.Model.Product))
                 return new ProductService();
 
-            if (entityType == typeof(DataMigration.Output.ElasticSearch.Entity.Attribute.Model.Attribute))
+            if (entityType == typeof(Output.ElasticSearch.Entity.Attribute.Model.Attribute))
                 return new PropertyService();
 
             return null;

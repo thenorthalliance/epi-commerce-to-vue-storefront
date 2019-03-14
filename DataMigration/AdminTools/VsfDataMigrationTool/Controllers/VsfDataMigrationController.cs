@@ -90,8 +90,8 @@ namespace DataMigration.AdminTools.VsfDataMigrationTool.Controllers
         private async Task<dynamic[]> MigrateEntities<T>() where T:class
         {
             var catalogs = _contentLoader.GetChildren<CatalogContent>(_referenceConverter.GetRootLink()).ToList();
-            var products = GetMappedEntites<T>(catalogs[0].ContentLink);
-            return await Migrate(products);
+            var entites = GetMappedEntites<T>(catalogs[0].ContentLink);
+            return await Migrate(entites);
         }
 
         

@@ -116,8 +116,7 @@ namespace DataMigration.Mapper.Product
                     var currentOption = options.FirstOrDefault(x => x.Label.Equals(variantProperty.Name));
                     if (currentOption == null)
                     {
-                        //TODO this will produce a position sequence like this: 0, 2, 3, ... is this intended ?
-                        var position = options.Count == 0 ? 0 : options.Count + 1;
+                        var position = options.Count;
                         var values = new List<ConfigurableOptionValue>
                         {
                             optionValue
@@ -170,7 +169,7 @@ namespace DataMigration.Mapper.Product
             var imageUrl = variation.CommerceMediaCollection.FirstOrDefault()?.AssetLink.GetUrl();
             var thumbnail = UrlHelper.GetAsThumbnailUrl(imageUrl);
             var price = PriceService.GetPrice(variation.ContentLink);
-//            var media_gallery = null;//GetGallery(variation as ProductContent);
+//            GetGallery(variation as ProductContent);
 
             var output = new ConfigurableChild
             {
