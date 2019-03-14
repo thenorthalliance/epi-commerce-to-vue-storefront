@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using DataMigration.Output.ElasticSearch.Entity.Category.Model;
-using DataMigration.Output.ElasticSearch.Entity.Attribute.Model;
 using DataMigration.Output.ElasticSearch.Entity.Product.Model;
 using Nest;
 
@@ -28,17 +27,6 @@ namespace DataMigration.Output.ElasticSearch.Service
                 _client.MapAsync<Product>(c => c.AutoMap()),
                 _client.MapAsync<Entity.Attribute.Model.Attribute>(c => c.AutoMap()),
                 _client.MapAsync<Category>(c => c.AutoMap()));
-
-            // EXPERIMENT :)
-            //            _client.Map<Category>(c => c.AutoMap().Properties(ps => 
-            //                    ps
-            //                        .Object<object>(s => s.Name("configurable_children").Properties(ps2 => 
-            //                            ps2.Keyword(kw => kw.Name("color"))
-            //                                .Keyword(kw => kw.Name("size"))
-            //                                .Keyword(kw => kw.Name("sku"))
-            //                            ))
-            //                ));
-            //            _client.LowLevel.IndicesPutMapping<>()
         }
 
         public async Task<dynamic> IndexSingel<T>(T doc) where T: class
