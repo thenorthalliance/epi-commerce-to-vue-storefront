@@ -31,7 +31,7 @@ namespace DataMigration.AdminTools.VsfDataMigrationTool.Controllers
         private readonly ReferenceConverter _referenceConverter = ServiceLocator.Current.GetInstance<ReferenceConverter>();
 
         //TODO this has to change. DI ?
-        private readonly IndexApiService _indexService = new IndexApiService("ziemniak", "http://localhost:9200");
+        private readonly IndexApiService _indexService = new IndexApiService("epi_catalog4", "http://localhost:9200");
 
         public ActionResult Index()
         {
