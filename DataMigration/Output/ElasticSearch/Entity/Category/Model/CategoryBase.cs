@@ -26,7 +26,7 @@ namespace DataMigration.Output.ElasticSearch.Entity.Category.Model
         [PropertyName("include_in_menu")]
         public bool IncludeInMenu { get; set; }
 
-        [PropertyName("url_key")]
+        [Keyword(Name = "url_key")]
         public string UrlKey { get; set; }
 
     }

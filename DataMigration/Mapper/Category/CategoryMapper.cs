@@ -23,7 +23,7 @@ namespace DataMigration.Mapper.Category
                 Description = GetDescription(source),
                 IsActive = isPublished,
                 IncludeInMenu = isPublished,
-                UrlKey = source.Category.RouteSegment.Replace("-", ""),
+                UrlKey = source.Category.RouteSegment,
                 Position = source.SortOrder,
                 Level = source.Level,
                 Children = source.Children.Select(MapCategory),
@@ -45,7 +45,7 @@ namespace DataMigration.Mapper.Category
                 Description = GetDescription(epiCategory),
                 IsActive = isPublished,
                 IncludeInMenu = isPublished,
-                UrlKey = epiCategory.Category.RouteSegment.Replace("-", ""), //TODO we repeat this a lot :)
+                UrlKey = epiCategory.Category.RouteSegment,
                 Position = epiCategory.SortOrder,
                 Level = epiCategory.Level,
                 Children = epiCategory.Children.Select(MapCategory),

@@ -27,10 +27,10 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
         [PropertyName("media_gallery")]
         public IEnumerable<Media> MediaGallery { get; set; }
 
-        [PropertyName("url_key")]
+        [Keyword(Name="url_key")]
         public string UrlKey { get; set; }
 
-        [PropertyName("url_path")]
+        [Keyword(Name="url_path")]
         public string UrlPath { get; set; }
 
         [PropertyName("price")]
@@ -88,6 +88,10 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
         //nullable
         [PropertyName("updated_at")]
         public DateTime? UpdatedAt { get; set; }
+        
+        //nullable
+        [PropertyName("created_at")]
+        public DateTime? CreatedAt { get; set; }
 
         //nullable
         [PropertyName("news_to_date")]

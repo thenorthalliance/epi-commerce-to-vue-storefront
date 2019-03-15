@@ -30,10 +30,10 @@ namespace DataMigration.Mapper.Product
             {
                 Id = source.Id,
                 Name = source.ProductContent.DisplayName,
-                UrlKey = epiProductProductContent.RouteSegment.Replace("-", ""),
-                UrlPath = epiProductProductContent.SeoUri.Replace("-", ""),
+                UrlKey = epiProductProductContent.RouteSegment,
+                UrlPath = epiProductProductContent.SeoUri,
                 IsInStock = new Stock {IsInStock = true, Quantity = (int) variantQuantity},
-                Sku = epiProductProductContent.Code.Replace("-", ""),
+                Sku = epiProductProductContent.Code,
                 TaxClassId = null,
                 MediaGallery = GetGallery(epiProductProductContent),
                 Image = imageUrl ?? "",
@@ -55,7 +55,8 @@ namespace DataMigration.Mapper.Product
                 HasOptions = configurableOptions.Count > 1 ? "1" : "0",
                 RequiredOptions = "0",
                 ConfigurableOptions = configurableOptions,
-                UpdatedAt = source.ProductContent.Changed
+                UpdatedAt = source.ProductContent.Changed,
+                CreatedAt = source.ProductContent.Created
             };
 
             product.ConfigurableChildren = productVariations.Select(v => MapVariant(product, ContentHelper.GetContent<VariationContent>(v))).ToList();
@@ -175,13 +176,13 @@ namespace DataMigration.Mapper.Product
             {
                 { "id", variation.ContentLink.ID},
                 { "product_id", product.Id},
-                { "sku", variation.Code.Replace("-", "")}, //TODO this repeats a lot !
+                { "sku", variation.Code},
                 { "tax_class_id", null},
                 { "thumbnail", thumbnail},
                 { "image", imageUrl},
                 { "media_gallery", null},
-                { "url_key", variation.RouteSegment.Replace("-", "")},
-                { "url_path", variation.SeoUri.Replace("-", "")},
+                { "url_key", variation.RouteSegment},
+                { "url_path", variation.SeoUri},
                 { "price", price},
                 { "stock", new Stock { IsInStock = true, Quantity = (int)variantQuantity }},
                 { "name", variation.DisplayName}
