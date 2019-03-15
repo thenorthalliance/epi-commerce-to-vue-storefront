@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using Nest;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 {
     public class CategoryListItem
     {
-        [JsonProperty("category_id")]
+        [PropertyName("category_id")]
         public int Id { get; set; }
 
-        [JsonProperty("name")]
+        [PropertyName("name")]
         public string Name { get; set; }
     }
 }

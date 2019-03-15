@@ -1,40 +1,28 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using DataMigration.Output.ElasticSearch.Entity.Attribute.Model;
+﻿using DataMigration.Output.ElasticSearch.Entity.Attribute.Model;
+using EPiServer.Core;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Attribute.Helper
 {
-    public sealed class AttributeHelper
+    public static class AttributeHelper
     {
-        private static readonly IDictionary<int, ICollection<Option>> Attributes = new Dictionary<int, ICollection<Option>>(); 
-        private static AttributeHelper _instance;
-
-        public static AttributeHelper Instance => _instance ?? (_instance = new AttributeHelper());
-
-        public Option GetAttributeOption(int attributeId, string attrLabel)
+        public static string AsAttributeValue(this PropertyData property)
         {
-            if (!Attributes.ContainsKey(attributeId))
+            return GetAttributeValue(property.PropertyDefinitionID, property.Value.ToString());
+        }
+
+        public static Option GetAttributeOption(int attributeId, string attrLabel)
+        {
+            return new Option
             {
-                var attributeValue = int.Parse(new StringBuilder(attributeId + "1").ToString());
-                var option = new Option {Name = attrLabel, Value = attributeValue};
-                Attributes.Add(attributeId, new List<Option> {option});
-                return option;
-            }
-            else
-            {
-                var options = Attributes[attributeId];
-                var existingOption = options.FirstOrDefault(x => x.Name.Equals(attrLabel));
-                if (existingOption != null)
-                {
-                    return existingOption;
-                }
-                var attributeValue = int.Parse(new StringBuilder(attributeId + (options.Count + 1).ToString()).ToString());
-                var option = new Option { Name = attrLabel, Value = attributeValue };
-                options.Add(option);
-                Attributes[attributeId] = options;
-                return option;
-            }
+                Name = attrLabel,
+                Value = GetAttributeValue(attributeId, attrLabel)
+            };
+        }
+
+        public static string GetAttributeValue(int attributeId, string attrLabel)
+        {
+            //TODO Don't know if replacing spaces with '_' is necessary
+            return $"{attributeId}_{attrLabel.Replace(" ", "_")}";
         }
     }
 }

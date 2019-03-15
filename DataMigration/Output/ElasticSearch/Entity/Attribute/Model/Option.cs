@@ -1,13 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using Nest;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Attribute.Model
 {
     public class Option
     {
-        [JsonProperty("label")]
+        [PropertyName("label")]
         public string Name { get; set; }
 
-        [JsonProperty("value")]
-        public int Value { get; set; }
+        [Keyword(Name = "value")]
+        public string Value { get; set; }
     }
 }
