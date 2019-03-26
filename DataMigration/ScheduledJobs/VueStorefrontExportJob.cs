@@ -26,8 +26,12 @@ namespace DataMigration.ScheduledJobs
         private readonly ReferenceConverter _referenceConverter = ServiceLocator.Current.GetInstance<ReferenceConverter>();
         private readonly IndexApiService _indexApiService = ServiceLocator.Current.GetInstance<IndexApiService>();
 
+        private int _itemsCount;
+
         public override string Execute()
         {
+            _itemsCount = 0;
+
             if (!_indexApiService.IsServiceAvailable())
             {
                 throw new Exception("Elasticsearch not available.");
@@ -48,13 +52,15 @@ namespace DataMigration.ScheduledJobs
                throw new Exception("Problem with indexing the data.");
             }
 
-            return _indexApiService.ApplyChanges() ? "Success" : throw new Exception("Unable to update Elasticsearch index alias.");
+            return _indexApiService.ApplyChanges() ? $"Success. {_itemsCount} items exported." : throw new Exception("Unable to update Elasticsearch index alias.");
         }
 
         private bool MigrateEntities<T>(ContentReference catalogReference) where T : class
         {
+            OnStatusChanged($"Exporting '{typeof(T).Name}' data");
             var entities = GetMappedEntities<T>(catalogReference).ToList();
             var result = _indexApiService.IndexMany(entities);
+            _itemsCount += result;
             return result == entities.Count;
         }
 
