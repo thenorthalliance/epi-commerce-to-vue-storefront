@@ -1,52 +1,81 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+using DataMigration.Configuration;
 using DataMigration.Output.ElasticSearch.Entity.Category.Model;
 using DataMigration.Output.ElasticSearch.Entity.Product.Model;
+using DataMigration.Utils;
+using EPiServer.Logging;
 using Nest;
 
 namespace DataMigration.Output.ElasticSearch.Service
 {
     public class IndexApiService
     {
-        private readonly string _indexName;
-        private readonly IElasticClient _client;
+        private readonly ILogger _logger = LogManager.GetLogger(typeof(IndexApiService));
 
-        public IndexApiService(string indexName, string serverUri)
+        private readonly VueStorefrontConfiguration _configuration;
+        private readonly IElasticClient _elasticClient;
+        private readonly ElasticIndexManager _indexManager;
+
+        private string _indexName;
+
+        public IndexApiService()
         {
-            _indexName = indexName;
-            var settings = new ConnectionSettings(new Uri(serverUri)).DefaultIndex(indexName);
-            _client = new ElasticClient(settings);
+            _configuration = VueStorefrontConfigurationManager.Configuration;
+            _elasticClient = new ElasticClient(_configuration.GetElasticConnectionSettings());
+            _indexManager = new ElasticIndexManager(_elasticClient, _configuration.IndexAliasName);
         }
 
-        public async Task CreateIndex()
+        public bool IsServiceAvailable()
         {
-            await Task.WhenAll(_client.CreateIndexAsync(_indexName),
-                _client.MapAsync<Product>(c => c.AutoMap()),
-                _client.MapAsync<Entity.Attribute.Model.Attribute>(c => c.AutoMap()),
-                _client.MapAsync<Category>(c => c.AutoMap()));
+            try
+            {
+                var root = _elasticClient.RootNodeInfo();
+                return root.IsValid;
+            }
+            catch (Exception ex)
+            {
+                _logger.Error("Elasticsearch not available.", ex);
+                return false;
+            }
         }
 
-        public async Task<dynamic> IndexSingel<T>(T doc) where T: class
+        public bool CreateIndex()
         {
-            var response = await _client.IndexDocumentAsync(doc);
-            return new {Status = response.Result.ToString("g"), Error = response.OriginalException?.ToString()};
+            _indexName = _indexManager.CreateIndex(x => x.Mappings(
+                client => client
+                    .Map<Product>(map => map.AutoMap())
+                    .Map<Entity.Attribute.Model.Attribute>(map => map.AutoMap())
+                    .Map<Category>(map => map.AutoMap())
+            ));
+
+            return _indexName != null;
         }
 
-        public async Task<dynamic[]> IndexMany<T>(IEnumerable<T> items) where T:class
+        public int IndexMany<T>(IEnumerable<T> items) where T : class
         {
-            var entities = items.Select(item => IndexSingel(item)).ToList();
-            return await Task.WhenAll(entities);
+            if (_indexName == null)
+            {
+                throw new InvalidOperationException("Create index first.");
+            }
+
+            var count = 0;
+            foreach (var batch in items.Chunk(_configuration.BulkIndexBatchSize))
+            {
+                count += _indexManager.BulkIndex(batch, _indexName);
+            }
+            return count;
+
         }
 
-        public Stream Serialize<T>(T document) where T: class
+        public bool ApplyChanges()
         {
-            var memoryStream = new MemoryStream();
-            _client.SourceSerializer.Serialize(document, memoryStream);
-            memoryStream.Position = 0;
-            return memoryStream;
+            if (_indexName == null)
+            {
+                throw new InvalidOperationException("Create index first.");
+            }
+
+            return _indexManager.SwitchAliasToIndex(_indexName);
         }
     }
 }

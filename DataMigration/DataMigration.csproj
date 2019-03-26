@@ -225,6 +225,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\VueStorefrontConfiguration.cs" />
+    <Compile Include="Configuration\VueStorefrontConfigurationManager.cs" />
+    <Compile Include="Utils\Extensions.cs" />
+    <Compile Include="Configuration\ElasticClientConfigurationExtension.cs" />
     <Compile Include="Input\Episerver\Common\Attributes\VsfOptionAttribute.cs" />
     <Compile Include="Input\Episerver\Common\Service\InventoryService.cs" />
     <Compile Include="Input\Episerver\Common\Service\PriceService.cs" />
@@ -244,6 +248,7 @@
     <Compile Include="Output\ElasticSearch\Entity\Product\Model\ConfigurableOptionValue.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Product\Model\Media.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Product\Model\Stock.cs" />
+    <Compile Include="Utils\ElasticIndexManager.cs" />
     <Compile Include="Output\ElasticSearch\Service\IndexApiService.cs" />
     <Compile Include="Mapper\Category\CategoryMapper.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Category\Model\Category.cs" />
@@ -257,20 +262,18 @@
     <Compile Include="Mapper\Attribute\AttributeMapper.cs" />
     <Compile Include="Input\Episerver\ContentProperty\Model\EpiContentProperty.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Attribute\Model\Attribute.cs" />
-    <Compile Include="AdminTools\VsfDataMigrationTool\Controllers\VsfDataMigrationController.cs" />
-    <Compile Include="AdminTools\VsfDataMigrationTool\Initialization\VsfDataMigrationInitialization.cs" />
-    <Compile Include="AdminTools\VsfDataMigrationTool\ViewModels\VsfDataMigrationViewModel.cs" />
     <Compile Include="Input\Episerver\Product\Service\ProductService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ScheduledJobs\VueStorefrontExportJob.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="DataMigration.nuspec" />
     <None Include="packages.config" />
-    <Content Include="AdminTools\VsfDataMigrationTool\Views\VsfDataMigration\Index.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy "$(ProjectDir)AdminTools\VsfDataMigrationTool\Views\VsfDataMigration\Index.cshtml" "$(SolutionDir)Quicksilver\EPiServer.Reference.Commerce.Site\Views\VsfDataMigration\" /Y /I</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
