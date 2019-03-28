@@ -17,7 +17,6 @@ namespace DataMigration.AdminTools.VsfDataMigrationTool.Initialization
         }
 
         public void Uninitialize(InitializationEngine context)
-        {
-        }
+        {}
     }
 }

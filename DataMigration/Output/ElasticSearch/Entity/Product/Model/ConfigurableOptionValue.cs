@@ -1,33 +1,19 @@
-﻿using DataMigration.Output.ElasticSearch.Entity.Attribute.Helper;
-using EPiServer.Core;
-using Newtonsoft.Json;
+﻿using Nest;
 
 namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
 {
     public class ConfigurableOptionValue
     {
-        public ConfigurableOptionValue(PropertyData variantProperty)
-        {
-            DefaultLabel = variantProperty.Value.ToString();
-            Label = variantProperty.Value.ToString();
-            Order = 0;
-            ValueIndex = AttributeHelper.CreateValueIndex(variantProperty.PropertyDefinitionID,
-                variantProperty.Value.ToString());
-        }
-
-        [JsonProperty("label")]
+        [PropertyName("label")]
         public string Label { get; set; }
 
-        [JsonProperty("default_label")]
+        [PropertyName("default_label")]
         public string DefaultLabel { get; set; }
 
-        [JsonProperty("order")]
+        [PropertyName("order")]
         public int Order { get; set; }
 
-        [JsonProperty("value_index")]
+        [Keyword(Name = "value_index")]
         public string ValueIndex { get; set; }
-
-        [JsonProperty("value_data")]
-        public string ValueData { get; set; }
     }
 }

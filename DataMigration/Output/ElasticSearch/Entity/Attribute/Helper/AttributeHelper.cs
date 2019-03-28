@@ -1,10 +1,28 @@
-﻿namespace DataMigration.Output.ElasticSearch.Entity.Attribute.Helper
+﻿using DataMigration.Output.ElasticSearch.Entity.Attribute.Model;
+using EPiServer.Core;
+
+namespace DataMigration.Output.ElasticSearch.Entity.Attribute.Helper
 {
-    public class AttributeHelper
+    public static class AttributeHelper
     {
-        public static string CreateValueIndex(int attributeId, string value)
+        public static string AsAttributeValue(this PropertyData property)
         {
-            return string.Concat(attributeId, "_", value.Replace(" ", string.Empty));
+            return GetAttributeValue(property.PropertyDefinitionID, property.Value.ToString());
+        }
+
+        public static Option GetAttributeOption(int attributeId, string attrLabel)
+        {
+            return new Option
+            {
+                Name = attrLabel,
+                Value = GetAttributeValue(attributeId, attrLabel)
+            };
+        }
+
+        public static string GetAttributeValue(int attributeId, string attrLabel)
+        {
+            //TODO Don't know if replacing spaces with '_' is necessary
+            return $"{attributeId}_{attrLabel.Replace(" ", "_")}";
         }
     }
 }
