@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using EPiServer.Commerce.Marketing;
 using EPiServer.Commerce.Order;
 using EPiServer.ServiceLocation;
+using EPiServer.Shell.ObjectEditing.EditorDescriptors;
 using EPiServer.VueStorefrontApiBridge.ApiModel;
 using EPiServer.VueStorefrontApiBridge.ApiModel.Cart;
 using Mediachase.Commerce.Customers;
@@ -13,6 +15,8 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
     public class CartAdapter : ICartAdapter
     {
         private readonly IOrderRepository _orderRepository = ServiceLocator.Current.GetInstance<IOrderRepository>();
+        private readonly IPromotionEngine _promotionEngine = ServiceLocator.Current.GetInstance<IPromotionEngine>();
+
         public string CreateCart(string userId)
         {
             var cart = _orderRepository.LoadOrCreateCart<ICart>(GetUserGuid(userId), "Default");
@@ -83,6 +87,55 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
         {
             var cart = GetCart(userId, cartId);
             return cart.GetFirstForm().Shipments.Select(s => new ShippingMethod(s));
+        }
+
+        public bool AddCoupon(string userId, string cartId, string couponCode)
+        {
+            var cart = GetCart(userId, cartId);
+
+            var couponCodes = cart.GetFirstForm().CouponCodes;
+            if (couponCodes.Any())
+            {
+                //Vue Storefront allows to apply only one coupon code
+                couponCodes.Clear();
+            }
+            couponCodes.Add(couponCode);
+            var rewardDescriptions = ApplyDiscounts(cart);
+            var appliedCoupons = rewardDescriptions
+                .Where(r => r.AppliedCoupon != null)
+                .Select(r => r.AppliedCoupon);
+
+            var couponApplied = appliedCoupons.Any(c => c.Equals(couponCode, StringComparison.OrdinalIgnoreCase));
+            if (!couponApplied)
+            {
+                couponCodes.Remove(couponCode);
+            }
+            return couponApplied;
+        }
+
+        public string GetCartCoupon(string userId, string cartId)
+        {
+            var cart = GetCart(userId, cartId);
+            return cart.GetFirstForm().CouponCodes.FirstOrDefault();
+        }
+
+        public bool DeleteCoupon(string userId, string cartId)
+        {
+            var cart = GetCart(userId, cartId);
+            var couponCodes = cart.GetFirstForm().CouponCodes;
+            if (couponCodes.Any())
+            {
+                couponCodes.Clear();
+                ApplyDiscounts(cart);
+                return true;
+            }
+
+            return false;
+        }
+
+        private IEnumerable<RewardDescription> ApplyDiscounts(ICart cart)
+        {
+            return cart.ApplyDiscounts(_promotionEngine, new PromotionEngineSettings());
         }
 
         private ICart GetCart(string userId, string cartId)

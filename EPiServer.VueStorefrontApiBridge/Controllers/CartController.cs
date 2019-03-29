@@ -91,24 +91,24 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
         [ActionName("apply-coupon")]
         public IHttpActionResult ApplyCoupon(string cartId, string coupon)
         {
-            //TODO::: 
-            return Ok(new VsfSuccessResponse<bool>(false));
+            var isAdded = _iCartAdapter.AddCoupon(GetUserId(), cartId, coupon);
+            return Ok(new VsfSuccessResponse<bool>(isAdded));
         }
 
         [HttpPost]
         [ActionName("delete-coupon")]
         public IHttpActionResult DeleteCoupon(string cartId)
         {
-            //TODO::: 
-            return Ok(new VsfSuccessResponse<bool>(false));
+            var isDeleted = _iCartAdapter.DeleteCoupon(GetUserId(), cartId);
+            return Ok(new VsfSuccessResponse<bool>(isDeleted));
         }
 
         [HttpGet]
         [ActionName("coupon")]
         public IHttpActionResult Coupon(string cartId)
         {
-            //TODO::: 
-            return Ok(new VsfSuccessResponse<string>(null));
+            var couponCode = _iCartAdapter.GetCartCoupon(GetUserId(), cartId);
+            return Ok(new VsfSuccessResponse<string>(couponCode));
         }
 
         private string GetUserId()

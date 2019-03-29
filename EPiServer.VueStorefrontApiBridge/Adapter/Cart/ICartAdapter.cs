@@ -13,5 +13,9 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
         Total GetTotals(string userId, string cartId);
         IEnumerable<PaymentMethod> GetPaymentMethods(string userId, string cartId);
         IEnumerable<ShippingMethod> GetShippingMethods(string userId, string cartId, UserAddressModel address);
+
+        bool AddCoupon(string userId, string cartId, string couponCode);
+        string GetCartCoupon(string userId, string cartId);
+        bool DeleteCoupon(string userId, string cartId);
     }
 }
