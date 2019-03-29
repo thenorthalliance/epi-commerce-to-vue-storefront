@@ -285,11 +285,17 @@
     <Compile Include="Adapter\User\UserAdapter.cs" />
     <Compile Include="ApiModel\Cart\CartItem.cs" />
     <Compile Include="ApiModel\Cart\CartRequest.cs" />
+    <Compile Include="ApiModel\Cart\CollectTotalsMethods.cs" />
+    <Compile Include="ApiModel\Cart\CollectTotalsRequest.cs" />
     <Compile Include="ApiModel\Cart\ConfigurableItemOption.cs" />
     <Compile Include="ApiModel\Cart\ExtensionAttributes.cs" />
     <Compile Include="ApiModel\Cart\PaymentMethod.cs" />
+    <Compile Include="ApiModel\Cart\PaymentMethodRequestModel.cs" />
     <Compile Include="ApiModel\Cart\ProductOption.cs" />
     <Compile Include="ApiModel\Cart\ShipmentMethodRequest.cs" />
+    <Compile Include="ApiModel\Cart\ShippingAddressInformation.cs" />
+    <Compile Include="ApiModel\Cart\ShippingInformation.cs" />
+    <Compile Include="ApiModel\Cart\ShippingInformationRequest.cs" />
     <Compile Include="ApiModel\Cart\ShippingMethod.cs" />
     <Compile Include="ApiModel\Cart\Total.cs" />
     <Compile Include="ApiModel\Cart\TotalItem.cs" />

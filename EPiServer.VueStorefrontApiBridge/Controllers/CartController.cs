@@ -71,6 +71,46 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
 
         }
 
+        [HttpPost]
+        [ActionName("shipping-information")]
+        public IHttpActionResult ShippingInformation(string cartId, [FromBody] ShippingInformationRequest request)
+        {
+            //TODO::: 
+            return Ok(new VsfSuccessResponse<ShippingInformation>(null));
+        }
+
+        [HttpPost]
+        [ActionName("collect-totals")]
+        public IHttpActionResult CollectTotals(string cartId, CollectTotalsRequest request)
+        {
+            //TODO::: 
+            return Ok(new VsfSuccessResponse<Total>(null));
+        }
+
+        [HttpPost]
+        [ActionName("apply-coupon")]
+        public IHttpActionResult ApplyCoupon(string cartId, string coupon)
+        {
+            //TODO::: 
+            return Ok(new VsfSuccessResponse<bool>(false));
+        }
+
+        [HttpPost]
+        [ActionName("delete-coupon")]
+        public IHttpActionResult DeleteCoupon(string cartId)
+        {
+            //TODO::: 
+            return Ok(new VsfSuccessResponse<bool>(false));
+        }
+
+        [HttpGet]
+        [ActionName("coupon")]
+        public IHttpActionResult Coupon(string cartId)
+        {
+            //TODO::: 
+            return Ok(new VsfSuccessResponse<string>(null));
+        }
+
         private string GetUserId()
         {
             return User.Identity.IsAuthenticated ? User.Identity.GetUserId() : null;
