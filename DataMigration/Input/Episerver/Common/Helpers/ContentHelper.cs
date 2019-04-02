@@ -5,26 +5,31 @@ using DataMigration.Input.Episerver.Common.Attributes;
 using EPiServer;
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Core;
-using EPiServer.ServiceLocation;
 
 namespace DataMigration.Input.Episerver.Common.Helpers
 {
     public class ContentHelper
     {
-        public static T GetContent<T>(ContentReference contentReference) where T : IContent
+        private readonly IContentLoader _contentLoader;
+
+        public ContentHelper(IContentLoader contentLoader)
         {
-            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
-            return contentLoader.Get<T>(contentReference);
+            _contentLoader = contentLoader;
         }
 
-        public static IEnumerable<PropertyData> GetVariantVsfProperties(ContentReference variantReference)
+        public T GetContent<T>(ContentReference contentReference) where T : IContent
+        {
+            return _contentLoader.Get<T>(contentReference);
+        }
+
+        public IEnumerable<PropertyData> GetVariantVsfProperties(ContentReference variantReference)
         {
             var variant = GetContent<VariationContent>(variantReference);
             var propertiesNames = variant.GetType().GetProperties().Where(x => System.Attribute.IsDefined(x, typeof(VsfOptionAttribute))).Select(x => x.Name);
             return variant.Property.Where(x => propertiesNames.Contains(x.Name));
         }
 
-        public static IEnumerable<T> GetEntriesRecursive<T>(ContentReference parentLink, CultureInfo defaultCulture) where T : IContent
+        public IEnumerable<T> GetEntriesRecursive<T>(ContentReference parentLink, CultureInfo defaultCulture) where T : IContent
         {
             foreach (var nodeContent in LoadChildrenBatched<T>(parentLink, defaultCulture))
             {
@@ -40,13 +45,12 @@ namespace DataMigration.Input.Episerver.Common.Helpers
             }
         }
 
-        public static IEnumerable<T> LoadChildrenBatched<T>(ContentReference parentLink, CultureInfo defaultCulture) where T : IContent
+        public IEnumerable<T> LoadChildrenBatched<T>(ContentReference parentLink, CultureInfo defaultCulture) where T : IContent
         {
-            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
             var start = 0;
             while (true)
             {
-                var batch = contentLoader.GetChildren<T>(parentLink, defaultCulture, start, 50);
+                var batch = _contentLoader.GetChildren<T>(parentLink, defaultCulture, start, 50);
                 var enumerable = batch.ToList();
                 if (!enumerable.Any())
                 {

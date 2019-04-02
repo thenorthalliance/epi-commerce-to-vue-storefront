@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataMigration.Input.Episerver;
+using DataMigration.Input.Episerver.Category.Model;
 using DataMigration.Input.Episerver.Common.Model;
+using DataMigration.Input.Episerver.Common.Service;
+using DataMigration.Input.Episerver.ContentProperty.Model;
+using DataMigration.Input.Episerver.Product.Model;
 using DataMigration.Mapper;
 using DataMigration.Output.ElasticSearch.Entity.Category.Model;
 using DataMigration.Output.ElasticSearch.Entity.Product.Model;
@@ -15,7 +18,6 @@ using EPiServer.PlugIn;
 using EPiServer.Scheduler;
 using EPiServer.ServiceLocation;
 using Mediachase.Commerce.Catalog;
-using Attribute = DataMigration.Output.ElasticSearch.Entity.Attribute.Model.Attribute;
 
 namespace DataMigration.ScheduledJobs
 {
@@ -43,9 +45,9 @@ namespace DataMigration.ScheduledJobs
 
             var catalogContentLink = _contentLoader.GetChildren<CatalogContent>(_referenceConverter.GetRootLink()).First().ContentLink;
 
-            var result = MigrateEntities<Attribute>(catalogContentLink)
-                && MigrateEntities<Category>(catalogContentLink)
-                && MigrateEntities<Product>(catalogContentLink);
+            var result = MigrateEntities<EpiContentProperty, Output.ElasticSearch.Entity.Attribute.Model.Attribute>(catalogContentLink)
+                && MigrateEntities<EpiCategory, Category>(catalogContentLink)
+                && MigrateEntities<EpiProduct, Product>(catalogContentLink);
 
             if (!result)
             {
@@ -55,24 +57,24 @@ namespace DataMigration.ScheduledJobs
             return _indexApiService.ApplyChanges() ? $"Success. {_itemsCount} items exported." : throw new Exception("Unable to update Elasticsearch index alias.");
         }
 
-        private bool MigrateEntities<T>(ContentReference catalogReference) where T : class
+        private bool MigrateEntities<TSource, TDestination>(ContentReference catalogReference) where TSource : ICmsObject where TDestination : class
         {
-            OnStatusChanged($"Exporting '{typeof(T).Name}' data");
-            var entities = GetMappedEntities<T>(catalogReference).ToList();
+            OnStatusChanged($"Exporting '{typeof(TDestination).Name}' data");
+            var entities = GetMappedEntities<TSource, TDestination>(catalogReference).ToList();
             var result = _indexApiService.IndexMany(entities);
             _itemsCount += result;
             return result == entities.Count;
         }
 
-        private static IEnumerable<T> GetMappedEntities<T>(ContentReference catalogReference) where T : class
+        private static IEnumerable<TDestination> GetMappedEntities<TSource, TDestination>(ContentReference catalogReference) where TSource : ICmsObject where TDestination : class
         {
-            var mapper = MapperFactory.Create<T>();
-            return GetEntities<T>(catalogReference).Select(mapper.Map);
+            var mapper = ServiceLocator.Current.GetInstance<IMapper<TSource, TDestination>>();
+            return GetEntities<TSource>(catalogReference).Select(mapper.Map);
         }
 
-        private static IEnumerable<CmsObjectBase> GetEntities<T>(ContentReference catalogReference) where T : class
+        private static IEnumerable<T> GetEntities<T>(ContentReference catalogReference) where T : ICmsObject
         {
-            var contentService = ContentServiceFactory.Create<T>();
+            var contentService = ServiceLocator.Current.GetInstance<IContentService<T>>();
             return contentService.GetAll(catalogReference, ContentLanguage.PreferredCulture);
         }
     }

@@ -34,10 +34,10 @@ namespace DataMigration.Output.ElasticSearch.Entity.Product.Model
         public string UrlPath { get; set; }
 
         [PropertyName("price")]
-        public int Price { get; set; }
+        public decimal Price { get; set; }
 
         [PropertyName("final_price")]
-        public int FinalPrice { get; set; }
+        public decimal FinalPrice { get; set; }
 
         //nullable
         [PropertyName("special_price")]

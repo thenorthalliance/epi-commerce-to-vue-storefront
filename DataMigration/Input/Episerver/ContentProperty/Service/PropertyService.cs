@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Linq;
 using DataMigration.Input.Episerver.Common.Helpers;
-using DataMigration.Input.Episerver.Common.Model;
 using DataMigration.Input.Episerver.Common.Service;
 using DataMigration.Input.Episerver.ContentProperty.Model;
 using DataMigration.Input.Episerver.Product.Model;
@@ -11,19 +10,28 @@ using EPiServer.Core;
 
 namespace DataMigration.Input.Episerver.ContentProperty.Service
 {
-    public class PropertyService: IContentService
+    public class PropertyService : IContentService<EpiContentProperty>
     {
-        public IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level = 2)
+        private readonly ContentHelper _contentHelper;
+        private readonly IContentService<EpiProduct> _productService;
+
+        public PropertyService(ContentHelper contentHelper, IContentService<EpiProduct> productService)
+        {
+            _contentHelper = contentHelper;
+            _productService = productService;
+        }
+
+
+        public IEnumerable<EpiContentProperty> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level = 2)
         {
             var properties = new List<EpiContentProperty>();
-            var productsService = ContentServiceFactory.Create<Output.ElasticSearch.Entity.Product.Model.Product>();
-            var products = (IEnumerable<EpiProduct>) productsService.GetAll(parentReference, cultureInfo);
+            var products =_productService.GetAll(parentReference, cultureInfo);
             foreach (var product in products)
             {
                 var variants = product.ProductContent.GetVariants();
                 foreach (var variant in variants)
                 {
-                    var variantProperties = ContentHelper.GetVariantVsfProperties(variant);
+                    var variantProperties = _contentHelper.GetVariantVsfProperties(variant);
                     foreach (var variantProperty in variantProperties)
                     {
                         if (variantProperty.Value == null)

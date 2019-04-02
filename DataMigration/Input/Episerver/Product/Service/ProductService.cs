@@ -2,7 +2,6 @@
 using System.Globalization;
 using System.Linq;
 using DataMigration.Input.Episerver.Common.Helpers;
-using DataMigration.Input.Episerver.Common.Model;
 using DataMigration.Input.Episerver.Common.Service;
 using DataMigration.Input.Episerver.Product.Model;
 using EPiServer.Commerce.Catalog.ContentTypes;
@@ -10,15 +9,22 @@ using EPiServer.Core;
 
 namespace DataMigration.Input.Episerver.Product.Service
 {
-    public class ProductService : IContentService
+    public class ProductService : IContentService<EpiProduct>
     {
-        public IEnumerable<CmsObjectBase> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level = 2)
+        private readonly ContentHelper _contentHelper;
+
+        public ProductService(ContentHelper contentHelper)
         {
-            var categories = ContentHelper.GetEntriesRecursive<NodeContent>(parentReference, cultureInfo);
+            _contentHelper = contentHelper;
+        }
+
+        public IEnumerable<EpiProduct> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level = 2)
+        {
+            var categories = _contentHelper.GetEntriesRecursive<NodeContent>(parentReference, cultureInfo);
             var resultProducts = new List<EpiProduct>();
             foreach (var category in categories)
             {
-                var categoryProducts = ContentHelper.GetEntriesRecursive<ProductContent>(category.ContentLink, cultureInfo)
+                var categoryProducts = _contentHelper.GetEntriesRecursive<ProductContent>(category.ContentLink, cultureInfo)
                     .Select(productContent => new EpiProduct
                     {
                         ProductContent = productContent

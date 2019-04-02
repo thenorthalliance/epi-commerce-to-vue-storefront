@@ -1,17 +1,13 @@
 ﻿using System.Linq;
 using DataMigration.Input.Episerver.Category.Model;
-using DataMigration.Input.Episerver.Common.Model;
 using EPiServer.Core;
 
 namespace DataMigration.Mapper.Category
 {
-    public class CategoryMapper : IMapper<Output.ElasticSearch.Entity.Category.Model.Category>
+    public class CategoryMapper : IMapper<EpiCategory, Output.ElasticSearch.Entity.Category.Model.Category>
     {
-        public Output.ElasticSearch.Entity.Category.Model.Category Map(CmsObjectBase cmsObject)
+        public Output.ElasticSearch.Entity.Category.Model.Category Map(EpiCategory source)
         {
-            if (!(cmsObject is EpiCategory source))
-                return null;
-
             var isPublished = source.Category.Status.Equals(VersionStatus.Published);
 
             return new Output.ElasticSearch.Entity.Category.Model.Category

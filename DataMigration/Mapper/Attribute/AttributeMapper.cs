@@ -1,17 +1,13 @@
 ﻿using System.Linq;
-using DataMigration.Input.Episerver.Common.Model;
 using DataMigration.Input.Episerver.ContentProperty.Model;
 using DataMigration.Output.ElasticSearch.Entity.Attribute.Helper;
 
 namespace DataMigration.Mapper.Attribute
 {
-    public class AttributeMapper : IMapper<Output.ElasticSearch.Entity.Attribute.Model.Attribute>
+    public class AttributeMapper : IMapper<EpiContentProperty, Output.ElasticSearch.Entity.Attribute.Model.Attribute>
     {
-        public Output.ElasticSearch.Entity.Attribute.Model.Attribute Map(CmsObjectBase cmsObject)
+        public Output.ElasticSearch.Entity.Attribute.Model.Attribute Map(EpiContentProperty source)
         {
-            if(!(cmsObject is EpiContentProperty source))
-                return null;
-
             return new Output.ElasticSearch.Entity.Attribute.Model.Attribute
             {
                 Id = source.Id,

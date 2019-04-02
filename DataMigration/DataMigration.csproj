@@ -227,6 +227,7 @@
   <ItemGroup>
     <Compile Include="Configuration\VueStorefrontConfiguration.cs" />
     <Compile Include="Configuration\VueStorefrontConfigurationManager.cs" />
+    <Compile Include="Infrastructure\DataExportInitialization.cs" />
     <Compile Include="Utils\Extensions.cs" />
     <Compile Include="Configuration\ElasticClientConfigurationExtension.cs" />
     <Compile Include="Input\Episerver\Common\Attributes\VsfOptionAttribute.cs" />
@@ -237,11 +238,9 @@
     <Compile Include="Input\Episerver\ContentProperty\Service\PropertyService.cs" />
     <Compile Include="Input\Episerver\Category\Service\CategoryService.cs" />
     <Compile Include="Input\Episerver\Common\Service\IContentService.cs" />
-    <Compile Include="Input\Episerver\ContentServiceFactory.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Attribute\Helper\AttributeHelper.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Attribute\Model\Option.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Category\Model\CategoryBase.cs" />
-    <Compile Include="Output\ElasticSearch\Entity\EntityType.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Product\Model\CategoryListItem.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Product\Model\ConfigurableChild.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Product\Model\ConfigurableOption.cs" />
@@ -253,9 +252,8 @@
     <Compile Include="Mapper\Category\CategoryMapper.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Category\Model\Category.cs" />
     <Compile Include="Input\Episerver\Category\Model\EpiCategory.cs" />
-    <Compile Include="Input\Episerver\Common\Model\CmsObjectBase.cs" />
+    <Compile Include="Input\Episerver\Common\Model\ICmsObject.cs" />
     <Compile Include="Mapper\IMapper.cs" />
-    <Compile Include="Mapper\MapperFactory.cs" />
     <Compile Include="Mapper\Product\ProductMapper.cs" />
     <Compile Include="Input\Episerver\Product\Model\EpiProduct.cs" />
     <Compile Include="Output\ElasticSearch\Entity\Product\Model\Product.cs" />

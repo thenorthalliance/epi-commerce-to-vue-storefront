@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DataMigration.Input.Episerver.Common.Helpers;
-using DataMigration.Input.Episerver.Common.Model;
 using DataMigration.Input.Episerver.Common.Service;
 using DataMigration.Input.Episerver.Product.Model;
 using DataMigration.Output.ElasticSearch.Entity.Attribute.Helper;
@@ -11,20 +10,28 @@ using EPiServer.Core;
 
 namespace DataMigration.Mapper.Product
 {
-    public class ProductMapper : IMapper<Output.ElasticSearch.Entity.Product.Model.Product>
+    public class ProductMapper : IMapper<EpiProduct, Output.ElasticSearch.Entity.Product.Model.Product>
     {
-        public Output.ElasticSearch.Entity.Product.Model.Product Map(CmsObjectBase cmsObject)
-        {
-            if (!(cmsObject is EpiProduct source))
-                return null;
+        private readonly PriceService _priceService;
+        private readonly InventoryService _inventoryService;
+        private readonly ContentHelper _contentHelper;
 
+        public ProductMapper(PriceService priceService, InventoryService inventoryService, ContentHelper contentHelper)
+        {
+            _priceService = priceService;
+            _inventoryService = inventoryService;
+            _contentHelper = contentHelper;
+        }
+
+        public Output.ElasticSearch.Entity.Product.Model.Product Map(EpiProduct source)
+        {
             var epiProductProductContent = source.ProductContent;
             var imageUrl = epiProductProductContent.CommerceMediaCollection.FirstOrDefault()?.AssetLink.GetUrl();
             var thumbnail = UrlHelper.GetAsThumbnailUrl(imageUrl);
-            var variantQuantity = InventoryService.GetTotalInventoryByEntry(epiProductProductContent.Code);
+            var variantQuantity = _inventoryService.GetTotalInventoryByEntry(epiProductProductContent.Code);
             var configurableOptions = GetProductConfigurableOptions(source.ProductContent).ToList();
             var productVariations = source.ProductContent.GetVariants();
-            var productPrice = PriceService.GetPrice(epiProductProductContent.ContentLink);
+            var productPrice = _priceService.GetDefaultPrice(epiProductProductContent.Code);
 
             var product = new Output.ElasticSearch.Entity.Product.Model.Product
             {
@@ -48,7 +55,7 @@ namespace DataMigration.Mapper.Product
                 SpecialFromDate = null,
                 SpecialToDate = null,
                 CategoryIds = source.ProductContent.GetCategories().Select(x => x.ID.ToString()),
-                Category = source.ProductContent.GetCategories().Select(x => new CategoryListItem {Id = x.ID, Name = ContentHelper.GetContent<NodeContent>(x).DisplayName}),
+                Category = source.ProductContent.GetCategories().Select(x => new CategoryListItem {Id = x.ID, Name = _contentHelper.GetContent<NodeContent>(x).DisplayName}),
                 Status = 1,
                 Visibility = source.ProductContent.Status.Equals(VersionStatus.Published) ? 4 : 0,
                 Weight = 1,
@@ -59,7 +66,7 @@ namespace DataMigration.Mapper.Product
                 CreatedAt = source.ProductContent.Created
             };
 
-            product.ConfigurableChildren = productVariations.Select(v => MapVariant(product, ContentHelper.GetContent<VariationContent>(v))).ToList();
+            product.ConfigurableChildren = productVariations.Select(v => MapVariant(product, _contentHelper.GetContent<VariationContent>(v))).ToList();
 
             //TODO how to make it better, color_options etc are needed to filetering in category view and it is needed to be a number
             foreach (var option in configurableOptions) 
@@ -78,7 +85,7 @@ namespace DataMigration.Mapper.Product
             return product;
         }
         
-        private static IEnumerable<Media> GetGallery(ProductContent content)
+        private IEnumerable<Media> GetGallery(ProductContent content)
         {
             if (content == null)
                 return null;
@@ -87,7 +94,7 @@ namespace DataMigration.Mapper.Product
             var variants = content.GetVariants();
             foreach (var variant in variants)
             {
-                var imageReference = ContentHelper.GetContent<VariationContent>(variant).CommerceMediaCollection
+                var imageReference = _contentHelper.GetContent<VariationContent>(variant).CommerceMediaCollection
                     .Select(x => x.AssetLink).FirstOrDefault();
                 result.Add(new Media
                 {
@@ -99,14 +106,14 @@ namespace DataMigration.Mapper.Product
         }
 
         //TODO we should have a separated class for this - probably...
-        private static IEnumerable<ConfigurableOption> GetProductConfigurableOptions(ProductContent product)
+        private IEnumerable<ConfigurableOption> GetProductConfigurableOptions(ProductContent product)
         {
             var options = new List<ConfigurableOption>();
             var variants = product.GetVariants();
             var index = 0;
             foreach (var variant in variants)
             {
-                var variantProperties = ContentHelper.GetVariantVsfProperties(variant);
+                var variantProperties = _contentHelper.GetVariantVsfProperties(variant);
 
                 foreach (var variantProperty in variantProperties)
                 {
@@ -164,12 +171,12 @@ namespace DataMigration.Mapper.Product
             };
         }
 
-        private static ConfigurableChild MapVariant(Output.ElasticSearch.Entity.Product.Model.Product product, VariationContent variation)
+        private ConfigurableChild MapVariant(Output.ElasticSearch.Entity.Product.Model.Product product, VariationContent variation)
         {
-            var variantQuantity = InventoryService.GetTotalInventoryByEntry(variation.Code);
+            var variantQuantity = _inventoryService.GetTotalInventoryByEntry(variation.Code);
             var imageUrl = variation.CommerceMediaCollection.FirstOrDefault()?.AssetLink.GetUrl();
             var thumbnail = UrlHelper.GetAsThumbnailUrl(imageUrl);
-            var price = PriceService.GetPrice(variation.ContentLink);
+            var price = _priceService.GetDefaultPrice(variation.Code);
 //            GetGallery(variation as ProductContent);
 
             var output = new ConfigurableChild
@@ -188,7 +195,7 @@ namespace DataMigration.Mapper.Product
                 { "name", variation.DisplayName}
             };
 
-            var variantProperties = ContentHelper.GetVariantVsfProperties(variation.ContentLink);
+            var variantProperties = _contentHelper.GetVariantVsfProperties(variation.ContentLink);
             foreach (var variantProperty in variantProperties.Where(p => p.Value != null))
             {
                 var name = variantProperty.Name.ToLower();

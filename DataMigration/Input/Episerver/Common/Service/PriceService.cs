@@ -1,18 +1,28 @@
-﻿using System.Linq;
-using EPiServer.Core;
-using EPiServer.ServiceLocation;
+﻿using System;
+using Mediachase.Commerce;
+using Mediachase.Commerce.Catalog;
 using Mediachase.Commerce.Pricing;
 
 namespace DataMigration.Input.Episerver.Common.Service
 {
     public class PriceService
     {
-        public static int GetPrice(ContentReference priceReference)
+        private readonly IPriceService _priceService;
+        private readonly ICurrentMarket _currentMarket;
+
+        public PriceService(
+            IPriceService priceService,
+            ICurrentMarket currentMarket)
         {
-            var priceService = ServiceLocator.Current.GetInstance<IPriceDetailService>();
-            var price = priceService.List(priceReference).FirstOrDefault();
-            if (price != null) return (int)price.UnitPrice.Amount;
-            return 0;
+            _priceService = priceService;
+            _currentMarket = currentMarket;
+        }
+
+        public decimal GetDefaultPrice(string code)
+        {
+            var currentMarket = _currentMarket.GetCurrentMarket();
+            var price = _priceService.GetDefaultPrice(currentMarket.MarketId, DateTime.Now, new CatalogKey(code), currentMarket.DefaultCurrency);
+            return price?.UnitPrice.Amount ?? 0.0m;
         }
     }
 }
