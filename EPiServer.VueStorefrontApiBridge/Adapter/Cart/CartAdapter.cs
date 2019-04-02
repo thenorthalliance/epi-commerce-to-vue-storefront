@@ -4,10 +4,8 @@ using System.Linq;
 using EPiServer.Commerce.Marketing;
 using EPiServer.Commerce.Order;
 using EPiServer.ServiceLocation;
-using EPiServer.Shell.ObjectEditing.EditorDescriptors;
 using EPiServer.VueStorefrontApiBridge.ApiModel;
 using EPiServer.VueStorefrontApiBridge.ApiModel.Cart;
-using Mediachase.Commerce.Customers;
 using PaymentMethod = EPiServer.VueStorefrontApiBridge.ApiModel.Cart.PaymentMethod;
 
 namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
@@ -17,23 +15,25 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
         private readonly IOrderRepository _orderRepository = ServiceLocator.Current.GetInstance<IOrderRepository>();
         private readonly IPromotionEngine _promotionEngine = ServiceLocator.Current.GetInstance<IPromotionEngine>();
 
-        public string CreateCart(string userId)
+        public string DefaultCartName => "Default";
+
+        public string CreateCart(Guid contactId)
         {
-            var cart = _orderRepository.LoadOrCreateCart<ICart>(GetUserGuid(userId), "Default");
+            var cart = _orderRepository.LoadOrCreateCart<ICart>(contactId, DefaultCartName);
             _orderRepository.Save(cart);
-            return cart.Name;
+            return cart.CustomerId.ToString();
         }
 
-        public IEnumerable<CartItem> Pull(string userId, string cartId)
+        public IEnumerable<CartItem> Pull(Guid contactId)
         {
-            var cart = GetCart(userId, cartId);
+            var cart = GetCart(contactId);
             var cartItems = cart?.GetAllLineItems();
-            return cartItems?.Select(item => new CartItem(item, cartId));
+            return cartItems?.Select(item => new CartItem(item, contactId.ToString()));
         }
 
-        public CartItem Update(string userId, string cartId, CartItem cartItem)
+        public CartItem Update(Guid contactId, CartItem cartItem)
         {
-            var cart = GetCart(userId, cartId);
+            var cart = GetCart(contactId);
             if (cart == null || cartItem == null)
             {
                 return null;
@@ -52,12 +52,12 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
             }
 
             _orderRepository.Save(cart);
-            return new CartItem(updatedItem, cartId);
+            return new CartItem(updatedItem, contactId.ToString());
         }
 
-        public bool Delete(string userId, string cartId, CartItem cartItem)
+        public bool Delete(Guid contactId, CartItem cartItem)
         {
-            var cart = GetCart(userId, cartId);
+            var cart = GetCart(contactId);
             var itemToDelete = cart.GetAllLineItems().FirstOrDefault(item => item.LineItemId == cartItem.ItemId);
             if (itemToDelete != null)
             {
@@ -70,28 +70,28 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
             return false;
         }
 
-        public Total GetTotals(string userId, string cartId)
+        public Total GetTotals(Guid contactId)
         {
-            var cart = GetCart(userId, cartId);
+            var cart = GetCart(contactId);
             return new Total(cart);
         }
 
-        public IEnumerable<PaymentMethod> GetPaymentMethods(string userId, string cartId)
+        public IEnumerable<PaymentMethod> GetPaymentMethods(Guid contactId)
         {
-            var cart = GetCart(userId, cartId);
+            var cart = GetCart(contactId);
             return cart.GetFirstForm().Payments.Select(payment =>
                 new PaymentMethod {Code = payment.PaymentMethodName.Replace(" ", "").ToLower(), Title = payment.PaymentMethodName});
         }
 
-        public IEnumerable<ShippingMethod> GetShippingMethods(string userId, string cartId, UserAddressModel address)
+        public IEnumerable<ShippingMethod> GetShippingMethods(Guid contactId, UserAddressModel address)
         {
-            var cart = GetCart(userId, cartId);
+            var cart = GetCart(contactId);
             return cart.GetFirstForm().Shipments.Select(s => new ShippingMethod(s));
         }
 
-        public bool AddCoupon(string userId, string cartId, string couponCode)
+        public bool AddCoupon(Guid contactId, string couponCode)
         {
-            var cart = GetCart(userId, cartId);
+            var cart = GetCart(contactId);
 
             var couponCodes = cart.GetFirstForm().CouponCodes;
             if (couponCodes.Any())
@@ -113,15 +113,15 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
             return couponApplied;
         }
 
-        public string GetCartCoupon(string userId, string cartId)
+        public string GetCartCoupon(Guid contactId)
         {
-            var cart = GetCart(userId, cartId);
+            var cart = GetCart(contactId);
             return cart.GetFirstForm().CouponCodes.FirstOrDefault();
         }
 
-        public bool DeleteCoupon(string userId, string cartId)
+        public bool DeleteCoupon(Guid contactId)
         {
-            var cart = GetCart(userId, cartId);
+            var cart = GetCart(contactId);
             var couponCodes = cart.GetFirstForm().CouponCodes;
             if (couponCodes.Any())
             {
@@ -138,14 +138,9 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
             return cart.ApplyDiscounts(_promotionEngine, new PromotionEngineSettings());
         }
 
-        private ICart GetCart(string userId, string cartId)
+        private ICart GetCart(Guid contactId)
         {
-            return _orderRepository.Load<ICart>(GetUserGuid(userId), cartId).FirstOrDefault();
-        }
-
-        private static Guid GetUserGuid(string userId)
-        {
-            return userId == null ? CustomerContext.Current.CurrentContactId : new Guid(userId);
+            return _orderRepository.Load<ICart>(contactId, DefaultCartName).FirstOrDefault();
         }
     }
 }

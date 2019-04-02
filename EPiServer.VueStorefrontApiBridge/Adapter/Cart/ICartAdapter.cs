@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using EPiServer.VueStorefrontApiBridge.ApiModel;
 using EPiServer.VueStorefrontApiBridge.ApiModel.Cart;
 
@@ -6,16 +7,16 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
 {
     public interface ICartAdapter
     {
-        string CreateCart(string userId);
-        IEnumerable<CartItem> Pull(string userId, string cartId);
-        CartItem Update(string userId, string cartId, CartItem cartItem);
-        bool Delete(string userId, string cartId, CartItem cartItem);
-        Total GetTotals(string userId, string cartId);
-        IEnumerable<PaymentMethod> GetPaymentMethods(string userId, string cartId);
-        IEnumerable<ShippingMethod> GetShippingMethods(string userId, string cartId, UserAddressModel address);
+        string CreateCart(Guid contactId);
+        IEnumerable<CartItem> Pull(Guid contactId);
+        CartItem Update(Guid contactId, CartItem cartItem);
+        bool Delete(Guid contactId, CartItem cartItem);
+        Total GetTotals(Guid contactId);
+        IEnumerable<PaymentMethod> GetPaymentMethods(Guid contactId);
+        IEnumerable<ShippingMethod> GetShippingMethods(Guid contactId, UserAddressModel address);
 
-        bool AddCoupon(string userId, string cartId, string couponCode);
-        string GetCartCoupon(string userId, string cartId);
-        bool DeleteCoupon(string userId, string cartId);
+        bool AddCoupon(Guid contactId, string couponCode);
+        string GetCartCoupon(Guid contactId);
+        bool DeleteCoupon(Guid contactId);
     }
 }
