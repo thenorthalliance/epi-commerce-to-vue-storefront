@@ -1,9 +1,7 @@
-﻿using DataMigration.Input.Episerver.Common.Model;
-
-namespace DataMigration.Mapper
+﻿namespace DataMigration.Mapper
 {
-    public interface IMapper<T> where T:class
+    public interface IMapper<TSource, TDestination> where TDestination : class
     {
-        T Map(CmsObjectBase cmsObject);
+        TDestination Map(TSource source);
     }
 }
