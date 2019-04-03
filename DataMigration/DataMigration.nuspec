@@ -12,7 +12,4 @@
     <copyright>Copyright 2018</copyright>
     <tags>VueStoreFrontDataMigration</tags>
   </metadata>
-  <files>
-	<file src="AdminTools/VsfMigrationTool/Views/VsfMigration/Index.cshtml" target="content/Views/VsfMigration" />
-  </files>
 </package>
