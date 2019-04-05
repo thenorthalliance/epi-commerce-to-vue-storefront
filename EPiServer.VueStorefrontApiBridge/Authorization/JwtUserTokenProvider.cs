@@ -25,7 +25,8 @@ namespace EPiServer.VueStorefrontApiBridge.Authorization
         {
             var claimsIdentity = new ClaimsIdentity(new List<Claim>
             {
-                new Claim(ClaimTypes.NameIdentifier, user.Id)
+                new Claim(ClaimTypes.NameIdentifier, user.Id),
+                new Claim(ClaimTypes.Name, user.Id)
             }, _options.AuthenticationType);
 
             return Task.FromResult(GenerateTokenForClaims(claimsIdentity));
