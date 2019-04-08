@@ -281,7 +281,9 @@
   <ItemGroup>
     <Compile Include="Adapter\Cart\CartAdapter.cs" />
     <Compile Include="Adapter\Cart\ICartAdapter.cs" />
+    <Compile Include="Adapter\Stock\IStockAdapter.cs" />
     <Compile Include="Adapter\Invoice\MockedInvoiceAdapter.cs" />
+    <Compile Include="Adapter\Stock\StockAdapter.cs" />
     <Compile Include="Adapter\User\UserAdapter.cs" />
     <Compile Include="ApiModel\Cart\CartItem.cs" />
     <Compile Include="ApiModel\Cart\CartRequest.cs" />
@@ -303,6 +305,7 @@
     <Compile Include="ApiModel\Cart\TotalSegmentExtensionAttributes.cs" />
     <Compile Include="ApiModel\ChangePasswordModel.cs" />
     <Compile Include="ApiModel\ResetPasswordModel.cs" />
+    <Compile Include="ApiModel\Stock\StockCheck.cs" />
     <Compile Include="ApiModel\UserAddressModel.cs" />
     <Compile Include="ApiModel\UserCreateModel.cs" />
     <Compile Include="ApiModel\UserLoginModel.cs" />
@@ -319,6 +322,7 @@
     <Compile Include="Authorization\Model\TokenValidationResult.cs" />
     <Compile Include="Authorization\VsfAuthentication.cs" />
     <Compile Include="Authorization\VsfAuthorize.cs" />
+    <Compile Include="Controllers\StockController.cs" />
     <Compile Include="Manager\Address\DefaultCustomerAddressManager.cs" />
     <Compile Include="Manager\Address\ICustomerAddressManager.cs" />
     <Compile Include="Manager\Contact\DefaultCustomerContactManager.cs" />
