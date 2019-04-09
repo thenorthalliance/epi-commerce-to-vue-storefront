@@ -1,20 +1,10 @@
-﻿using EPiServer.Commerce.Order;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 
 namespace EPiServer.VueStorefrontApiBridge.ApiModel.Cart
 {
     public class ShippingMethod
     {
-        public ShippingMethod()
-        {
-        }
 
-        public ShippingMethod(IShipment shipment)
-        {
-            MethodCode = shipment.ShippingMethodName?.Replace(" ", "").ToLower();
-            MethodTitle = shipment.ShippingMethodName;
-            Available = shipment.CanBePacked(); //???
-        }
         [JsonProperty("carrier_code")]
         public string CarrierCode { get; set; }
 

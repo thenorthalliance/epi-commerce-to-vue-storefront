@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DataMigration.Utils.Epi;
+using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Commerce.Marketing;
 using EPiServer.Commerce.Order;
 using EPiServer.ServiceLocation;
 using EPiServer.VueStorefrontApiBridge.ApiModel;
 using EPiServer.VueStorefrontApiBridge.ApiModel.Cart;
+using Mediachase.Commerce.Catalog;
 using PaymentMethod = EPiServer.VueStorefrontApiBridge.ApiModel.Cart.PaymentMethod;
 
 namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
@@ -15,12 +18,12 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
         private readonly IOrderRepository _orderRepository = ServiceLocator.Current.GetInstance<IOrderRepository>();
         private readonly IPromotionEngine _promotionEngine = ServiceLocator.Current.GetInstance<IPromotionEngine>();
 
-        public string DefaultCartName => "Default";
+        public string DefaultCartName => "vsf-default-cart";
 
         public string CreateCart(Guid contactId)
         {
             var cart = _orderRepository.LoadOrCreateCart<ICart>(contactId, DefaultCartName);
-            _orderRepository.Save(cart);
+            _orderRepository.Save(cart); //TODO since CreateCart and Update methods are called simultaneously, this may introduce inconsistency
             return cart.CustomerId.ToString();
         }
 
@@ -28,17 +31,18 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
         {
             var cart = GetCart(contactId);
             var cartItems = cart?.GetAllLineItems();
-            return cartItems?.Select(item => new CartItem(item, contactId.ToString()));
+            return cartItems?.Select(item => CreateCartItem(item, contactId.ToString()));
         }
 
         public CartItem Update(Guid contactId, CartItem cartItem)
         {
             var cart = GetCart(contactId);
+
             if (cart == null || cartItem == null)
-            {
                 return null;
-            }
+
             var updatedItem = cart.GetAllLineItems().FirstOrDefault(item => item.Code == cartItem.Sku);
+
             if (updatedItem != null)
             {
                 var shipment = cart.GetFirstShipment();
@@ -48,11 +52,12 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
             {
                 updatedItem = cart.CreateLineItem(cartItem.Sku);
                 updatedItem.Quantity = cartItem.Qty;
+                UpdateCartLine(updatedItem);
                 cart.AddLineItem(updatedItem);
             }
 
-            _orderRepository.Save(cart);
-            return new CartItem(updatedItem, contactId.ToString());
+            _orderRepository.Save(cart); //TODO since CreateCart and Update methods are called simultaneously, this may introduce inconsistency
+            return CreateCartItem(updatedItem, contactId.ToString());
         }
 
         public bool Delete(Guid contactId, CartItem cartItem)
@@ -64,9 +69,11 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
                 var shipment = cart.GetFirstShipment();
                 var result = shipment.LineItems.Remove(itemToDelete);
                 shipment.LineItems.Remove(itemToDelete);
+                _orderRepository.Save(cart);
                 return result;
             }
 
+            //TODO save missing ? 
             return false;
         }
 
@@ -86,7 +93,7 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
         public IEnumerable<ShippingMethod> GetShippingMethods(Guid contactId, UserAddressModel address)
         {
             var cart = GetCart(contactId);
-            return cart.GetFirstForm().Shipments.Select(s => new ShippingMethod(s));
+            return cart.GetFirstForm().Shipments.Select(CreateShippingMethod);
         }
 
         public bool AddCoupon(Guid contactId, string couponCode)
@@ -141,6 +148,47 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
         private ICart GetCart(Guid contactId)
         {
             return _orderRepository.Load<ICart>(contactId, DefaultCartName).FirstOrDefault();
+        }
+
+        private CartItem CreateCartItem(ILineItem item, string cartId)
+        {
+            var cartItem = new CartItem
+            {
+                ItemId = item.LineItemId,
+                Sku = item.Code,
+                Qty = (int) item.Quantity,
+                Name = item.DisplayName,
+                Price = (int) item.PlacedPrice,
+                ProductType = "configurable",
+                QuoteId = cartId
+            };
+
+            return cartItem;
+        }
+
+        private void UpdateCartLine(ILineItem updatedItem)
+        {
+            var referenceConverter = ServiceLocator.Current.GetInstance<ReferenceConverter>();
+            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
+            var priceService = ServiceLocator.Current.GetInstance<PriceService>();
+            
+            var variationLinkt = referenceConverter.GetContentLink(updatedItem.Code);
+            var variation = contentLoader?.Get<VariationContent>(variationLinkt);
+            if (variation != null)
+            {
+                updatedItem.DisplayName = variation.DisplayName;
+                updatedItem.PlacedPrice = priceService.GetDefaultPrice(updatedItem.Code);
+            }
+        }
+
+        private static ShippingMethod CreateShippingMethod(IShipment shipment)
+        {
+            return new ShippingMethod
+                {
+                    MethodCode = shipment.ShippingMethodName?.Replace(" ", "").ToLower(),
+                    MethodTitle = shipment.ShippingMethodName,
+                    Available = shipment.CanBePacked()
+                };
         }
     }
 }

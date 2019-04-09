@@ -8,6 +8,7 @@ namespace EPiServer.VueStorefrontApiBridge.ApiModel.Cart
         [JsonProperty("payment_methods")]
         public IEnumerable<PaymentMethod> PaymentMethods { get; set; }
 
+        [JsonProperty("totals")]
         public Total Totals { get; set; }
     }
 }

@@ -350,6 +350,11 @@
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\DataMigration\DataMigration.csproj">
+      <Project>{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}</Project>
+      <Name>DataMigration</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

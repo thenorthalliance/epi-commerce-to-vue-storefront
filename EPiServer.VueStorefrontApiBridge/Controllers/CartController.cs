@@ -77,7 +77,15 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
         public IHttpActionResult ShippingInformation(Guid cartId, [FromBody] ShippingInformationRequest request)
         {
             //TODO::: 
-            return Ok(new VsfSuccessResponse<ShippingInformation>(null));
+            return Ok(new VsfSuccessResponse<ShippingInformation>(new ShippingInformation
+            {
+                PaymentMethods = new List<PaymentMethod>(),
+                Totals = new Total
+                {
+                    Items = new List<TotalItem>(),
+                    TotalSegments = new List<TotalSegment>()
+                }
+            }));
         }
 
         [HttpPost]

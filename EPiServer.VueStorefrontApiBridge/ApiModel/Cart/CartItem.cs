@@ -5,20 +5,6 @@ namespace EPiServer.VueStorefrontApiBridge.ApiModel.Cart
 {
     public class CartItem
     {
-        public CartItem()
-        {
-        }
-        public CartItem(ILineItem item, string cartId)
-        {
-            ItemId = item.LineItemId;
-            Sku = item.Code;
-            Qty = (int) item.Quantity;
-            Name = item.DisplayName;
-            Price = (int) item.PlacedPrice;
-            ProductType = "configurable";
-            QuoteId = cartId;
-        }
-
         [JsonProperty("item_id")]
         public int? ItemId { get; set; }
 
