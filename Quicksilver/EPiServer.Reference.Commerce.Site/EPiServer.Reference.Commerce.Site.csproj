@@ -933,6 +933,14 @@
       <Project>{07caa40b-7d3f-43a9-88dc-3b5d7bc5c0a0}</Project>
       <Name>DataMigration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\EPiServer.Vsf.Core\EPiServer.Vsf.Core.csproj">
+      <Project>{51DDA385-D610-4673-8562-BDE9197291FB}</Project>
+      <Name>EPiServer.Vsf.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EPiServer.Vsf.Mapping\EPiServer.Vsf.Mapping.csproj">
+      <Project>{9D281D7F-B362-4693-88E2-A6EA4CDAA16B}</Project>
+      <Name>EPiServer.Vsf.Mapping</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\EPiServer.VueStorefrontApiBridge\EPiServer.VueStorefrontApiBridge.csproj">
       <Project>{36f81164-899b-4c3e-8789-8df923333160}</Project>
       <Name>EPiServer.VueStorefrontApiBridge</Name>

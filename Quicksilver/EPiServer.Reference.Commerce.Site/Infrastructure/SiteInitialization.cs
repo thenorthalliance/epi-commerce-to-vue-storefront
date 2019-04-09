@@ -29,6 +29,9 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.WebPages;
 using EPiServer.Personalization.Commerce.Tracking;
+using EPiServer.Reference.Commerce.Site.Features.Product.Models;
+using EPiServer.Vsf.Core.Mapping;
+using EPiServer.Vsf.Mapping;
 using EPiServer.VueStorefrontApiBridge;
 
 namespace EPiServer.Reference.Commerce.Site.Infrastructure
@@ -90,6 +93,12 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
             services.AddTransient<HttpContextBase>(locator => HttpContext.Current.ContextBaseOrNull());
 
             services.AddSingleton<ServiceAccessor<IContentRouteHelper>>(locator => locator.GetInstance<IContentRouteHelper>);
+
+             var setup = MapperSetupBuilder.Create()
+                    .Register<TestMapper>().For<FashionProduct>().Build();
+
+            services.AddSingleton(typeof(IMapperSetup), setup);
+            services.AddTransient<IMapperResolver, ServiceLocatorMapperResolver>();
 
             DependencyResolver.SetResolver(new StructureMapDependencyResolver(context.StructureMap()));
             GlobalConfiguration.Configure(config =>
