@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using EPiServer.VueStorefrontApiBridge.Authorization.Model;
 
-namespace EPiServer.VueStorefrontApiBridge.Authorization
+namespace EPiServer.VueStorefrontApiBridge.Authorization.Token
 {
-    public class MemoryRefreshTokenRepo : IRefreshTokenRepo
+    public class MemoryRefreshTokenRepository : IRefreshTokenRepository
     {
         private static readonly object Locker = new object();
         private static readonly Dictionary<string, RefreshToken> RefreshTokens = new Dictionary<string, RefreshToken>();

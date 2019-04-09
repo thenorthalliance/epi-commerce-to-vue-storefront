@@ -29,7 +29,9 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.WebPages;
 using EPiServer.Personalization.Commerce.Tracking;
+using EPiServer.Reference.Commerce.Shared.Identity;
 using EPiServer.VueStorefrontApiBridge;
+using EPiServer.VueStorefrontApiBridge.ApiModel;
 
 namespace EPiServer.Reference.Commerce.Site.Infrastructure
 {
@@ -90,6 +92,10 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
             services.AddTransient<HttpContextBase>(locator => HttpContext.Current.ContextBaseOrNull());
 
             services.AddSingleton<ServiceAccessor<IContentRouteHelper>>(locator => locator.GetInstance<IContentRouteHelper>);
+
+            services
+                .VsfRegisterAuthServices<MyUserModel>()
+                .VsfRegisterUserManager<MyUserModel, MyUserAdapter>();
 
             DependencyResolver.SetResolver(new StructureMapDependencyResolver(context.StructureMap()));
             GlobalConfiguration.Configure(config =>

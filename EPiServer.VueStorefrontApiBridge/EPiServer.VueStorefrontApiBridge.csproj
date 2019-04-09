@@ -190,6 +190,9 @@
     <Reference Include="Microsoft.Owin.Security.Cookies, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.0\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Owin.Security.Jwt, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Owin.Security.Jwt.3.1.0\lib\net45\Microsoft.Owin.Security.Jwt.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Owin.Security.OAuth, Version=3.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.1.0\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
     </Reference>
@@ -279,12 +282,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapter\Cart\CartAdapter.cs" />
-    <Compile Include="Adapter\Cart\ICartAdapter.cs" />
-    <Compile Include="Adapter\Stock\IStockAdapter.cs" />
-    <Compile Include="Adapter\Invoice\MockedInvoiceAdapter.cs" />
-    <Compile Include="Adapter\Stock\StockAdapter.cs" />
-    <Compile Include="Adapter\User\UserAdapter.cs" />
+    <Compile Include="Adapter\CartAdapter.cs" />
+    <Compile Include="Adapter\ICartAdapter.cs" />
+    <Compile Include="Adapter\IStockAdapter.cs" />
+    <Compile Include="Adapter\StockAdapter.cs" />
     <Compile Include="ApiModel\Cart\CartItem.cs" />
     <Compile Include="ApiModel\Cart\CartRequest.cs" />
     <Compile Include="ApiModel\Cart\CollectTotalsMethods.cs" />
@@ -314,30 +315,29 @@
     <Compile Include="ApiModel\UserUpdateModel.cs" />
     <Compile Include="ApiModel\VsfResponse.cs" />
     <Compile Include="ApiModel\OrderHistoryModel.cs" />
-    <Compile Include="Authorization\IRefreshTokenRepo.cs" />
-    <Compile Include="Authorization\IUserTokenProvider.cs" />
-    <Compile Include="Authorization\MemoryRefreshTokenRepo.cs" />
+    <Compile Include="Authorization\Claims\UserClaimsProvider.cs" />
+    <Compile Include="Endpoints\CartEndpoint.cs" />
+    <Compile Include="Endpoints\ICartEndpoint.cs" />
+    <Compile Include="Endpoints\IStockEndpoint.cs" />
+    <Compile Include="Endpoints\StockEndpoint.cs" />
+    <Compile Include="Endpoints\UserEndpoint.cs" />
+    <Compile Include="Endpoints\IUserEndpoint.cs" />
+    <Compile Include="Authorization\Token\VsfJwtBearerTokenProvider.cs" />
+    <Compile Include="Authorization\Token\IRefreshTokenRepository.cs" />
+    <Compile Include="Authorization\Claims\IUserClaimsProvider.cs" />
+    <Compile Include="Authorization\Token\IUserTokenProvider.cs" />
+    <Compile Include="Authorization\Token\MemoryRefreshTokenRepository.cs" />
     <Compile Include="Authorization\Model\AuthTokenOptions.cs" />
     <Compile Include="Authorization\Model\RefreshToken.cs" />
     <Compile Include="Authorization\Model\TokenValidationResult.cs" />
-    <Compile Include="Authorization\VsfAuthentication.cs" />
-    <Compile Include="Authorization\VsfAuthorize.cs" />
+    <Compile Include="Authorization\VsfAuthorizeAttribute.cs" />
     <Compile Include="Controllers\StockController.cs" />
-    <Compile Include="Manager\Address\DefaultCustomerAddressManager.cs" />
-    <Compile Include="Manager\Address\ICustomerAddressManager.cs" />
-    <Compile Include="Manager\Contact\DefaultCustomerContactManager.cs" />
-    <Compile Include="Manager\Contact\ICustomerContactManager.cs" />
-    <Compile Include="Adapter\Invoice\IInvoiceAdapter.cs" />
-    <Compile Include="Manager\User\DefaultUserManager.cs" />
-    <Compile Include="Manager\User\IUserManager.cs" />
-    <Compile Include="Mapper\User\DefaultUserMapper.cs" />
-    <Compile Include="Mapper\User\IUserMapper.cs" />
-    <Compile Include="Model\Invoice\InvoiceInformation.cs" />
-    <Compile Include="Utils\IResetPasswordEmailSender.cs" />
-    <Compile Include="Adapter\User\IUserAdapter.cs" />
-    <Compile Include="Authorization\JwtUserTokenProvider.cs" />
+    <Compile Include="Adapter\IUserAdapter.cs" />
+    <Compile Include="ApiModel\InvoiceInformation.cs" />
+    <Compile Include="Authorization\Token\JwtUserTokenProvider.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Utils\ResourceLocker.cs" />
+    <Compile Include="Utils\SecurityExtensions.cs" />
     <Compile Include="VueStorefrontApiBridgeRegisterEx.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -356,5 +356,6 @@
       <Name>DataMigration</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

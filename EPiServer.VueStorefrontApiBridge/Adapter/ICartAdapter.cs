@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using EPiServer.VueStorefrontApiBridge.ApiModel;
 using EPiServer.VueStorefrontApiBridge.ApiModel.Cart;
 
-namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
+namespace EPiServer.VueStorefrontApiBridge.Adapter
 {
     public interface ICartAdapter
     {

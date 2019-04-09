@@ -7,12 +7,11 @@ using EPiServer.VueStorefrontApiBridge.ApiModel;
 
 namespace EPiServer.VueStorefrontApiBridge.Authorization
 {
-    public class VsfAuthorize : AuthorizeAttribute
+    public class VsfAuthorizeAttribute : AuthorizeAttribute
     {
         public override void OnAuthorization(HttpActionContext actionContext)
         {
-            if (!actionContext.RequestContext.Principal.Identity.IsAuthenticated
-                || actionContext.RequestContext.Principal.Identity.AuthenticationType != "VueStorefronToken")
+            if (!actionContext.RequestContext.Principal.Identity.IsAuthenticated)
             {
                 actionContext.Response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
                 actionContext.Response.Content = new ObjectContent(typeof(VsfErrorResponse), 

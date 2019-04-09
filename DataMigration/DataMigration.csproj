@@ -154,6 +154,7 @@
     <Reference Include="Mediachase.WebConsoleLib, Version=12.16.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\EPiServer.Commerce.Core.12.16.0\lib\net461\Mediachase.WebConsoleLib.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Build.Tasks.v4.0" />
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>

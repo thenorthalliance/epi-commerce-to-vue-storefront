@@ -10,5 +10,6 @@ namespace EPiServer.VueStorefrontApiBridge.Authorization.Model
         public string AuthenticationType { get; set; } = "VueStorefronToken";
 
         public SymmetricSecurityKey SecurityKey { get; set; }
+        
     }
 }

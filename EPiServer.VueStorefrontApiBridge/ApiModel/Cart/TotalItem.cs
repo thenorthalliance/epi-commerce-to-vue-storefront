@@ -5,32 +5,6 @@ namespace EPiServer.VueStorefrontApiBridge.ApiModel.Cart
 {
     public class TotalItem
     {
-        public TotalItem()
-        {
-        }
-
-        public TotalItem(ILineItem item)
-        {
-            ItemId = item.LineItemId;
-            Price = (long) item.PlacedPrice;
-            BasePrice = (long) item.PlacedPrice;
-            Qty = (long) item.Quantity;
-            RowTotal = 0;
-            BaseRowTotal = 0;
-            RowTotalWithDiscount = 0;
-            TaxAmount = 0;
-            BaseTaxAmount = 0;
-            TaxPercent = 0;
-            DiscountAmount = 0;
-            BaseDiscountAmount = 0;
-            DiscountPercent = 0;
-            Options = "";
-            WeeeTaxAppliedAmount = null;
-            WeeeTaxApplied = null;
-            Name = item.DisplayName;
-            ProductOption = new ProductOption(); //TODO get products options
-        }
-
         [JsonProperty("item_id")]
         public long ItemId { get; set; }
 

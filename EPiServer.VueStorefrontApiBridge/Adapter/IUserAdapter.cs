@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using EPiServer.VueStorefrontApiBridge.ApiModel;
 
-namespace EPiServer.VueStorefrontApiBridge.Manager.User
+namespace EPiServer.VueStorefrontApiBridge.Adapter
 {
-    public interface IUserManager
+    public interface IUserAdapter<TUser> where TUser: UserModel
     {
-        Task<UserModel> GetUserByCredentials(string userLogin, string userPassword);
-        Task<UserModel> GetUserById(string userId);
-        Task<UserModel> CreateUser(UserCreateModel newUser);
+        Task<TUser> GetUserByCredentials(string userLogin, string userPassword);
+        Task<TUser> GetUserById(string userId);
+        Task<TUser> CreateUser(UserCreateModel newUser);
         Task<bool> UpdateUser(string userId, UserModel updatedUser);
         Task<bool> ChangePassword(string userId, string oldPassword, string newPassword);
         Task<bool> SendResetPasswordEmail(string userEmail);

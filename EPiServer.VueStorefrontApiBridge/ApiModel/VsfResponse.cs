@@ -2,9 +2,12 @@
 
 namespace EPiServer.VueStorefrontApiBridge.ApiModel
 {
-    public abstract class VsfResponse<T>
+    public abstract class VsfResponse
+    {}
+
+    public abstract class VsfResponse<T> : VsfResponse
     {
-        public VsfResponse(int code, T result)
+        protected VsfResponse(int code, T result)
         {
             this.Code = code;
             this.Result = result;

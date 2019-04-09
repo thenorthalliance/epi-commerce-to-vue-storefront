@@ -1,24 +1,22 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
-using EPiServer.VueStorefrontApiBridge.Adapter.Stock;
-using EPiServer.VueStorefrontApiBridge.ApiModel;
-using EPiServer.VueStorefrontApiBridge.ApiModel.Stock;
+using EPiServer.VueStorefrontApiBridge.Endpoints;
 
 namespace EPiServer.VueStorefrontApiBridge.Controllers
 {
     public class StockController : ApiController
     {
-        private readonly IStockAdapter _stockAdapter;
+        private readonly IStockEndpoint _stockEndpoint;
 
-        public StockController(IStockAdapter stockAdapter)
+        public StockController(IStockEndpoint stockEndpoint)
         {
-            _stockAdapter = stockAdapter;
+            _stockEndpoint = stockEndpoint;
         }
 
         [HttpGet]
         public async Task<IHttpActionResult> Check([FromUri]string sku)
         {
-            return Ok(new VsfSuccessResponse<StockCheck>(await _stockAdapter.Check(sku)));
+            return Ok(await _stockEndpoint.Check(sku));
         }
     }
 }

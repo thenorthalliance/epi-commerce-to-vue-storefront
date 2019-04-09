@@ -6,7 +6,7 @@ using EPiServer.VueStorefrontApiBridge.ApiModel.Stock;
 using Mediachase.Commerce.Catalog;
 using Mediachase.Commerce.InventoryService;
 
-namespace EPiServer.VueStorefrontApiBridge.Adapter.Stock
+namespace EPiServer.VueStorefrontApiBridge.Adapter
 {
     public class StockAdapter : IStockAdapter
     {

@@ -1,64 +1,64 @@
 ﻿using System.IdentityModel.Tokens;
-using System.Text;
 using System.Web.Http;
 using System.Web.Http.Cors;
-using EPiServer.Framework;
-using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
-using EPiServer.VueStorefrontApiBridge.Adapter.Invoice;
-using EPiServer.VueStorefrontApiBridge.Adapter.Cart;
-using EPiServer.VueStorefrontApiBridge.Adapter.Stock;
-using EPiServer.VueStorefrontApiBridge.Authorization;
+using EPiServer.VueStorefrontApiBridge.Adapter;
+using EPiServer.VueStorefrontApiBridge.ApiModel;
+using EPiServer.VueStorefrontApiBridge.Authorization.Claims;
 using EPiServer.VueStorefrontApiBridge.Authorization.Model;
-using EPiServer.VueStorefrontApiBridge.Manager.Address;
-using EPiServer.VueStorefrontApiBridge.Manager.Contact;
-using EPiServer.VueStorefrontApiBridge.Manager.User;
-using EPiServer.VueStorefrontApiBridge.Mapper.User;
+using EPiServer.VueStorefrontApiBridge.Authorization.Token;
+using EPiServer.VueStorefrontApiBridge.Endpoints;
+using EPiServer.VueStorefrontApiBridge.Utils;
+using Microsoft.Owin.Security.Jwt;
+using Owin;
 
 namespace EPiServer.VueStorefrontApiBridge
 {
-    [InitializableModule]
-    public class ModuleWithServices : IConfigurableModule
+    
+    public static class VsfServicesExt
     {
-        public void ConfigureContainer(ServiceConfigurationContext context)
+
+        public static IServiceConfigurationProvider VsfRegisterAuthServices<TUser>(this IServiceConfigurationProvider services) 
+            where TUser : UserModel
         {
             //MOCKED AUTH SETUP
             //THIS WILL CHANGE 
-            context.Services.Add(typeof(IUserTokenProvider), new JwtUserTokenProvider(new AuthTokenOptions
+            services.Add(typeof(IUserTokenProvider), new JwtUserTokenProvider(new AuthTokenOptions
             {
                 Issuer = "test_issuer",
                 Audience = "http://localhost:50244",
-                SecurityKey = new InMemorySymmetricSecurityKey(Encoding.UTF8.GetBytes("alamakotaalamakotaalamakotaalamakota"))
-            }, new MemoryRefreshTokenRepo()));
+                SecurityKey = "alamakotaalamakotaalamakotaalamakota".ToSymmetricSecurityKey()
+            }, new MemoryRefreshTokenRepository()));
+            
+            if (!services.Contains(typeof(ICartAdapter)))
+                services.Add(typeof(ICartAdapter), typeof(CartAdapter), ServiceInstanceScope.Transient);
 
-            if (!context.Services.Contains(typeof(IUserMapper)))
-                context.Services.Add(typeof(IUserMapper), typeof(DefaultUserMapper), ServiceInstanceScope.Singleton);
+            if(!services.Contains(typeof(IStockAdapter)))
+                services.Add(typeof(IStockAdapter), typeof(StockAdapter), ServiceInstanceScope.Transient);
 
-            if (!context.Services.Contains(typeof(IUserManager)))
-                context.Services.Add(typeof(IUserManager), typeof(DefaultUserManager), ServiceInstanceScope.Transient);
+            if (!services.Contains(typeof(IUserEndpoint)))
+                services.Add(typeof(IUserEndpoint), typeof(UserEndpoint<TUser>), ServiceInstanceScope.Transient);
 
-            if (!context.Services.Contains(typeof(ICustomerContactManager)))
-                context.Services.Add(typeof(ICustomerContactManager), typeof(DefaultCustomerContactManager), ServiceInstanceScope.Transient);
+            if (!services.Contains(typeof(ICartEndpoint)))
+                services.Add(typeof(ICartEndpoint), typeof(CartEndpoint), ServiceInstanceScope.Transient);
 
-            if (!context.Services.Contains(typeof(ICustomerAddressManager)))
-                context.Services.Add(typeof(ICustomerAddressManager), typeof(DefaultCustomerAddressManager), ServiceInstanceScope.Transient);
+            if (!services.Contains(typeof(IStockEndpoint)))
+                services.Add(typeof(IStockEndpoint), typeof(StockEndpoint), ServiceInstanceScope.Transient);
+            
+            services.Add(typeof(IUserClaimsProvider<TUser>), typeof(UserClaimsProvider<TUser>), ServiceInstanceScope.Transient);
 
-            context.Services.Add(typeof(IInvoiceAdapter), typeof(MockedInvoiceAdapter), ServiceInstanceScope.Singleton);
-
-            if (!context.Services.Contains(typeof(ICartAdapter)))
-                context.Services.Add(typeof(ICartAdapter), typeof(CartAdapter), ServiceInstanceScope.Transient);
-
-            if(!context.Services.Contains(typeof(IStockAdapter)))
-                context.Services.Add(typeof(IStockAdapter), typeof(StockAdapter), ServiceInstanceScope.Transient);
-
+            return services;
         }
 
-        public void Initialize(InitializationEngine context)
-        {}
+        public static IServiceConfigurationProvider VsfRegisterUserManager<TUser, TUserManager>(this IServiceConfigurationProvider services) where TUser : UserModel
+        {
+            if (!services.Contains(typeof(IUserAdapter<TUser>)))
+                services.Add(typeof(IUserAdapter<TUser>), typeof(TUserManager), ServiceInstanceScope.Transient);
 
-        public void Uninitialize(InitializationEngine context)
-        {}
+            return services;
+        }
     }
+
 
     public static class VueStorefrontApiBridgeRegisterEx
     {
@@ -67,8 +67,24 @@ namespace EPiServer.VueStorefrontApiBridge
             configuration.EnableCors(new EnableCorsAttribute("*", "*", "*"));
             configuration.Routes.MapHttpRoute("VueStorefron API Bridge",
                 "vsbridge/{controller}/{action}");
-            
-            configuration.Filters.Add(new VsfAuthentication());
+        }
+
+        public static IAppBuilder RegisterVueStorefrontAuth(this IAppBuilder bulder)
+        {
+            bulder.UseJwtBearerAuthentication(new JwtBearerAuthenticationOptions
+            {
+                
+                AuthenticationType = "VueStorefronToken",
+                TokenValidationParameters = new TokenValidationParameters
+                {
+                    IssuerSigningKey = "alamakotaalamakotaalamakotaalamakota".ToSymmetricSecurityKey(),
+                    ValidIssuer = "test_issuer",
+                    ValidAudience = "http://localhost:50244",
+                    ValidateLifetime = true,
+                },
+                Provider = new VsfJwtBearerTokenProvider()
+            });
+            return bulder;
         }
     }
 }

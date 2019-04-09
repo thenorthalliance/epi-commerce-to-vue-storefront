@@ -11,7 +11,7 @@ using EPiServer.VueStorefrontApiBridge.ApiModel.Cart;
 using Mediachase.Commerce.Catalog;
 using PaymentMethod = EPiServer.VueStorefrontApiBridge.ApiModel.Cart.PaymentMethod;
 
-namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
+namespace EPiServer.VueStorefrontApiBridge.Adapter
 {
     public class CartAdapter : ICartAdapter
     {
@@ -69,18 +69,16 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
                 var shipment = cart.GetFirstShipment();
                 var result = shipment.LineItems.Remove(itemToDelete);
                 shipment.LineItems.Remove(itemToDelete);
-                _orderRepository.Save(cart);
+                _orderRepository.Save(cart); //TODO since CreateCart and Update methods are called simultaneously, this may introduce inconsistency
                 return result;
             }
-
-            //TODO save missing ? 
             return false;
         }
 
         public Total GetTotals(Guid contactId)
         {
             var cart = GetCart(contactId);
-            return new Total(cart);
+            return CreateTotal(cart);
         }
 
         public IEnumerable<PaymentMethod> GetPaymentMethods(Guid contactId)
@@ -184,11 +182,88 @@ namespace EPiServer.VueStorefrontApiBridge.Adapter.Cart
         private static ShippingMethod CreateShippingMethod(IShipment shipment)
         {
             return new ShippingMethod
-                {
-                    MethodCode = shipment.ShippingMethodName?.Replace(" ", "").ToLower(),
-                    MethodTitle = shipment.ShippingMethodName,
-                    Available = shipment.CanBePacked()
-                };
+            {
+                MethodCode = shipment.ShippingMethodName?.Replace(" ", "").ToLower(),
+                MethodTitle = shipment.ShippingMethodName,
+                Available = shipment.CanBePacked()
+            };
+        }
+
+        private static Total CreateTotal(ICart cart)
+        {
+            var items = cart.GetAllLineItems().ToList();
+
+            return new Total
+            {
+                GrandTotal = cart.GetTotal().Amount,
+                WeeeTaxAppliedAmount = null,
+                BaseCurrencyCode = cart.Currency.CurrencyCode,
+                QuoteCurrencyCode = cart.Currency.CurrencyCode,
+                ItemsQty = items.Count(),
+                Items = items.Select(CreateTotalItem).ToList(),
+                TotalSegments = CreateSegments(cart)
+            };
+        }
+
+        private static List<TotalSegment> CreateSegments(ICart cart)
+        {
+            var result = new List<TotalSegment>();
+            var subTotal = cart.GetSubTotal();
+            result.Add(new TotalSegment
+            {
+                Code = "subtotal",
+                Title = "Subtotal",
+                Value = (long?)subTotal.Amount
+            });
+
+            var shippingTotal = cart.GetShippingTotal();
+            result.Add(new TotalSegment
+            {
+                Code = "shipping",
+                Title = "Shipping",
+                Value = (long?)shippingTotal.Amount
+            });
+            result.Add(new TotalSegment
+            {
+                Code = "handling",
+                Title = "Handling",
+                Value = (long?)shippingTotal.Amount
+            });
+            var grandTotal = cart.GetTotal();
+            result.Add(new TotalSegment
+            {
+                Code = "grand_total",
+                Title = "Grant Total",
+                Value = (long?)grandTotal.Amount
+            });
+            return result;
+        }
+
+        private static TotalItem CreateTotalItem(ILineItem item)
+        {
+            //TODO get products options
+            
+            return new TotalItem
+            {
+                ItemId = item.LineItemId,
+                Price = (long)item.PlacedPrice,
+                BasePrice = (long)item.PlacedPrice,
+                Qty = (long)item.Quantity,
+                RowTotal = 0,
+                BaseRowTotal = 0,
+                RowTotalWithDiscount = 0,
+                TaxAmount = 0,
+                BaseTaxAmount = 0,
+                TaxPercent = 0,
+                DiscountAmount = 0,
+                BaseDiscountAmount = 0,
+                DiscountPercent = 0,
+                Options = "",
+                WeeeTaxAppliedAmount = null,
+                WeeeTaxApplied = null,
+                Name = item.DisplayName,
+                ProductOption = new ProductOption()
+            };
         }
     }
 }

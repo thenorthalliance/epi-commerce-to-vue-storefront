@@ -2,85 +2,50 @@
 using System.Web.Http;
 using EPiServer.VueStorefrontApiBridge.ApiModel;
 using EPiServer.VueStorefrontApiBridge.Authorization;
-using EPiServer.VueStorefrontApiBridge.Manager.User;
-using EPiServer.VueStorefrontApiBridge.Utils;
+using EPiServer.VueStorefrontApiBridge.Endpoints;
 using Microsoft.AspNet.Identity;
 
 namespace EPiServer.VueStorefrontApiBridge.Controllers
 {
     public class UserController : ApiController
     {
-        private readonly IUserManager _userManager;
-        private readonly IUserTokenProvider _tokenProvider;
+        private readonly IUserEndpoint _userEndpoint;
 
-        public UserController(IUserManager userManager, IUserTokenProvider userTokenProvider)
+        public UserController(IUserEndpoint userEndpoint)
         {
-            _userManager = userManager;
-            _tokenProvider = userTokenProvider;
+            _userEndpoint = userEndpoint;
         }
 
         [HttpPost]
         public async Task<IHttpActionResult> Login([FromBody]UserLoginModel userLoginModel)
         {
-            var user = await _userManager.GetUserByCredentials(userLoginModel.Username, userLoginModel.Password);
-
-            if (user == null)
-                return Ok(new VsfErrorResponse(
-                    "You did not sign in correctly or your account is temporarily disabled."));
-
-            using (await UserLocker.LockAsync(user.Id))
-            {
-                var authToken = await _tokenProvider.GenerateNewToken(user);
-                var refreshToken = await _tokenProvider.GenerateNewRefreshToken(user);
-
-                return Ok(new LoginResponse(authToken, refreshToken));
-            }
+            return Ok(await _userEndpoint.CreateLoginResponse(userLoginModel));
         }
 
         [HttpPost]
         public async Task<IHttpActionResult> Refresh([FromBody] UserRefreshTokenModel userRefreshTokenModel)
         {
-            var refreshToken = await _tokenProvider.GetRefreshToken(userRefreshTokenModel.RefreshToken);
-
-            var user = await _userManager.GetUserById(refreshToken.UserId);
-            var authToken = await _tokenProvider.GenerateNewToken(user);
-
-            return Ok(new RefreshTokenResponse(authToken));
+            return Ok(await _userEndpoint.RefreshToken(userRefreshTokenModel));
         }
 
         [HttpPost]
         public async Task<IHttpActionResult> Create(UserCreateModel userCreateModel)
         {
-            var newUser = await _userManager.CreateUser(userCreateModel);
-            if (newUser == null)
-                return Ok(new VsfErrorResponse("User not created. TODO ADD INFO!"));
-
-            return Ok(new VsfSuccessResponse<UserModel>(newUser));
+            return Ok(await _userEndpoint.CreateUser(userCreateModel));
         }
 
         [HttpPost]
         [ActionName("reset-password")]
         public async Task<IHttpActionResult> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
-            if (!await _userManager.SendResetPasswordEmail(resetPasswordModel.Email))
-                return Ok(new VsfErrorResponse($"No such entity with email = {resetPasswordModel.Email}"));
-            return Ok(new VsfSuccessResponse<string>("Email sent."));
+            return Ok(await _userEndpoint.ResetPassword(resetPasswordModel));
         }
 
         [VsfAuthorize]
         [ActionName("change-password")]
         public async Task<IHttpActionResult> ChangePassword(ChangePasswordModel changePasswordModel)
         {
-            var userId = User.Identity.GetUserId();
-
-            using (await UserLocker.LockAsync(userId))
-            {
-                if (!await _userManager.ChangePassword(userId, 
-                    changePasswordModel.CurrentPassword, changePasswordModel.NewPassword))
-                    return Ok(new VsfErrorResponse("The password doesn't match this account."));
-
-                return Ok(new VsfSuccessResponse<string>("Password changed."));
-            }
+            return Ok(await _userEndpoint.ChangePassword(User.Identity.GetUserId(), changePasswordModel));
         }
 
         [HttpGet]
@@ -96,11 +61,7 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
         [ActionName("me")]
         public async Task<IHttpActionResult> GetUser()
         {
-            var userId = User.Identity.GetUserId();
-            using (await UserLocker.LockAsync(userId))
-            {
-                return Ok(new VsfSuccessResponse<UserModel>(await _userManager.GetUserById(userId)));
-            }
+            return Ok(await _userEndpoint.GetUser(User.Identity.GetUserId()));
         }
 
         [HttpPost]
@@ -108,18 +69,7 @@ namespace EPiServer.VueStorefrontApiBridge.Controllers
         [ActionName("me")]
         public async Task<IHttpActionResult> UpdateUser(UserUpdateModel updateModel)
         {
-            var userId = User.Identity.GetUserId();
-
-            using (await UserLocker.LockAsync(userId))
-            {
-                if (await _userManager.UpdateUser(userId, updateModel.Customer))
-                {
-                    return Ok(new VsfSuccessResponse<UserModel>(await _userManager.GetUserById(
-                        User.Identity.GetUserId())));
-                }
-
-                return Ok(new VsfErrorResponse("User update failed."));
-            }
+            return base.Ok(_userEndpoint.UpdateUser(User.Identity.GetUserId(), updateModel));
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
 using EPiServer.VueStorefrontApiBridge.Authorization.Model;
 
-namespace EPiServer.VueStorefrontApiBridge.Authorization
+namespace EPiServer.VueStorefrontApiBridge.Authorization.Token
 {
-    public interface IRefreshTokenRepo
+    public interface IRefreshTokenRepository
     {
         Task StoreToken(RefreshToken token);
 

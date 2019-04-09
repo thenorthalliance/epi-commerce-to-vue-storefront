@@ -32,6 +32,9 @@ namespace DataMigration.Mapper
             var productVariations = source.ProductContent.GetVariants();
             var productPrice = _priceService.GetDefaultPrice(epiProductProductContent.Code);
 
+            if (productPrice == 0.0m)
+                productPrice = _priceService.GetDefaultPrice(epiProductProductContent.ContentLink);
+            
             var product = new Product
             {
                 Id = source.Id,
