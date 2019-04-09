@@ -1,9 +1,9 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using DataMigration.Attributes;
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Commerce.Catalog.DataAnnotations;
 using EPiServer.Core;
 using EPiServer.DataAnnotations;
+using EPiServer.Vsf.DataExport.Attributes;
 
 namespace EPiServer.Reference.Commerce.Site.Features.Product.Models
 {
