@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
+using EPiServer.Vsf.Core.ApiBridge.Endpoint;
 using EPiServer.VueStorefrontApiBridge.Endpoints;
 
 namespace EPiServer.VueStorefrontApiBridge.Controllers

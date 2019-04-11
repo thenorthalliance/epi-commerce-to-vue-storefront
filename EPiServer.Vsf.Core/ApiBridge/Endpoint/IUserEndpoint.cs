@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using EPiServer.Vsf.Core.ApiBridge.Model;
 
-namespace EPiServer.VueStorefrontApiBridge.Endpoints
+namespace EPiServer.Vsf.Core.ApiBridge.Endpoint
 {
     public interface IUserEndpoint
     {

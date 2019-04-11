@@ -215,9 +215,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ApiBridge\ICartAdapter.cs" />
-    <Compile Include="ApiBridge\IStockAdapter.cs" />
-    <Compile Include="ApiBridge\IUserAdapter.cs" />
+    <Compile Include="ApiBridge\Adapter\ICartAdapter.cs" />
+    <Compile Include="ApiBridge\Adapter\IStockAdapter.cs" />
+    <Compile Include="ApiBridge\Adapter\IUserAdapter.cs" />
+    <Compile Include="ApiBridge\Endpoint\ICartEndpoint.cs" />
+    <Compile Include="ApiBridge\Endpoint\IStockEndpoint.cs" />
+    <Compile Include="ApiBridge\Endpoint\IUserEndpoint.cs" />
     <Compile Include="ApiBridge\Model\Cart\CartItem.cs" />
     <Compile Include="ApiBridge\Model\Cart\CartRequest.cs" />
     <Compile Include="ApiBridge\Model\Cart\CollectTotalsMethods.cs" />

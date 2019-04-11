@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using EPiServer.Vsf.Core.ApiBridge.Model;
 
-namespace EPiServer.Vsf.Core.ApiBridge
+namespace EPiServer.Vsf.Core.ApiBridge.Adapter
 {
     public interface IUserAdapter<TUser> where TUser: UserModel
     {

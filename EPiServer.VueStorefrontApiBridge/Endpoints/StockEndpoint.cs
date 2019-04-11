@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
-using EPiServer.Vsf.Core.ApiBridge;
+using EPiServer.Vsf.Core.ApiBridge.Adapter;
+using EPiServer.Vsf.Core.ApiBridge.Endpoint;
 using EPiServer.Vsf.Core.ApiBridge.Model;
 using EPiServer.Vsf.Core.ApiBridge.Model.Stock;
 

@@ -9,6 +9,7 @@ using EPiServer.Logging;
 using EPiServer.Reference.Commerce.Shared.Identity;
 using EPiServer.Reference.Commerce.Shared.Services;
 using EPiServer.Vsf.Core.ApiBridge;
+using EPiServer.Vsf.Core.ApiBridge.Adapter;
 using EPiServer.Vsf.Core.ApiBridge.Model;
 using Mediachase.BusinessFoundation.Data;
 using Mediachase.Commerce.Customers;

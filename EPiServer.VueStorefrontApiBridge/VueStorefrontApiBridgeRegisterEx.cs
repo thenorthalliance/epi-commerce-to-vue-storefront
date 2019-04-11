@@ -3,6 +3,8 @@ using System.Web.Http;
 using System.Web.Http.Cors;
 using EPiServer.ServiceLocation;
 using EPiServer.Vsf.Core.ApiBridge;
+using EPiServer.Vsf.Core.ApiBridge.Adapter;
+using EPiServer.Vsf.Core.ApiBridge.Endpoint;
 using EPiServer.Vsf.Core.ApiBridge.Model;
 using EPiServer.VueStorefrontApiBridge.Adapter;
 using EPiServer.VueStorefrontApiBridge.Authorization.Claims;

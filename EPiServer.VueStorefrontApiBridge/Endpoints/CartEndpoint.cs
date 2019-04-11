@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Castle.Core.Internal;
-using EPiServer.Vsf.Core.ApiBridge;
+using EPiServer.Vsf.Core.ApiBridge.Adapter;
+using EPiServer.Vsf.Core.ApiBridge.Endpoint;
 using EPiServer.Vsf.Core.ApiBridge.Model;
 using EPiServer.Vsf.Core.ApiBridge.Model.Cart;
 using Mediachase.Commerce.Customers;

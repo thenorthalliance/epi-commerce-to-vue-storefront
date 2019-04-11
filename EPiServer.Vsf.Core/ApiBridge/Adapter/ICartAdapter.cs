@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using EPiServer.Vsf.Core.ApiBridge.Model;
 using EPiServer.Vsf.Core.ApiBridge.Model.Cart;
 
-namespace EPiServer.Vsf.Core.ApiBridge
+namespace EPiServer.Vsf.Core.ApiBridge.Adapter
 {
     public interface ICartAdapter
     {

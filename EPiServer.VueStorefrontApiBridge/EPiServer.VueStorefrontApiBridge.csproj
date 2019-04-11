@@ -286,11 +286,8 @@
     <Compile Include="Adapter\StockAdapter.cs" />
     <Compile Include="Authorization\Claims\UserClaimsProvider.cs" />
     <Compile Include="Endpoints\CartEndpoint.cs" />
-    <Compile Include="Endpoints\ICartEndpoint.cs" />
-    <Compile Include="Endpoints\IStockEndpoint.cs" />
     <Compile Include="Endpoints\StockEndpoint.cs" />
     <Compile Include="Endpoints\UserEndpoint.cs" />
-    <Compile Include="Endpoints\IUserEndpoint.cs" />
     <Compile Include="Authorization\Token\VsfJwtBearerTokenProvider.cs" />
     <Compile Include="Authorization\Token\IRefreshTokenRepository.cs" />
     <Compile Include="Authorization\Claims\IUserClaimsProvider.cs" />

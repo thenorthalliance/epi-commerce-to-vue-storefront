@@ -6,6 +6,7 @@ using EPiServer.Commerce.Marketing;
 using EPiServer.Commerce.Order;
 using EPiServer.ServiceLocation;
 using EPiServer.Vsf.Core.ApiBridge;
+using EPiServer.Vsf.Core.ApiBridge.Adapter;
 using EPiServer.Vsf.Core.ApiBridge.Model;
 using EPiServer.Vsf.Core.ApiBridge.Model.Cart;
 using EPiServer.Vsf.DataExport.Utils.Epi;
