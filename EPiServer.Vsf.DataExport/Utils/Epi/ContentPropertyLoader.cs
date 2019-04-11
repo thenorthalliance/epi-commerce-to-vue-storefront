@@ -1,32 +1,31 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using EPiServer.Commerce.Catalog.ContentTypes;
-using EPiServer.Core;
-using EPiServer.Vsf.DataExport.Input.Model;
-using EPiServer.Vsf.DataExport.Utils.Epi;
+using EPiServer.Vsf.DataExport.Model;
 
-namespace EPiServer.Vsf.DataExport.Input.Service
+namespace EPiServer.Vsf.DataExport.Utils.Epi
 {
-    public class PropertyService : IContentService<EpiContentProperty>
+    public class ContentPropertyLoader
     {
-        private readonly ContentService _contentService;
-        private readonly IContentService<EpiProduct> _productService;
+        private readonly List<EpiContentProperty> _epiContentProperties = new List<EpiContentProperty>();
 
-        public PropertyService(ContentService contentService, IContentService<EpiProduct> productService)
+        private readonly ContentService _contentService;
+
+        public ContentPropertyLoader(ContentService contentService)
         {
             _contentService = contentService;
-            _productService = productService;
         }
 
+        public IEnumerable<EpiContentProperty> GetProperties() => _epiContentProperties;
 
-        public IEnumerable<EpiContentProperty> GetAll(ContentReference parentReference, CultureInfo cultureInfo, int level = 2)
+        public void Clear() => _epiContentProperties.Clear();
+
+
+        public void LoadProperties(IEnumerable<ProductContent> products)
         {
-            var properties = new List<EpiContentProperty>();
-            var products =_productService.GetAll(parentReference, cultureInfo);
             foreach (var product in products)
             {
-                var variants = product.ProductContent.GetVariants();
+                var variants = product.GetVariants();
                 foreach (var variant in variants)
                 {
                     var variantProperties = _contentService.GetVariantVsfProperties(variant);
@@ -36,10 +35,10 @@ namespace EPiServer.Vsf.DataExport.Input.Service
                         {
                             continue;
                         }
-                        var existingProperty = properties.FirstOrDefault(x => x.Id == variantProperty.PropertyDefinitionID);
+                        var existingProperty = _epiContentProperties.FirstOrDefault(x => x.Id == variantProperty.PropertyDefinitionID);
                         if (existingProperty == null)
                         {
-                            properties.Add(new EpiContentProperty
+                            _epiContentProperties.Add(new EpiContentProperty
                             {
                                 Name = variantProperty.Name,
                                 Id = variantProperty.PropertyDefinitionID,
@@ -56,8 +55,6 @@ namespace EPiServer.Vsf.DataExport.Input.Service
                     }
                 }
             }
-
-            return properties;
         }
     }
 }

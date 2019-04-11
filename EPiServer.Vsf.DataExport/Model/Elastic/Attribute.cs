@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Nest;
 
-namespace EPiServer.Vsf.DataExport.Output.Model
+namespace EPiServer.Vsf.DataExport.Model.Elastic
 {
     //TODO Can we change this name to something that does not get confused with System.Attribute ? :) 
     public class Attribute

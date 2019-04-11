@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using EPiServer.Core;
-using EPiServer.Vsf.DataExport.Input.Model;
-using EPiServer.Vsf.DataExport.Output.Model;
+using EPiServer.Vsf.DataExport.Model;
+using EPiServer.Vsf.DataExport.Model.Elastic;
 
 namespace EPiServer.Vsf.DataExport.Mapper
 {
@@ -13,7 +13,7 @@ namespace EPiServer.Vsf.DataExport.Mapper
 
             return new Category
             {
-                Id = source.Id,
+                Id = source.Category.ContentLink.ID,
                 Name = source.Category.DisplayName,
                 AvailableSortBy = null,
                 ParentId = source.Category.ParentLink.ID,
@@ -25,7 +25,7 @@ namespace EPiServer.Vsf.DataExport.Mapper
                 Level = source.Level,
                 Children = source.Children.Select(MapCategory),
                 ChildrenCount = source.Children.Count().ToString(),
-                ProductCount = source.ProductsCount
+                ProductCount = source.TotalProductsCount
             };
         }
 
@@ -35,7 +35,7 @@ namespace EPiServer.Vsf.DataExport.Mapper
 
             var category = new Category
             {
-                Id = epiCategory.Id,
+                Id = epiCategory.Category.ContentLink.ID,
                 Name = epiCategory.Category.DisplayName,
                 AvailableSortBy = null,
                 ParentId = epiCategory.Category.ParentLink.ID,
@@ -47,7 +47,7 @@ namespace EPiServer.Vsf.DataExport.Mapper
                 Level = epiCategory.Level,
                 Children = epiCategory.Children.Select(MapCategory),
                 ChildrenCount = epiCategory.Children.Count().ToString(),
-                ProductCount = epiCategory.ProductsCount
+                ProductCount = epiCategory.TotalProductsCount
             };
 
             return category;

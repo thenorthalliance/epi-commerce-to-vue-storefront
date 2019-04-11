@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace EPiServer.Vsf.DataExport.Input.Model
+namespace EPiServer.Vsf.DataExport.Model
 {
-    public class EpiContentProperty : ICmsObject
+    public class EpiContentProperty
     {
         public int Id { get; set; }
         public string Name { get; set; }

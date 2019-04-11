@@ -3,13 +3,12 @@ using System.Linq;
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Core;
 using EPiServer.Vsf.DataExport.Helpers;
-using EPiServer.Vsf.DataExport.Input.Model;
-using EPiServer.Vsf.DataExport.Output.Model;
+using EPiServer.Vsf.DataExport.Model.Elastic;
 using EPiServer.Vsf.DataExport.Utils.Epi;
 
 namespace EPiServer.Vsf.DataExport.Mapper
 {
-    public class ProductMapper : IMapper<EpiProduct, Product>
+    public class ProductMapper : IMapper<ProductContent, Product>
     {
         private readonly PriceService _priceService;
         private readonly InventoryService _inventoryService;
@@ -22,47 +21,47 @@ namespace EPiServer.Vsf.DataExport.Mapper
             _contentService = contentService;
         }
 
-        public Product Map(EpiProduct source)
+        public Product Map(ProductContent source)
         {
-            var epiProductProductContent = source.ProductContent;
-            var imageUrl = epiProductProductContent.CommerceMediaCollection.FirstOrDefault()?.AssetLink.GetUrl();
+
+            var imageUrl = source.CommerceMediaCollection.FirstOrDefault()?.AssetLink.GetUrl();
             var thumbnail = UrlHelper.GetAsThumbnailUrl(imageUrl);
-            var variantQuantity = _inventoryService.GetTotalInventoryByEntry(epiProductProductContent.Code);
-            var configurableOptions = GetProductConfigurableOptions(source.ProductContent).ToList();
-            var productVariations = source.ProductContent.GetVariants();
-            var productPrice = _priceService.GetDefaultPrice(epiProductProductContent.Code);
+            var variantQuantity = _inventoryService.GetTotalInventoryByEntry(source.Code);
+            var configurableOptions = GetProductConfigurableOptions(source).ToList();
+            var productVariations = source.GetVariants();
+            var productPrice = _priceService.GetDefaultPrice(source.Code);
 
             var product = new Product
             {
-                Id = source.Id,
-                Name = source.ProductContent.DisplayName,
-                UrlKey = epiProductProductContent.RouteSegment,
-                UrlPath = epiProductProductContent.SeoUri,
+                Id = source.ContentLink.ID,
+                Name = source.DisplayName,
+                UrlKey = source.RouteSegment,
+                UrlPath = source.SeoUri,
                 IsInStock = new Stock {IsInStock = true, Quantity = (int) variantQuantity},
-                Sku = epiProductProductContent.Code,
+                Sku = source.Code,
                 TaxClassId = null,
-                MediaGallery = GetGallery(epiProductProductContent),
+                MediaGallery = GetGallery(source),
                 Image = imageUrl ?? "",
                 Thumbnail = thumbnail,
                 FinalPrice = productPrice,
                 Price = productPrice,
-                Description = source.ProductContent.GetType().GetProperty("Description") ?.GetValue(source.ProductContent, null)?.ToString(),
+                Description = source.GetType().GetProperty("Description") ?.GetValue(source, null)?.ToString(),
                 TypeId = "configurable",
                 SpecialPrice = null,
                 NewsFromDate = null,
                 NewsToDate = null,
                 SpecialFromDate = null,
                 SpecialToDate = null,
-                CategoryIds = source.ProductContent.GetCategories().Select(x => x.ID.ToString()),
-                Category = source.ProductContent.GetCategories().Select(x => new CategoryListItem {Id = x.ID, Name = _contentService.GetContent<NodeContent>(x).DisplayName}),
+                CategoryIds = source.GetCategories().Select(x => x.ID.ToString()),
+                Category = source.GetCategories().Select(x => new CategoryListItem {Id = x.ID, Name = _contentService.GetContent<NodeContent>(x).DisplayName}),
                 Status = 1,
-                Visibility = source.ProductContent.Status.Equals(VersionStatus.Published) ? 4 : 0,
+                Visibility = source.Status.Equals(VersionStatus.Published) ? 4 : 0,
                 Weight = 1,
                 HasOptions = configurableOptions.Count > 1 ? "1" : "0",
                 RequiredOptions = "0",
                 ConfigurableOptions = configurableOptions,
-                UpdatedAt = source.ProductContent.Changed,
-                CreatedAt = source.ProductContent.Created
+                UpdatedAt = source.Changed,
+                CreatedAt = source.Created
             };
 
             product.ConfigurableChildren = productVariations.Select(v => MapVariant(product, _contentService.GetContent<VariationContent>(v))).ToList();

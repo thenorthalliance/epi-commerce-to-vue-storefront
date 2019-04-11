@@ -1,26 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using EPiServer.Logging;
 using EPiServer.Vsf.DataExport.Configuration;
-using EPiServer.Vsf.DataExport.Output.Model;
-using EPiServer.Vsf.DataExport.Utils;
-using EPiServer.Vsf.DataExport.Utils.Elastic;
+using EPiServer.Vsf.DataExport.Model.Elastic;
 using Nest;
-using Attribute = EPiServer.Vsf.DataExport.Output.Model.Attribute;
+using Attribute = EPiServer.Vsf.DataExport.Model.Elastic.Attribute;
 
-namespace EPiServer.Vsf.DataExport.Output
+namespace EPiServer.Vsf.DataExport.Utils.Elastic
 {
-    public class IndexApiService
+    public class IndexingService
     {
-        private readonly ILogger _logger = LogManager.GetLogger(typeof(IndexApiService));
+        private readonly ILogger _logger = LogManager.GetLogger(typeof(IndexingService));
 
         private readonly VueStorefrontConfiguration _configuration;
         private readonly IElasticClient _elasticClient;
         private readonly ElasticIndexManager _indexManager;
 
+        private readonly List<object> _itemsToIndex = new List<object>();
         private string _indexName;
+        
 
-        public IndexApiService()
+        public IndexingService()
         {
             _configuration = VueStorefrontConfigurationManager.Configuration;
             _elasticClient = new ElasticClient(_configuration.GetElasticConnectionSettings());
@@ -53,7 +54,17 @@ namespace EPiServer.Vsf.DataExport.Output
             return _indexName != null;
         }
 
-        public int IndexMany<T>(IEnumerable<T> items) where T : class
+        public void AddForIndexing<T>(T items) where T : class
+        {
+            _itemsToIndex.Add(items);
+        }
+
+        public void AddForIndexing<T>(IEnumerable<T> items) where T : class
+        {
+            _itemsToIndex.AddRange(items);
+        }
+
+        public int IndexBatchIfReady()
         {
             if (_indexName == null)
             {
@@ -61,12 +72,26 @@ namespace EPiServer.Vsf.DataExport.Output
             }
 
             var count = 0;
-            foreach (var batch in items.Chunk(_configuration.BulkIndexBatchSize))
+
+            while (_itemsToIndex.Count >= _configuration.BulkIndexBatchSize)
             {
-                count += _indexManager.BulkIndex(batch, _indexName);
+                count += _indexManager.BulkIndex(_itemsToIndex.Take(_configuration.BulkIndexBatchSize), _indexName);
+                _itemsToIndex.RemoveRange(0, _configuration.BulkIndexBatchSize);
             }
             return count;
+        }
 
+        public int IndexBatchAll()
+        {
+            var count = IndexBatchIfReady();
+
+            if (_itemsToIndex.Any())
+            {
+                count += _indexManager.BulkIndex(_itemsToIndex, _indexName);
+                _itemsToIndex.Clear();
+            }
+
+            return count;
         }
 
         public bool ApplyChanges()
@@ -74,6 +99,10 @@ namespace EPiServer.Vsf.DataExport.Output
             if (_indexName == null)
             {
                 throw new InvalidOperationException("Create index first.");
+            }
+            if(_itemsToIndex.Any())
+            {
+                throw new InvalidOperationException("Index all items first.");
             }
 
             return _indexManager.SwitchAliasToIndex(_indexName);

@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using EPiServer.Vsf.DataExport.Helpers;
-using EPiServer.Vsf.DataExport.Input.Model;
-using EPiServer.Vsf.DataExport.Output.Model;
+using EPiServer.Vsf.DataExport.Model;
+using EPiServer.Vsf.DataExport.Model.Elastic;
 
 namespace EPiServer.Vsf.DataExport.Mapper
 {

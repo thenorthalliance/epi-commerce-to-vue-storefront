@@ -1,5 +1,5 @@
 ﻿using EPiServer.Core;
-using EPiServer.Vsf.DataExport.Output.Model;
+using EPiServer.Vsf.DataExport.Model.Elastic;
 
 namespace EPiServer.Vsf.DataExport.Helpers
 {

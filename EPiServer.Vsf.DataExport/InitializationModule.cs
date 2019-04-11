@@ -1,11 +1,10 @@
-﻿using EPiServer.Framework;
+﻿using EPiServer.Commerce.Catalog.ContentTypes;
+using EPiServer.Framework;
 using EPiServer.Framework.Initialization;
 using EPiServer.ServiceLocation;
-using EPiServer.Vsf.DataExport.Input;
-using EPiServer.Vsf.DataExport.Input.Model;
-using EPiServer.Vsf.DataExport.Input.Service;
 using EPiServer.Vsf.DataExport.Mapper;
-using EPiServer.Vsf.DataExport.Output.Model;
+using EPiServer.Vsf.DataExport.Model;
+using EPiServer.Vsf.DataExport.Model.Elastic;
 using EPiServer.Vsf.DataExport.Utils.Epi;
 
 namespace EPiServer.Vsf.DataExport
@@ -28,10 +27,7 @@ namespace EPiServer.Vsf.DataExport
             services.AddSingleton<ContentService>();
             services.AddSingleton<PriceService>();
             services.AddSingleton<InventoryService>();
-            services.AddTransient<IContentService<EpiProduct>, ProductService>();
-            services.AddTransient<IContentService<EpiContentProperty>, PropertyService>();
-            services.AddTransient<IContentService<EpiCategory>, CategoryService>();
-            services.AddTransient<IMapper<EpiProduct, Product>, ProductMapper>();
+            services.AddTransient<IMapper<ProductContent, Product>, ProductMapper>();
             services.AddTransient<IMapper<EpiContentProperty, Attribute>, AttributeMapper>();
             services.AddTransient<IMapper<EpiCategory, Category>, CategoryMapper>();
         }
