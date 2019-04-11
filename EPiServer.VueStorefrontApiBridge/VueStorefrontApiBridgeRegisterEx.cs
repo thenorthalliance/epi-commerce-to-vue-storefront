@@ -2,8 +2,9 @@
 using System.Web.Http;
 using System.Web.Http.Cors;
 using EPiServer.ServiceLocation;
+using EPiServer.Vsf.Core.ApiBridge;
+using EPiServer.Vsf.Core.ApiBridge.Model;
 using EPiServer.VueStorefrontApiBridge.Adapter;
-using EPiServer.VueStorefrontApiBridge.ApiModel;
 using EPiServer.VueStorefrontApiBridge.Authorization.Claims;
 using EPiServer.VueStorefrontApiBridge.Authorization.Model;
 using EPiServer.VueStorefrontApiBridge.Authorization.Token;

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
-using EPiServer.VueStorefrontApiBridge.ApiModel;
+using EPiServer.Vsf.Core.ApiBridge.Model;
 
 namespace EPiServer.VueStorefrontApiBridge.Authorization.Claims
 {

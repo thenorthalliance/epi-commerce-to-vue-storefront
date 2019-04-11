@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataMigration.Utils.Epi;
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Commerce.Marketing;
 using EPiServer.Commerce.Order;
 using EPiServer.ServiceLocation;
-using EPiServer.VueStorefrontApiBridge.ApiModel;
-using EPiServer.VueStorefrontApiBridge.ApiModel.Cart;
+using EPiServer.Vsf.Core.ApiBridge;
+using EPiServer.Vsf.Core.ApiBridge.Model;
+using EPiServer.Vsf.Core.ApiBridge.Model.Cart;
+using EPiServer.Vsf.DataExport.Utils.Epi;
 using Mediachase.Commerce.Catalog;
-using PaymentMethod = EPiServer.VueStorefrontApiBridge.ApiModel.Cart.PaymentMethod;
 
 namespace EPiServer.VueStorefrontApiBridge.Adapter
 {

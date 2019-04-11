@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using EPiServer.VueStorefrontApiBridge.ApiModel;
+using EPiServer.Vsf.Core.ApiBridge.Model;
 
 namespace EPiServer.VueStorefrontApiBridge.Endpoints
 {

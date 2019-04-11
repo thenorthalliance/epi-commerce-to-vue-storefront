@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using EPiServer.VueStorefrontApiBridge.Adapter;
-using EPiServer.VueStorefrontApiBridge.ApiModel;
+using EPiServer.Vsf.Core.ApiBridge;
+using EPiServer.Vsf.Core.ApiBridge.Model;
 using EPiServer.VueStorefrontApiBridge.Authorization.Token;
 using EPiServer.VueStorefrontApiBridge.Utils;
 using EPiServer.VueStorefrontApiBridge.Authorization.Claims;

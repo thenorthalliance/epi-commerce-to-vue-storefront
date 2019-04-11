@@ -3,7 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Formatting;
 using System.Web.Http;
 using System.Web.Http.Controllers;
-using EPiServer.VueStorefrontApiBridge.ApiModel;
+using EPiServer.Vsf.Core.ApiBridge.Model;
 
 namespace EPiServer.VueStorefrontApiBridge.Authorization
 {

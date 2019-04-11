@@ -283,38 +283,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Adapter\CartAdapter.cs" />
-    <Compile Include="Adapter\ICartAdapter.cs" />
-    <Compile Include="Adapter\IStockAdapter.cs" />
     <Compile Include="Adapter\StockAdapter.cs" />
-    <Compile Include="ApiModel\Cart\CartItem.cs" />
-    <Compile Include="ApiModel\Cart\CartRequest.cs" />
-    <Compile Include="ApiModel\Cart\CollectTotalsMethods.cs" />
-    <Compile Include="ApiModel\Cart\CollectTotalsRequest.cs" />
-    <Compile Include="ApiModel\Cart\ConfigurableItemOption.cs" />
-    <Compile Include="ApiModel\Cart\ExtensionAttributes.cs" />
-    <Compile Include="ApiModel\Cart\PaymentMethod.cs" />
-    <Compile Include="ApiModel\Cart\PaymentMethodRequestModel.cs" />
-    <Compile Include="ApiModel\Cart\ProductOption.cs" />
-    <Compile Include="ApiModel\Cart\ShipmentMethodRequest.cs" />
-    <Compile Include="ApiModel\Cart\ShippingAddressInformation.cs" />
-    <Compile Include="ApiModel\Cart\ShippingInformation.cs" />
-    <Compile Include="ApiModel\Cart\ShippingInformationRequest.cs" />
-    <Compile Include="ApiModel\Cart\ShippingMethod.cs" />
-    <Compile Include="ApiModel\Cart\Total.cs" />
-    <Compile Include="ApiModel\Cart\TotalItem.cs" />
-    <Compile Include="ApiModel\Cart\TotalSegment.cs" />
-    <Compile Include="ApiModel\Cart\TotalSegmentExtensionAttributes.cs" />
-    <Compile Include="ApiModel\ChangePasswordModel.cs" />
-    <Compile Include="ApiModel\ResetPasswordModel.cs" />
-    <Compile Include="ApiModel\Stock\StockCheck.cs" />
-    <Compile Include="ApiModel\UserAddressModel.cs" />
-    <Compile Include="ApiModel\UserCreateModel.cs" />
-    <Compile Include="ApiModel\UserLoginModel.cs" />
-    <Compile Include="ApiModel\UserModel.cs" />
-    <Compile Include="ApiModel\UserRefreshTokenModel.cs" />
-    <Compile Include="ApiModel\UserUpdateModel.cs" />
-    <Compile Include="ApiModel\VsfResponse.cs" />
-    <Compile Include="ApiModel\OrderHistoryModel.cs" />
     <Compile Include="Authorization\Claims\UserClaimsProvider.cs" />
     <Compile Include="Endpoints\CartEndpoint.cs" />
     <Compile Include="Endpoints\ICartEndpoint.cs" />
@@ -332,8 +301,6 @@
     <Compile Include="Authorization\Model\TokenValidationResult.cs" />
     <Compile Include="Authorization\VsfAuthorizeAttribute.cs" />
     <Compile Include="Controllers\StockController.cs" />
-    <Compile Include="Adapter\IUserAdapter.cs" />
-    <Compile Include="ApiModel\InvoiceInformation.cs" />
     <Compile Include="Authorization\Token\JwtUserTokenProvider.cs" />
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Utils\ResourceLocker.cs" />
@@ -351,6 +318,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\EPiServer.Vsf.Core\EPiServer.Vsf.Core.csproj">
+      <Project>{51DDA385-D610-4673-8562-BDE9197291FB}</Project>
+      <Name>EPiServer.Vsf.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EPiServer.Vsf.DataExport\EPiServer.Vsf.DataExport.csproj">
       <Project>{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}</Project>
       <Name>DataMigration</Name>

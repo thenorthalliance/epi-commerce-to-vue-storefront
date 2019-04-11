@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Web.Http;
-using EPiServer.VueStorefrontApiBridge.ApiModel.Cart;
+using EPiServer.Vsf.Core.ApiBridge.Model.Cart;
 using EPiServer.VueStorefrontApiBridge.Endpoints;
 
 namespace EPiServer.VueStorefrontApiBridge.Controllers

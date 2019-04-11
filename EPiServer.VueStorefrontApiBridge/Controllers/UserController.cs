@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using System.Web.Http;
-using EPiServer.VueStorefrontApiBridge.ApiModel;
+using EPiServer.Vsf.Core.ApiBridge.Model;
 using EPiServer.VueStorefrontApiBridge.Authorization;
 using EPiServer.VueStorefrontApiBridge.Endpoints;
 using Microsoft.AspNet.Identity;

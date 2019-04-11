@@ -31,8 +31,9 @@ namespace EPiServer.Vsf.DataExport.Mapper
             var productVariations = source.GetVariants();
             var productPrice = _priceService.GetDefaultPrice(source.Code);
 
+            //TODO this is a poor fix for a problem :)
             if (productPrice == 0.0m)
-                productPrice = _priceService.GetDefaultPrice(epiProductProductContent.ContentLink);
+                productPrice = _priceService.GetDefaultPrice(source.ContentLink);
             
             var product = new Product
             {

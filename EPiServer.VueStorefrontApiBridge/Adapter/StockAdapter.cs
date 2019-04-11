@@ -2,7 +2,8 @@
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using EPiServer.Commerce.Catalog.ContentTypes;
-using EPiServer.VueStorefrontApiBridge.ApiModel.Stock;
+using EPiServer.Vsf.Core.ApiBridge;
+using EPiServer.Vsf.Core.ApiBridge.Model.Stock;
 using Mediachase.Commerce.Catalog;
 using Mediachase.Commerce.InventoryService;
 
