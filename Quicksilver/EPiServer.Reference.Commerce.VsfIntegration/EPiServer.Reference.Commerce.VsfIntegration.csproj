@@ -269,13 +269,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MyUserAdapter.cs" />
+    <Compile Include="QuickSilverCartAdapter.cs" />
+    <Compile Include="QuickSilverUserAdapter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QuicksilverUserModelMapper.cs" />
+    <Compile Include="QuickSilverStockAdapter.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\EPiServer.Vsf.Core\EPiServer.Vsf.Core.csproj">
       <Project>{51DDA385-D610-4673-8562-BDE9197291FB}</Project>
       <Name>EPiServer.Vsf.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\EPiServer.Vsf.DataExport\EPiServer.Vsf.DataExport.csproj">
+      <Project>{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}</Project>
+      <Name>EPiServer.Vsf.DataExport</Name>
     </ProjectReference>
     <ProjectReference Include="..\EPiServer.Reference.Commerce.Shared\EPiServer.Reference.Commerce.Shared.csproj">
       <Project>{341C8E14-4EAE-4946-9841-45F9818265A8}</Project>

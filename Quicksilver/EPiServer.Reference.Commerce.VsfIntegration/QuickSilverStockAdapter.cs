@@ -7,15 +7,15 @@ using EPiServer.Vsf.Core.ApiBridge.Model.Stock;
 using Mediachase.Commerce.Catalog;
 using Mediachase.Commerce.InventoryService;
 
-namespace EPiServer.Vsf.ApiBridge.Adapter
+namespace EPiServer.Reference.Commerce.VsfIntegration
 {
-    public class StockAdapter : IStockAdapter
+    public class QuickSilverStockAdapter : IStockAdapter
     {
         private readonly IInventoryService _inventoryService;
         private readonly IContentLoader _contentLoader;
         private readonly ReferenceConverter _referenceConverter;
 
-        public StockAdapter(IInventoryService inventoryService, IContentLoader contentLoader, ReferenceConverter referenceConverter)
+        public QuickSilverStockAdapter(IInventoryService inventoryService, IContentLoader contentLoader, ReferenceConverter referenceConverter)
         {
             _inventoryService = inventoryService;
             _contentLoader = contentLoader;

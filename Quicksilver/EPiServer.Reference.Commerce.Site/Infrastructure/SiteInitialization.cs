@@ -103,9 +103,11 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
             services.AddSingleton(typeof(IMapperSetup), setup);
             services.AddTransient<IMapperResolver, ServiceLocatorMapperResolver>();
 
-            services
-                .VsfRegisterAuthServices<UserModel>()
-                .VsfRegisterUserManager<UserModel, MyUserAdapter>();
+            services.VsfRegisterServices(new VsfApiBridgeServicesConfiguration<UserModel>(
+                userAdapter: typeof(QuickSilverUserAdapter), 
+                cartAdapter: typeof(QuickSilverCartAdapter), 
+                stockAdapter: typeof(QuickSilverStockAdapter)));
+                
 
             DependencyResolver.SetResolver(new StructureMapDependencyResolver(context.StructureMap()));
             GlobalConfiguration.Configure(config =>

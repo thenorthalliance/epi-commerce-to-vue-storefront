@@ -282,8 +282,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapter\CartAdapter.cs" />
-    <Compile Include="Adapter\StockAdapter.cs" />
     <Compile Include="Authorization\Claims\UserClaimsProvider.cs" />
     <Compile Include="Endpoints\CartEndpoint.cs" />
     <Compile Include="Endpoints\StockEndpoint.cs" />
@@ -302,6 +300,7 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Utils\ResourceLocker.cs" />
     <Compile Include="Utils\SecurityExtensions.cs" />
+    <Compile Include="VsfApiBridgeServicesConfiguration.cs" />
     <Compile Include="VueStorefrontApiBridgeRegisterEx.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

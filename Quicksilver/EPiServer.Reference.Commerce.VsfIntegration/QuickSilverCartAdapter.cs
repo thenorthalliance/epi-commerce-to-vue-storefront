@@ -11,9 +11,9 @@ using EPiServer.Vsf.Core.ApiBridge.Model.Cart;
 using EPiServer.Vsf.DataExport.Utils.Epi;
 using Mediachase.Commerce.Catalog;
 
-namespace EPiServer.Vsf.ApiBridge.Adapter
+namespace EPiServer.Reference.Commerce.VsfIntegration
 {
-    public class CartAdapter : ICartAdapter
+    public class QuickSilverCartAdapter : ICartAdapter
     {
         private readonly IOrderRepository _orderRepository = ServiceLocator.Current.GetInstance<IOrderRepository>();
         private readonly IPromotionEngine _promotionEngine = ServiceLocator.Current.GetInstance<IPromotionEngine>();
