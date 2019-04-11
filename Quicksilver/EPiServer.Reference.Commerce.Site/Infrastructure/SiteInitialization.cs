@@ -30,7 +30,9 @@ using System.Web.Routing;
 using System.Web.WebPages;
 using EPiServer.Personalization.Commerce.Tracking;
 using EPiServer.Reference.Commerce.Site.Features.Product.Models;
+using EPiServer.Reference.Commerce.VsfIntegration;
 using EPiServer.Vsf.ApiBridge;
+using EPiServer.Vsf.Core.ApiBridge.Model;
 using EPiServer.Vsf.Core.Mapping;
 using EPiServer.Vsf.Mapping;
 
@@ -102,8 +104,8 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
             services.AddTransient<IMapperResolver, ServiceLocatorMapperResolver>();
 
             services
-                .VsfRegisterAuthServices<MyUserModel>()
-                .VsfRegisterUserManager<MyUserModel, MyUserAdapter>();
+                .VsfRegisterAuthServices<UserModel>()
+                .VsfRegisterUserManager<UserModel, MyUserAdapter>();
 
             DependencyResolver.SetResolver(new StructureMapDependencyResolver(context.StructureMap()));
             GlobalConfiguration.Configure(config =>

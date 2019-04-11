@@ -8,19 +8,16 @@ using EPiServer.Cms.UI.AspNetIdentity;
 using EPiServer.Logging;
 using EPiServer.Reference.Commerce.Shared.Identity;
 using EPiServer.Reference.Commerce.Shared.Services;
-using EPiServer.Vsf.Core.ApiBridge;
 using EPiServer.Vsf.Core.ApiBridge.Adapter;
 using EPiServer.Vsf.Core.ApiBridge.Model;
 using Mediachase.BusinessFoundation.Data;
 using Mediachase.Commerce.Customers;
 using Microsoft.AspNet.Identity;
 
-namespace EPiServer.Reference.Commerce.Site.Infrastructure
+namespace EPiServer.Reference.Commerce.VsfIntegration
 {
-    public class MyUserModel : UserModel
-    { }
     
-    public class MyUserAdapter : IUserAdapter<MyUserModel>
+    public class MyUserAdapter : IUserAdapter<UserModel>
     {
         private readonly ApplicationUserManager<SiteUser> _appUserManager;
         private readonly MailService _mailService;
@@ -33,7 +30,7 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
             _urlHelper = urlHelper;
         }
 
-        public async Task<MyUserModel> GetUserByCredentials(string userLogin, string userPassword)
+        public async Task<UserModel> GetUserByCredentials(string userLogin, string userPassword)
         {
             var user = await _appUserManager.FindAsync(userLogin, userPassword);
             if (user == null || !user.IsApproved)
@@ -42,13 +39,13 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
             return CvtUser(user);
         }
 
-        public async Task<MyUserModel> GetUserById(string userId)
+        public async Task<UserModel> GetUserById(string userId)
         {
             var user = await _appUserManager.FindByIdAsync(userId);
             return CvtUser(user);
         }
 
-        public async Task<MyUserModel> CreateUser(UserCreateModel newUser)
+        public async Task<UserModel> CreateUser(UserCreateModel newUser)
         {
             var appUser = new SiteUser
             {
@@ -137,12 +134,12 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
             return true;
         }
 
-        private MyUserModel CvtUser(SiteUser user)
+        private UserModel CvtUser(SiteUser user)
         {
             var userContact = CustomerContext.Current.GetContactById(Guid.Parse(user.Id));
             var userAddresses = userContact?.ContactAddresses?.Select(addr => MapAddress(userContact, addr)).ToList();
 
-            return new MyUserModel
+            return new UserModel
             {
                 Id = user.Id,
                 LastName = userContact?.LastName ?? string.Empty,
