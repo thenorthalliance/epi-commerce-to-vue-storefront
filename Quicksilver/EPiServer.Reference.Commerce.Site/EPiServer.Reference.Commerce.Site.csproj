@@ -929,6 +929,10 @@
     <Content Include="Views\Shared\_Facet.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\EPiServer.Vsf.ApiBridge\EPiServer.Vsf.ApiBridge.csproj">
+      <Project>{36f81164-899b-4c3e-8789-8df923333160}</Project>
+      <Name>EPiServer.Vsf.ApiBridge</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\EPiServer.Vsf.Core\EPiServer.Vsf.Core.csproj">
       <Project>{51DDA385-D610-4673-8562-BDE9197291FB}</Project>
       <Name>EPiServer.Vsf.Core</Name>
@@ -940,10 +944,6 @@
     <ProjectReference Include="..\..\EPiServer.Vsf.Mapping\EPiServer.Vsf.Mapping.csproj">
       <Project>{9D281D7F-B362-4693-88E2-A6EA4CDAA16B}</Project>
       <Name>EPiServer.Vsf.Mapping</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\EPiServer.VueStorefrontApiBridge\EPiServer.VueStorefrontApiBridge.csproj">
-      <Project>{36f81164-899b-4c3e-8789-8df923333160}</Project>
-      <Name>EPiServer.VueStorefrontApiBridge</Name>
     </ProjectReference>
     <ProjectReference Include="..\EPiServer.Reference.Commerce.Shared\EPiServer.Reference.Commerce.Shared.csproj">
       <Project>{341c8e14-4eae-4946-9841-45f9818265a8}</Project>

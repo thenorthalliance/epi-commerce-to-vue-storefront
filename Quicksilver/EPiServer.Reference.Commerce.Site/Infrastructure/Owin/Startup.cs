@@ -14,7 +14,7 @@ using Microsoft.Owin.Security.MicrosoftAccount;
 using Microsoft.Owin.Security.Twitter;
 using Owin;
 using System;
-using EPiServer.VueStorefrontApiBridge;
+using EPiServer.Vsf.ApiBridge;
 
 #if !(MIXED_MODE_AUTHENTICATION)
 [assembly: OwinStartup(typeof(EPiServer.Reference.Commerce.Site.Infrastructure.Owin.Startup))]

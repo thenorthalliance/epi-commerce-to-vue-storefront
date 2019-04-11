@@ -30,9 +30,10 @@ using System.Web.Routing;
 using System.Web.WebPages;
 using EPiServer.Personalization.Commerce.Tracking;
 using EPiServer.Reference.Commerce.Site.Features.Product.Models;
+using EPiServer.Vsf.ApiBridge;
 using EPiServer.Vsf.Core.Mapping;
 using EPiServer.Vsf.Mapping;
-using EPiServer.VueStorefrontApiBridge;
+
 
 namespace EPiServer.Reference.Commerce.Site.Infrastructure
 {
