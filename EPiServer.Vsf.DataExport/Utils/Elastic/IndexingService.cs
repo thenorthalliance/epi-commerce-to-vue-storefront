@@ -46,9 +46,12 @@ namespace EPiServer.Vsf.DataExport.Utils.Elastic
         {
             _indexName = _indexManager.CreateIndex(x => x.Mappings(
                 client => client
-                    .Map<Product>(map => map.AutoMap())
+                    .Map<Product>(map => map.AutoMap()
+                        .Properties(MapConfigurableChildrenSkuProperty))
                     .Map<Attribute>(map => map.AutoMap())
                     .Map<Category>(map => map.AutoMap())
+                    
+
             ));
 
             return _indexName != null;
@@ -106,6 +109,17 @@ namespace EPiServer.Vsf.DataExport.Utils.Elastic
             }
 
             return _indexManager.SwitchAliasToIndex(_indexName);
+        }
+
+        private PropertiesDescriptor<Product> MapConfigurableChildrenSkuProperty(PropertiesDescriptor<Product> propertiesDescriptor)
+        {
+            return propertiesDescriptor.Object<object>(s =>
+            {
+                return s.Name("configurable_children").Properties(ps2 =>
+                {
+                    return ps2.Keyword(kw => kw.Name("sku"));
+                });
+            });
         }
     }
 }

@@ -14,6 +14,7 @@ using Microsoft.Owin.Security.MicrosoftAccount;
 using Microsoft.Owin.Security.Twitter;
 using Owin;
 using System;
+using EPiServer.VueStorefrontApiBridge;
 
 #if !(MIXED_MODE_AUTHENTICATION)
 [assembly: OwinStartup(typeof(EPiServer.Reference.Commerce.Site.Infrastructure.Owin.Startup))]
@@ -66,6 +67,8 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure.Owin
                     OnResponseSignOut = context => context.Response.Redirect(UrlResolver.Current.GetUrl(ContentReference.StartPage))
                 }
             });
+
+            app.RegisterVueStorefrontAuth();
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 

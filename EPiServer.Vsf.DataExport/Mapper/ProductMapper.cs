@@ -31,6 +31,9 @@ namespace EPiServer.Vsf.DataExport.Mapper
             var productVariations = source.GetVariants();
             var productPrice = _priceService.GetDefaultPrice(source.Code);
 
+            if (productPrice == 0.0m)
+                productPrice = _priceService.GetDefaultPrice(epiProductProductContent.ContentLink);
+            
             var product = new Product
             {
                 Id = source.ContentLink.ID,

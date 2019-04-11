@@ -33,6 +33,7 @@ using EPiServer.Reference.Commerce.Site.Features.Product.Models;
 using EPiServer.Vsf.Core.Mapping;
 using EPiServer.Vsf.Mapping;
 using EPiServer.VueStorefrontApiBridge;
+using EPiServer.VueStorefrontApiBridge.ApiModel;
 
 namespace EPiServer.Reference.Commerce.Site.Infrastructure
 {
@@ -99,6 +100,10 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
 
             services.AddSingleton(typeof(IMapperSetup), setup);
             services.AddTransient<IMapperResolver, ServiceLocatorMapperResolver>();
+
+            services
+                .VsfRegisterAuthServices<MyUserModel>()
+                .VsfRegisterUserManager<MyUserModel, MyUserAdapter>();
 
             DependencyResolver.SetResolver(new StructureMapDependencyResolver(context.StructureMap()));
             GlobalConfiguration.Configure(config =>
