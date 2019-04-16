@@ -3,6 +3,8 @@ using System.Web.Http;
 using EPiServer.Vsf.ApiBridge.Authorization;
 using EPiServer.Vsf.Core.ApiBridge.Endpoint;
 using EPiServer.Vsf.Core.ApiBridge.Model;
+using EPiServer.Vsf.Core.ApiBridge.Model.Authorization;
+using EPiServer.Vsf.Core.ApiBridge.Model.User;
 using Microsoft.AspNet.Identity;
 
 namespace EPiServer.Vsf.ApiBridge.Controllers

@@ -17,7 +17,7 @@ namespace EPiServer.Vsf.ApiBridge.Endpoints
 
         public async Task<VsfResponse> Check(string sku)
         {
-            return new VsfSuccessResponse<StockCheck>(await _stockAdapter.Check(sku));
+            return new VsfSuccessResponse<VsfStockCheck>(await _stockAdapter.Check(sku));
         }
     }
 }

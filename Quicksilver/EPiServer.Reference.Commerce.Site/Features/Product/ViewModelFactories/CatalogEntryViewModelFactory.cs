@@ -1,5 +1,4 @@
 ﻿using EPiServer.Core;
-using EPiServer.Reference.Commerce.Site.Features.Product.Models;
 using EPiServer.Reference.Commerce.Site.Features.Product.ViewModels;
 using EPiServer.Reference.Commerce.Site.Features.Shared.Extensions;
 using EPiServer.Reference.Commerce.Site.Features.Shared.Services;
@@ -10,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+using EPiServer.Reference.Commerce.Shared.Models.Products;
 
 namespace EPiServer.Reference.Commerce.Site.Features.Product.ViewModelFactories
 {

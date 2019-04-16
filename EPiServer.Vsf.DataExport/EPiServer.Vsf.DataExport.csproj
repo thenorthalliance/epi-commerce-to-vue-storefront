@@ -177,6 +177,7 @@
     </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Runtime.Remoting" />
     <Reference Include="System.Security" />
     <Reference Include="System.Security.AccessControl, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -226,44 +227,50 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Exporting\CachedContentLoaderWrapper.cs" />
+    <Compile Include="Exporting\CategoryTreeBuilder.cs" />
     <Compile Include="Configuration\VueStorefrontConfiguration.cs" />
     <Compile Include="Configuration\VueStorefrontConfigurationManager.cs" />
-    <Compile Include="Utils\Epi\ContentPropertyLoader.cs" />
-    <Compile Include="InitializationModule.cs" />
-    <Compile Include="Configuration\ElasticClientConfigurationExtension.cs" />
-    <Compile Include="Attributes\VsfOptionAttribute.cs" />
-    <Compile Include="Utils\Epi\InventoryService.cs" />
-    <Compile Include="Utils\Epi\PriceService.cs" />
-    <Compile Include="Helpers\UrlHelper.cs" />
-    <Compile Include="Utils\Epi\ContentService.cs" />
-    <Compile Include="Helpers\AttributeHelper.cs" />
-    <Compile Include="Model\Elastic\Option.cs" />
-    <Compile Include="Model\Elastic\CategoryBase.cs" />
-    <Compile Include="Model\Elastic\CategoryListItem.cs" />
-    <Compile Include="Model\Elastic\ConfigurableChild.cs" />
-    <Compile Include="Model\Elastic\ConfigurableOption.cs" />
-    <Compile Include="Model\Elastic\ConfigurableOptionValue.cs" />
-    <Compile Include="Model\Elastic\Media.cs" />
-    <Compile Include="Model\Elastic\Stock.cs" />
-    <Compile Include="Utils\Elastic\ElasticIndexManager.cs" />
-    <Compile Include="Utils\Elastic\IndexingService.cs" />
-    <Compile Include="Mapper\CategoryMapper.cs" />
-    <Compile Include="Model\Elastic\Category.cs" />
+    <Compile Include="Exporting\ContentExtractor.cs" />
+    <Compile Include="Exporting\ContentLoaderWrapper.cs" />
+    <Compile Include="Exporting\ExtractedContentHandler.cs" />
     <Compile Include="Model\EpiCategory.cs" />
-    <Compile Include="Mapper\IMapper.cs" />
-    <Compile Include="Mapper\ProductMapper.cs" />
-    <Compile Include="Model\Elastic\Product.cs" />
-    <Compile Include="Mapper\AttributeMapper.cs" />
     <Compile Include="Model\EpiContentProperty.cs" />
-    <Compile Include="Model\Elastic\Attribute.cs" />
+    <Compile Include="Utils\Epi\ContentPropertyLoader.cs" />
+    <Compile Include="Attributes\VsfOptionAttribute.cs" />
+    <Compile Include="Utils\Epi\IPriceService.cs" />
+    <Compile Include="Utils\Epi\PriceService.cs" />
+    <Compile Include="VueStorefrontDataRegisterEx.cs" />
+    <Compile Include="Utils\UrlHelper.cs" />
+    <Compile Include="Utils\AttributeHelper.cs" />
+    <Compile Include="Model\VsfOption.cs" />
+    <Compile Include="Model\VsfCategoryBase.cs" />
+    <Compile Include="Model\CategoryListItem.cs" />
+    <Compile Include="Model\ConfigurableChild.cs" />
+    <Compile Include="Model\ConfigurableOption.cs" />
+    <Compile Include="Model\ConfigurableOptionValue.cs" />
+    <Compile Include="Model\Media.cs" />
+    <Compile Include="Model\VsfStock.cs" />
+    <Compile Include="Exporting\ElasticIndexManager.cs" />
+    <Compile Include="Exporting\IndexingService.cs" />
+    <Compile Include="Mapping\CategoryMapper.cs" />
+    <Compile Include="Model\VsfCategory.cs" />
+    <Compile Include="Mapping\ProductMapper.cs" />
+    <Compile Include="Model\VsfBaseProduct.cs" />
+    <Compile Include="Mapping\AttributeMapper.cs" />
+    <Compile Include="Model\VsfAttribute.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VueStorefrontExportJob.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="EPiServer.Vsf.DataExport.nuspec" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\EPiServer.Vsf.Core\EPiServer.Vsf.Core.csproj">
+      <Project>{51DDA385-D610-4673-8562-BDE9197291FB}</Project>
+      <Name>EPiServer.Vsf.Core</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>

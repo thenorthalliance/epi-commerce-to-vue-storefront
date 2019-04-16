@@ -5,6 +5,6 @@ namespace EPiServer.Vsf.Core.ApiBridge.Adapter
 {
     public interface IStockAdapter
     {
-        Task<StockCheck> Check(string code);
+        Task<VsfStockCheck> Check(string code);
     }
 }

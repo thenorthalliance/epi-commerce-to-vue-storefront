@@ -14,6 +14,7 @@ using Microsoft.Owin.Security.MicrosoftAccount;
 using Microsoft.Owin.Security.Twitter;
 using Owin;
 using System;
+using System.Configuration;
 using EPiServer.Vsf.ApiBridge;
 
 #if !(MIXED_MODE_AUTHENTICATION)
@@ -68,7 +69,8 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure.Owin
                 }
             });
 
-            app.RegisterVueStorefrontAuth();
+            //REGISTER VSF AUTH
+            app.RegisterVueStorefrontAuth(ConfigurationManager.GetSection("vsf.apiBridge") as VsfApiBridgeConfiguration);
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);
 

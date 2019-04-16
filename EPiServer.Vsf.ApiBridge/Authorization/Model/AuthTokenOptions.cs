@@ -2,7 +2,7 @@
 
 namespace EPiServer.Vsf.ApiBridge.Authorization.Model
 {
-    public class AuthTokenOptions
+    public class AuthTokenOptions2
     {
         public string Issuer { get; set; }
         public string Audience { get; set; }

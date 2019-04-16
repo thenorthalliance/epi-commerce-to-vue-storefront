@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -238,6 +238,11 @@
     <Compile Include="Identity\ChallengeResult.cs" />
     <Compile Include="Identity\ContactIdentityResult.cs" />
     <Compile Include="Models\MailBasePage.cs" />
+    <Compile Include="Models\Products\FashionBundle.cs" />
+    <Compile Include="Models\Products\FashionNode.cs" />
+    <Compile Include="Models\Products\FashionPackage.cs" />
+    <Compile Include="Models\Products\FashionProduct.cs" />
+    <Compile Include="Models\Products\FashionVariant.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="CatalogIndexer\RestSearchDocument.cs" />
     <Compile Include="CatalogIndexer\RestSearchField.cs" />
@@ -253,6 +258,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\EPiServer.Vsf.DataExport\EPiServer.Vsf.DataExport.csproj">
+      <Project>{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}</Project>
+      <Name>EPiServer.Vsf.DataExport</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

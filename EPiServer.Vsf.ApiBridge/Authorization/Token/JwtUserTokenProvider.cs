@@ -5,31 +5,32 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using EPiServer.Vsf.ApiBridge.Authorization.Model;
+using EPiServer.Vsf.ApiBridge.Utils;
 
 namespace EPiServer.Vsf.ApiBridge.Authorization.Token
 {
     public class JwtUserTokenProvider : IUserTokenProvider
     {
-        private readonly AuthTokenOptions _options;
+        private readonly VsfApiBridgeConfiguration _configuration;
         private readonly IRefreshTokenRepository _refreshTokenRepository;
 
-        public JwtUserTokenProvider(AuthTokenOptions options, IRefreshTokenRepository refreshTokenRepository)
+        public JwtUserTokenProvider(VsfApiBridgeConfiguration configuration, IRefreshTokenRepository refreshTokenRepository)
         {
-            _options = options;
+            _configuration = configuration;
             _refreshTokenRepository = refreshTokenRepository;
         }
         
         public Task<string> GenerateNewToken(IEnumerable<Claim> claims)
         {
-            var signingCredentials = new SigningCredentials(_options.SecurityKey,
+            var signingCredentials = new SigningCredentials(_configuration.IssuerSigningKey.ToSymmetricSecurityKey(),
                 SecurityAlgorithms.HmacSha256Signature, SecurityAlgorithms.Sha256Digest);
 
             var jwtSecurityToken = new JwtSecurityToken
             (
-                issuer: _options.Issuer,
-                audience: _options.Audience,
+                issuer: _configuration.ValidIssuer,
+                audience: _configuration.ValidAudience,
                 claims: claims,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(_options.AccessTokenExpirationMinutes)),
+                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(_configuration.AccessTokenExpirationMinutes)),
                 signingCredentials: signingCredentials
             );
 

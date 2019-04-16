@@ -1,4 +1,4 @@
-﻿using EPiServer.Reference.Commerce.Site.Features.Product.Models;
+﻿using EPiServer.Reference.Commerce.Shared.Models.Products;
 using EPiServer.Shell;
 
 namespace EPiServer.Reference.Commerce.Site.Infrastructure.Descriptors

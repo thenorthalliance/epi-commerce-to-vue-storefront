@@ -2,7 +2,6 @@
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Core;
 using EPiServer.Reference.Commerce.Shared.CatalogIndexer;
-using EPiServer.Reference.Commerce.Site.Features.Product.Models;
 using EPiServer.Reference.Commerce.Site.Features.Shared.Services;
 using Mediachase.Commerce.Catalog;
 using Mediachase.Search.Extensions;
@@ -12,6 +11,7 @@ using System.Globalization;
 using System.Linq;
 using System.Web.Http;
 using System.Web.Http.Description;
+using EPiServer.Reference.Commerce.Shared.Models.Products;
 
 namespace EPiServer.Reference.Commerce.Site.Infrastructure.Indexing
 {

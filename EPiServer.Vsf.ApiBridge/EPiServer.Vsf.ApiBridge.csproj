@@ -300,7 +300,7 @@
     <Compile Include="Controllers\CartController.cs" />
     <Compile Include="Utils\ResourceLocker.cs" />
     <Compile Include="Utils\SecurityExtensions.cs" />
-    <Compile Include="VsfApiBridgeServicesConfiguration.cs" />
+    <Compile Include="VsfApiBridgeConfiguration.cs" />
     <Compile Include="VueStorefrontApiBridgeRegisterEx.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

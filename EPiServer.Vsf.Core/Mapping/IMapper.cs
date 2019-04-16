@@ -1,9 +1,7 @@
-﻿using System.Threading.Tasks;
-
-namespace EPiServer.Vsf.Core.Mapping
+﻿namespace EPiServer.Vsf.Core.Mapping
 {
-    public interface IMapper
+    public interface IMapper<TSource, TDestination> where TDestination : class
     {
-        Task<object> Map(object input);
+        TDestination Map(TSource source);
     }
 }
