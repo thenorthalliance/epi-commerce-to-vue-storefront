@@ -1,9 +1,9 @@
-﻿using EPiServer.Reference.Commerce.Site.Features.Product.Models;
-using EPiServer.Reference.Commerce.Site.Features.Product.ViewModelFactories;
+﻿using EPiServer.Reference.Commerce.Site.Features.Product.ViewModelFactories;
 using EPiServer.Reference.Commerce.Site.Infrastructure.Facades;
 using EPiServer.Web.Mvc;
 using System.Linq;
 using System.Web.Mvc;
+using EPiServer.Reference.Commerce.Shared.Models.Products;
 
 namespace EPiServer.Reference.Commerce.Site.Features.Product.Controllers
 {

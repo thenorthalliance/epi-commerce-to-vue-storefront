@@ -2,7 +2,6 @@
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Core;
 using EPiServer.Logging;
-using EPiServer.Reference.Commerce.Site.Features.Product.Models;
 using EPiServer.Reference.Commerce.Site.Features.Shared.Services;
 using EPiServer.ServiceLocation;
 using Mediachase.Commerce;
@@ -19,6 +18,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using EPiServer.Reference.Commerce.Shared.Models.Products;
 
 namespace EPiServer.Reference.Commerce.Site.Infrastructure.Indexing
 {

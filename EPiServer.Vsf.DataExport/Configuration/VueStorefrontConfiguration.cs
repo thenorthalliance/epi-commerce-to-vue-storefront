@@ -16,7 +16,7 @@ namespace EPiServer.Vsf.DataExport.Configuration
         [ConfigurationProperty("indexAliasName", DefaultValue = "epi-catalog")]
         public string IndexAliasName => (string) this["indexAliasName"];
 
-        [ConfigurationProperty("bulkIndexBatchSize", DefaultValue = 100)]
+        [ConfigurationProperty("bulkIndexBatchSize", DefaultValue = 500)]
         public int BulkIndexBatchSize => (int) this["bulkIndexBatchSize"];
     }
 }

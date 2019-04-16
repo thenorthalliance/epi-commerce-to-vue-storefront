@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using EPiServer.Vsf.Core.ApiBridge.Model.User;
+using Newtonsoft.Json;
 
 namespace EPiServer.Vsf.Core.ApiBridge.Model.Cart
 {

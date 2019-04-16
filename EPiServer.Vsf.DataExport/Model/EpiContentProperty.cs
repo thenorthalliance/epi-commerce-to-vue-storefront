@@ -6,6 +6,6 @@ namespace EPiServer.Vsf.DataExport.Model
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public ICollection<string> Values { get; set; }
+        public List<string> Values { get; set; }
     }
 }

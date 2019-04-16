@@ -940,16 +940,12 @@
       <Project>{07caa40b-7d3f-43a9-88dc-3b5d7bc5c0a0}</Project>
       <Name>EPiServer.Vsf.DataExport</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\EPiServer.Vsf.Mapping\EPiServer.Vsf.Mapping.csproj">
-      <Project>{9D281D7F-B362-4693-88E2-A6EA4CDAA16B}</Project>
-      <Name>EPiServer.Vsf.Mapping</Name>
-    </ProjectReference>
     <ProjectReference Include="..\EPiServer.Reference.Commerce.Shared\EPiServer.Reference.Commerce.Shared.csproj">
       <Project>{341c8e14-4eae-4946-9841-45f9818265a8}</Project>
       <Name>EPiServer.Reference.Commerce.Shared</Name>
     </ProjectReference>
     <ProjectReference Include="..\EPiServer.Reference.Commerce.VsfIntegration\EPiServer.Reference.Commerce.VsfIntegration.csproj">
-      <Project>{47119CC2-F071-4992-ADDD-FD62264156B2}</Project>
+      <Project>{47119cc2-f071-4992-addd-fd62264156b2}</Project>
       <Name>EPiServer.Reference.Commerce.VsfIntegration</Name>
     </ProjectReference>
   </ItemGroup>

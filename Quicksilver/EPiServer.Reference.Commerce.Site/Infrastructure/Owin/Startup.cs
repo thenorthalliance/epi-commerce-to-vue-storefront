@@ -68,6 +68,8 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure.Owin
                 }
             });
 
+
+            //REGISTER VSF AUTH
             app.RegisterVueStorefrontAuth();
 
             app.UseExternalSignInCookie(DefaultAuthenticationTypes.ExternalCookie);

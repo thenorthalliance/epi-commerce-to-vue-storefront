@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using EPiServer.Vsf.Core.ApiBridge.Model;
 using EPiServer.Vsf.Core.ApiBridge.Model.Cart;
+using EPiServer.Vsf.Core.ApiBridge.Model.User;
 
 namespace EPiServer.Vsf.Core.ApiBridge.Adapter
 {

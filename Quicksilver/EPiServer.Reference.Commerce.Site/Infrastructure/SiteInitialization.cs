@@ -29,12 +29,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using System.Web.WebPages;
 using EPiServer.Personalization.Commerce.Tracking;
-using EPiServer.Reference.Commerce.Site.Features.Product.Models;
-using EPiServer.Reference.Commerce.VsfIntegration;
 using EPiServer.Vsf.ApiBridge;
-using EPiServer.Vsf.Core.ApiBridge.Model;
-using EPiServer.Vsf.Core.Mapping;
-using EPiServer.Vsf.Mapping;
 
 
 namespace EPiServer.Reference.Commerce.Site.Infrastructure
@@ -76,9 +71,7 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
             var services = context.Services;
 
             services.AddSingleton<IRecommendationContext, RecommendationContext>();
-
             services.AddSingleton<ICurrentMarket, CurrentMarket>();
-
             services.AddSingleton<ITrackingResponseDataInterceptor, TrackingResponseDataInterceptor>();
 
             //Register for auto injection of edit mode check, should be default life cycle (per request to service locator)
@@ -96,18 +89,9 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
             services.AddTransient<HttpContextBase>(locator => HttpContext.Current.ContextBaseOrNull());
 
             services.AddSingleton<ServiceAccessor<IContentRouteHelper>>(locator => locator.GetInstance<IContentRouteHelper>);
+            
 
-             var setup = MapperSetupBuilder.Create()
-                    .Register<TestMapper>().For<FashionProduct>().Build();
 
-            services.AddSingleton(typeof(IMapperSetup), setup);
-            services.AddTransient<IMapperResolver, ServiceLocatorMapperResolver>();
-
-            services.VsfRegisterServices(new VsfApiBridgeServicesConfiguration<UserModel>(
-                userAdapter: typeof(QuickSilverUserAdapter), 
-                cartAdapter: typeof(QuickSilverCartAdapter), 
-                stockAdapter: typeof(QuickSilverStockAdapter)));
-                
 
             DependencyResolver.SetResolver(new StructureMapDependencyResolver(context.StructureMap()));
             GlobalConfiguration.Configure(config =>
@@ -118,6 +102,7 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
                 config.DependencyResolver = new StructureMapResolver(context.StructureMap());
                 config.MapHttpAttributeRoutes();
 
+                //REGISTER VSF API
                 config.RegisterVueStorefrontBridge();
             });
             

@@ -6,10 +6,12 @@ using EPiServer.Vsf.ApiBridge.Utils;
 using EPiServer.Vsf.Core.ApiBridge.Adapter;
 using EPiServer.Vsf.Core.ApiBridge.Endpoint;
 using EPiServer.Vsf.Core.ApiBridge.Model;
+using EPiServer.Vsf.Core.ApiBridge.Model.Authorization;
+using EPiServer.Vsf.Core.ApiBridge.Model.User;
 
 namespace EPiServer.Vsf.ApiBridge.Endpoints
 {
-    public class UserEndpoint<TUser>  : IUserEndpoint where TUser : UserModel
+    public class UserEndpoint<TUser>  : IUserEndpoint where TUser : VsfUser
     {
         private readonly IUserAdapter<TUser> _userAdapter;
         private readonly IUserTokenProvider _userTokenProvider;
@@ -55,7 +57,7 @@ namespace EPiServer.Vsf.ApiBridge.Endpoints
             if (newUser == null)
                 return new VsfErrorResponse("User not created. TODO ADD INFO!");
 
-            return new VsfSuccessResponse<UserModel>(newUser);
+            return new VsfSuccessResponse<VsfUser>(newUser);
         }
 
         public async Task<VsfResponse> ResetPassword(ResetPasswordModel resetPasswordModel)
@@ -81,7 +83,7 @@ namespace EPiServer.Vsf.ApiBridge.Endpoints
         {
             using (await UserLocker.LockAsync(userId))
             {
-                return new VsfSuccessResponse<UserModel>(await _userAdapter.GetUserById(userId));
+                return new VsfSuccessResponse<VsfUser>(await _userAdapter.GetUserById(userId));
             }
         }
 
@@ -90,7 +92,7 @@ namespace EPiServer.Vsf.ApiBridge.Endpoints
             using (await UserLocker.LockAsync(userId))
             {
                 if (await _userAdapter.UpdateUser(userId, userUpdateModel.Customer))
-                    return new VsfSuccessResponse<UserModel>(await _userAdapter.GetUserById( userId));
+                    return new VsfSuccessResponse<VsfUser>(await _userAdapter.GetUserById( userId));
 
                 return new VsfErrorResponse("User update failed.");
             }

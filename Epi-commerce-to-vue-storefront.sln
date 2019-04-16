@@ -13,8 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Vsf.DataExport", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Vsf.Core", "EPiServer.Vsf.Core\EPiServer.Vsf.Core.csproj", "{51DDA385-D610-4673-8562-BDE9197291FB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Vsf.Mapping", "EPiServer.Vsf.Mapping\EPiServer.Vsf.Mapping.csproj", "{9D281D7F-B362-4693-88E2-A6EA4CDAA16B}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Vsf.ApiBridge", "EPiServer.Vsf.ApiBridge\EPiServer.Vsf.ApiBridge.csproj", "{36F81164-899B-4C3E-8789-8DF923333160}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EPiServer.Reference.Commerce.VsfIntegration", "Quicksilver\EPiServer.Reference.Commerce.VsfIntegration\EPiServer.Reference.Commerce.VsfIntegration.csproj", "{47119CC2-F071-4992-ADDD-FD62264156B2}"
@@ -56,12 +54,6 @@ Global
 		{51DDA385-D610-4673-8562-BDE9197291FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51DDA385-D610-4673-8562-BDE9197291FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51DDA385-D610-4673-8562-BDE9197291FB}.Release|Any CPU.Build.0 = Release|Any CPU
-		{9D281D7F-B362-4693-88E2-A6EA4CDAA16B}.CA|Any CPU.ActiveCfg = Release|Any CPU
-		{9D281D7F-B362-4693-88E2-A6EA4CDAA16B}.CA|Any CPU.Build.0 = Release|Any CPU
-		{9D281D7F-B362-4693-88E2-A6EA4CDAA16B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{9D281D7F-B362-4693-88E2-A6EA4CDAA16B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{9D281D7F-B362-4693-88E2-A6EA4CDAA16B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{9D281D7F-B362-4693-88E2-A6EA4CDAA16B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{36F81164-899B-4C3E-8789-8DF923333160}.CA|Any CPU.ActiveCfg = Release|Any CPU
 		{36F81164-899B-4C3E-8789-8DF923333160}.CA|Any CPU.Build.0 = Release|Any CPU
 		{36F81164-899B-4C3E-8789-8DF923333160}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
