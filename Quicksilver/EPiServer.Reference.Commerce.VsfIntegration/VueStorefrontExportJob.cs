@@ -55,7 +55,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration
 
         public void UpdateStatus()
         {
-            if ((_nodeExportCounter + _nodeExportCounter) % 100 == 0)
+            if ((_nodeExportCounter + _productExportCounter) % 100 == 0)
                 OnStatusChanged($"{_nodeExportCounter} nodes and {_productExportCounter} product exported.");
         }
     }

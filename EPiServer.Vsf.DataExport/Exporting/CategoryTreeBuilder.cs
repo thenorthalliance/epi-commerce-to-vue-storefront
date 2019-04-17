@@ -26,7 +26,7 @@ namespace EPiServer.Vsf.DataExport.Exporting
 
             var epiCategory = MkEpiCategory(nodeContent);
 
-            if (MissingParrent(parentNode))
+            if (MissingParent(parentNode))
                 InsertIntoRoot(epiCategory);
             else
                 InsertIntoParent(epiCategory, parentNode);
@@ -57,12 +57,12 @@ namespace EPiServer.Vsf.DataExport.Exporting
         private void InsertIntoParent(EpiCategory node, NodeContentBase parentNode)
         {
             var parentCategory = _categoryMap[parentNode.ContentGuid];
-            var parentsChildred = parentCategory.Children;
+            var parentsChildren = parentCategory.Children;
 
-            node.SortOrder = parentsChildred.Count;
+            node.SortOrder = parentsChildren.Count;
             node.Level = parentCategory.Level + 1;
 
-            parentsChildred.Add(node);
+            parentsChildren.Add(node);
         }
         
         private void MapNode(EpiCategory node)
@@ -70,7 +70,7 @@ namespace EPiServer.Vsf.DataExport.Exporting
             _categoryMap.Add(node.Category.ContentGuid, node);
         }
 
-        private bool MissingParrent(NodeContentBase parentNode)
+        private bool MissingParent(NodeContentBase parentNode)
         {
             return !_categoryMap.ContainsKey(parentNode.ContentGuid);
         }

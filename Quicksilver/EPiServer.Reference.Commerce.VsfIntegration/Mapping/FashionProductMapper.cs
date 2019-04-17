@@ -9,20 +9,20 @@ using Mediachase.Commerce.InventoryService;
 
 namespace EPiServer.Reference.Commerce.VsfIntegration.Mapping
 {
-    public class FasionProductMapper : ProductBaseMapper<FasionVsfProduct>
+    public class FashionProductMapper : ProductBaseMapper<FashionVsfProduct>
     {
-        public FasionProductMapper(IVsfPriceService priceService, IContentLoaderWrapper contentLoaderWrapper, IInventoryService inventoryService) :
+        public FashionProductMapper(IVsfPriceService priceService, IContentLoaderWrapper contentLoaderWrapper, IInventoryService inventoryService) :
             base(priceService, contentLoaderWrapper, inventoryService)
         {}
 
-        public override FasionVsfProduct Map(ProductContent source)
+        public override FashionVsfProduct Map(ProductContent source)
         {
             if (source.GetOriginalType() == typeof(FashionProduct))
             {
-                var fasionContent = (FashionProduct) source;
+                var fashionContent = (FashionProduct) source;
                 var product = BaseMap(source);
                 
-                product.Description = fasionContent.Description.ToString();
+                product.Description = fashionContent.Description.ToString();
 
                 var configurableOptions = product.ConfigurableOptions;
                 product.ColorOptions = configurableOptions.FirstOrDefault(o => o.Label == "Color")?.Values.Select(x => x.ValueIndex);

@@ -21,7 +21,7 @@ namespace EPiServer.Vsf.DataExport.Model
         public int Position { get; set; }
 
         [PropertyName("frontend_label")]
-        public string FrontentLabel { get; set; }
+        public string FrontendLabel { get; set; }
 
         [PropertyName("values")]
         public List<ConfigurableOptionValue> Values { get; set; }

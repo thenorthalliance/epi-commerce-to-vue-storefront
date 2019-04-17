@@ -11,7 +11,7 @@ namespace EPiServer.Vsf.DataExport.Exporting
 {
     public class ContentExtractor : IContentExtractor
     {
-        private const int MaxBatshSize = 50;
+        private const int MaxBatchSize = 50;
         
         private readonly IContentLoaderWrapper _contentLoaderWrapper;
         private readonly ReferenceConverter _referenceConverter;
@@ -59,7 +59,7 @@ namespace EPiServer.Vsf.DataExport.Exporting
             var start = 0;
             while (true)
             {
-                var batch = _contentLoaderWrapper.GetChildren<T>(parentLink, _cultureInfo, start, MaxBatshSize);
+                var batch = _contentLoaderWrapper.GetChildren<T>(parentLink, _cultureInfo, start, MaxBatchSize);
                 var enumerable = batch.ToList();
 
                 if (!enumerable.Any())
@@ -73,7 +73,7 @@ namespace EPiServer.Vsf.DataExport.Exporting
                     yield return content;
                 }
 
-                start += 50;
+                start += MaxBatchSize;
             }
         }
 

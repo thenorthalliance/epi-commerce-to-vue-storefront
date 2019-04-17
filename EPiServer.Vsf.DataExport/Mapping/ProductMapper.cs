@@ -20,7 +20,7 @@ namespace EPiServer.Vsf.DataExport.Mapping
         protected readonly IContentLoaderWrapper ContentLoaderWrapper;
         protected readonly IInventoryService InventoryService;
 
-        public ProductBaseMapper(IVsfPriceService priceService, IContentLoaderWrapper contentLoaderWrapper, IInventoryService inventoryService)
+        protected ProductBaseMapper(IVsfPriceService priceService, IContentLoaderWrapper contentLoaderWrapper, IInventoryService inventoryService)
         {
             PriceService = priceService;
             ContentLoaderWrapper = contentLoaderWrapper;
@@ -162,7 +162,7 @@ namespace EPiServer.Vsf.DataExport.Mapping
                 Position = position,
                 Label = variantProperty.Name,
                 AttributeCode = variantProperty.Name.ToLower().Replace(" ", "_"),
-                FrontentLabel = variantProperty.Name.ToLower(),
+                FrontendLabel = variantProperty.Name.ToLower(),
                 ProductId = productId,
                 Values = values
             };
