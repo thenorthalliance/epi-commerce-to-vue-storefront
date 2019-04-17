@@ -14,17 +14,17 @@ namespace EPiServer.Vsf.DataExport.Exporting
     {
         private readonly ILogger _logger = LogManager.GetLogger(typeof(IndexingService<TProduct>));
 
-        private readonly VueStorefrontConfiguration _configuration;
+        private readonly VsfExporterConfiguration _configuration;
         private readonly IElasticClient _elasticClient;
         private readonly ElasticIndexManager _indexManager;
 
         private readonly List<object> _itemsToIndex = new List<object>();
         private string _indexName;
-        
 
-        public IndexingService()
+
+        public IndexingService(VsfExporterConfiguration configuration)
         {
-            _configuration = VueStorefrontConfigurationManager.Configuration;
+            _configuration = configuration;
             _elasticClient = new ElasticClient(GetElasticConnectionSettings(_configuration.ElasticServerUrls, _configuration.ElasticUserName, _configuration.ElasticPassword));
             _indexManager = new ElasticIndexManager(_elasticClient, _configuration.IndexAliasName);
         }

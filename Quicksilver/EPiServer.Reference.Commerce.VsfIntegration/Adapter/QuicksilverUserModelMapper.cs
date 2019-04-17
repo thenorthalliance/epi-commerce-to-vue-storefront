@@ -18,9 +18,9 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             return new VsfUser
             {
                 Id = user.Id,
-                LastName = userContact?.LastName ?? String.Empty,
-                FirstName = userContact?.FirstName ?? String.Empty,
-                Email = userContact?.Email ?? String.Empty,
+                LastName = userContact?.LastName ?? string.Empty,
+                FirstName = userContact?.FirstName ?? string.Empty,
+                Email = userContact?.Email ?? string.Empty,
                 CreatedAt = user.CreationDate,
                 UpdatedAt = userContact?.Modified ?? user.CreationDate,
                 Addresses = userAddresses,
