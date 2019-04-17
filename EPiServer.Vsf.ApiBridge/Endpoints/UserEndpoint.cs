@@ -55,7 +55,7 @@ namespace EPiServer.Vsf.ApiBridge.Endpoints
         {
             var newUser = await _userAdapter.CreateUser(userCreateModel);
             if (newUser == null)
-                return new VsfErrorResponse("User not created. TODO ADD INFO!");
+                return new VsfErrorResponse("User creation failed.");
 
             return new VsfSuccessResponse<VsfUser>(newUser);
         }

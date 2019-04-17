@@ -110,7 +110,6 @@ namespace EPiServer.Vsf.DataExport.Exporting
                 _itemsToIndex.Clear();
             }
         }
-
         
         public static IConnectionSettingsValues GetElasticConnectionSettings(string elasticServerUrls, string elasticUserName, string elasticPassword)
         {

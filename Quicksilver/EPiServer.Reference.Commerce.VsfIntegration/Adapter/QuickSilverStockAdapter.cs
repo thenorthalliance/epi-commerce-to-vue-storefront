@@ -30,8 +30,8 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             var variation = _contentLoaderWrapper.Get<VariationContent>(variationLinkt);
             var productLink = variation.GetParentProducts().FirstOrDefault();
 //            var product = _contentLoader.Get<ProductContent>(productLink);
-            
             var qauantity = _inventoryService.QueryByEntry(new[] {code}).Sum(x => x.PurchaseAvailableQuantity);
+
             return new VsfStockCheck
             {
                 ItemId = variationLinkt.ID,

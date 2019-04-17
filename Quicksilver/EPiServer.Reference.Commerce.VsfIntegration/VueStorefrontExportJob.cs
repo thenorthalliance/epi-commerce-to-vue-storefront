@@ -2,7 +2,6 @@
 using EPiServer.PlugIn;
 using EPiServer.Scheduler;
 using EPiServer.ServiceLocation;
-using EPiServer.Vsf.Core;
 using EPiServer.Vsf.Core.Exporting;
 
 namespace EPiServer.Reference.Commerce.VsfIntegration
@@ -21,13 +20,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration
             _nodeExportCounter = 0;
             _productExportCounter = 0;
 
-            CallTest.Reset();
-
-            var t = CallTest.Start("_vsfExporter.Extract");
             _vsfExporter.Extract(this);
-            t.EndTask();
-
-            CallTest.PrintCnter();
             
             return $"VSF export finished. {_nodeExportCounter} nodes and {_productExportCounter} product exported.";
         }

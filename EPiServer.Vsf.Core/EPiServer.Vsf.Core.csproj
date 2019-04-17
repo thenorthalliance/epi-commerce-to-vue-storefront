@@ -255,7 +255,6 @@
     <Compile Include="Exporting\IContentLoaderWrapper.cs" />
     <Compile Include="Exporting\IExtractedContentHandler.cs" />
     <Compile Include="Exporting\IIndexingService.cs" />
-    <Compile Include="CallTest.cs" />
     <Compile Include="Mapping\IMapper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

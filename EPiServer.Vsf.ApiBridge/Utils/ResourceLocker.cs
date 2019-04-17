@@ -11,6 +11,11 @@ namespace EPiServer.Vsf.ApiBridge.Utils
         {}
     }
 
+    public class CartLocker : ResourceLocker<Guid>
+    {
+        public CartLocker(Guid contact) : base(contact)
+        { }
+    }
     public class ResourceLocker<T> : IDisposable
     {
         public class ResourceSemaphore

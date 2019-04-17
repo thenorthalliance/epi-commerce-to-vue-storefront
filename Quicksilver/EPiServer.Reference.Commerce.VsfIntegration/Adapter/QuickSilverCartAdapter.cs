@@ -5,6 +5,7 @@ using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Commerce.Marketing;
 using EPiServer.Commerce.Order;
 using EPiServer.ServiceLocation;
+using EPiServer.Vsf.ApiBridge.Utils;
 using EPiServer.Vsf.Core.ApiBridge.Adapter;
 using EPiServer.Vsf.Core.ApiBridge.Model.Cart;
 using EPiServer.Vsf.Core.ApiBridge.Model.User;
@@ -30,57 +31,69 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
 
         public string CreateCart(Guid contactId)
         {
-            var cart = _orderRepository.LoadOrCreateCart<ICart>(contactId, DefaultCartName);
-            _orderRepository.Save(cart); //TODO since CreateCart and Update methods are called simultaneously, this may introduce inconsistency
-            return cart.CustomerId.ToString();
+            using (CartLocker.LockAsync(contactId))
+            {
+                var cart = _orderRepository.LoadOrCreateCart<ICart>(contactId, DefaultCartName);
+                _orderRepository.Save(cart);
+                return cart.CustomerId.ToString();
+            }
         }
 
         public IEnumerable<CartItem> Pull(Guid contactId)
         {
-            var cart = GetCart(contactId);
-            var cartItems = cart?.GetAllLineItems();
-            return cartItems?.Select(item => CreateCartItem(item, contactId.ToString()));
+            using (CartLocker.LockAsync(contactId))
+            {
+                var cart = GetCart(contactId);
+                var cartItems = cart?.GetAllLineItems();
+                return cartItems?.Select(item => CreateCartItem(item, contactId.ToString()));
+            }
         }
 
         public CartItem Update(Guid contactId, CartItem cartItem)
         {
-            var cart = GetCart(contactId);
-
-            if (cart == null || cartItem == null)
-                return null;
-
-            var updatedItem = cart.GetAllLineItems().FirstOrDefault(item => item.Code == cartItem.Sku);
-
-            if (updatedItem != null)
+            using (CartLocker.LockAsync(contactId))
             {
-                var shipment = cart.GetFirstShipment();
-                cart.UpdateLineItemQuantity(shipment, updatedItem, cartItem.Qty);
-            }
-            else
-            {
-                updatedItem = cart.CreateLineItem(cartItem.Sku);
-                updatedItem.Quantity = cartItem.Qty;
-                UpdateCartLine(updatedItem);
-                cart.AddLineItem(updatedItem);
-            }
+                var cart = GetCart(contactId);
 
-            _orderRepository.Save(cart); //TODO since CreateCart and Update methods are called simultaneously, this may introduce inconsistency
-            return CreateCartItem(updatedItem, contactId.ToString());
+                if (cart == null || cartItem == null)
+                    return null;
+
+                var updatedItem = cart.GetAllLineItems().FirstOrDefault(item => item.Code == cartItem.Sku);
+
+                if (updatedItem != null)
+                {
+                    var shipment = cart.GetFirstShipment();
+                    cart.UpdateLineItemQuantity(shipment, updatedItem, cartItem.Qty);
+                }
+                else
+                {
+                    updatedItem = cart.CreateLineItem(cartItem.Sku);
+                    updatedItem.Quantity = cartItem.Qty;
+                    UpdateCartLine(updatedItem);
+                    cart.AddLineItem(updatedItem);
+                }
+
+                _orderRepository.Save(cart);
+                return CreateCartItem(updatedItem, contactId.ToString());
+            }
         }
 
         public bool Delete(Guid contactId, CartItem cartItem)
         {
-            var cart = GetCart(contactId);
-            var itemToDelete = cart.GetAllLineItems().FirstOrDefault(item => item.LineItemId == cartItem.ItemId);
-            if (itemToDelete != null)
+            using (CartLocker.LockAsync(contactId))
             {
-                var shipment = cart.GetFirstShipment();
-                var result = shipment.LineItems.Remove(itemToDelete);
-                shipment.LineItems.Remove(itemToDelete);
-                _orderRepository.Save(cart); //TODO since CreateCart and Update methods are called simultaneously, this may introduce inconsistency
-                return result;
+                var cart = GetCart(contactId);
+                var itemToDelete = cart.GetAllLineItems().FirstOrDefault(item => item.LineItemId == cartItem.ItemId);
+                if (itemToDelete != null)
+                {
+                    var shipment = cart.GetFirstShipment();
+                    var result = shipment.LineItems.Remove(itemToDelete);
+                    shipment.LineItems.Remove(itemToDelete);
+                    _orderRepository.Save(cart);
+                    return result;
+                }
+                return false;
             }
-            return false;
         }
 
         public Total GetTotals(Guid contactId)
@@ -250,7 +263,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
 
         private static TotalItem CreateTotalItem(ILineItem item)
         {
-            //TODO get products options
+            //TODO this may not be fully implemented
             
             return new TotalItem
             {

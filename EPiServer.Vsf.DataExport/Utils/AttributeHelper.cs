@@ -21,8 +21,7 @@ namespace EPiServer.Vsf.DataExport.Utils
 
         public static string GetAttributeValue(int attributeId, string attrLabel)
         {
-            //TODO Don't know if replacing spaces with '_' is necessary
-            return $"{attributeId}_{attrLabel.Replace(" ", "_")}";
+            return $"{attributeId}_{attrLabel}";
         }
     }
 }

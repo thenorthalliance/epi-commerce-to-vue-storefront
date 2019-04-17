@@ -230,7 +230,6 @@
     <Compile Include="Exporting\CachedContentLoaderWrapper.cs" />
     <Compile Include="Exporting\CategoryTreeBuilder.cs" />
     <Compile Include="Configuration\VueStorefrontConfiguration.cs" />
-    <Compile Include="Configuration\VueStorefrontConfigurationManager.cs" />
     <Compile Include="Exporting\ContentExtractor.cs" />
     <Compile Include="Exporting\ContentLoaderWrapper.cs" />
     <Compile Include="Exporting\ExtractedContentHandler.cs" />
