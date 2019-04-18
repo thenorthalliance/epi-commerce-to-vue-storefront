@@ -409,8 +409,6 @@
     <Compile Include="Features\Payment\ViewModels\PaymentMethodViewModel.cs" />
     <Compile Include="Features\Product\Controllers\BundleController.cs" />
     <Compile Include="Features\Product\Controllers\PackageController.cs" />
-    <Compile Include="Features\Product\Models\FashionBundle.cs" />
-    <Compile Include="Features\Product\Models\FashionPackage.cs" />
     <Compile Include="Features\Product\ViewModelFactories\CatalogEntryViewModelFactory.cs" />
     <Compile Include="Features\Product\ViewModels\FashionBundleViewModel.cs" />
     <Compile Include="Features\Product\ViewModels\FashionPackageViewModel.cs" />
@@ -508,7 +506,6 @@
     <Compile Include="Features\Product\Controllers\VariationPartialController.cs" />
     <Compile Include="Features\Shared\Controllers\PreviewController.cs" />
     <Compile Include="Features\Product\Services\IProductService.cs" />
-    <Compile Include="Features\Product\Models\FashionProduct.cs" />
     <Compile Include="Features\Market\Controllers\MarketController.cs" />
     <Compile Include="Features\Market\Services\CurrentMarket.cs" />
     <Compile Include="Features\Market\ViewModels\MarketViewModel.cs" />
@@ -531,7 +528,6 @@
     <Compile Include="Features\Search\Models\CustomSearchResult.cs" />
     <Compile Include="Features\Search\Models\FacetGroupOption.cs" />
     <Compile Include="Features\Search\Models\FacetOption.cs" />
-    <Compile Include="Features\Product\Models\FashionNode.cs" />
     <Compile Include="Features\Search\ViewModels\FilterOptionViewModel.cs" />
     <Compile Include="Features\Search\ViewModels\FilterOptionViewModelBinder.cs" />
     <Compile Include="Features\Search\Models\ProductSortOrder.cs" />
@@ -543,7 +539,6 @@
     <Compile Include="Features\Shared\Extensions\AssetContainerExtensions.cs" />
     <Compile Include="Features\Shared\Extensions\ContentExtensions.cs" />
     <Compile Include="Features\Shared\Extensions\LineItemExtensions.cs" />
-    <Compile Include="Features\Product\Models\FashionVariant.cs" />
     <Compile Include="Features\Start\Controllers\HeadController.cs" />
     <Compile Include="Features\Start\Extensions\StringExtensions.cs" />
     <Compile Include="Features\Start\Pages\StartPage.cs" />
