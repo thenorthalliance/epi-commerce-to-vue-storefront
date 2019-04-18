@@ -18,13 +18,23 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
     public class QuickSilverCartAdapter : ICartAdapter
     {
         private readonly IContentLoaderWrapper _contentLoaderWrapper;
+        private readonly IOrderRepository _orderRepository;
+        private readonly IPromotionEngine _promotionEngine;
+        private readonly IVsfPriceService _priceService;
+        private readonly ReferenceConverter _referenceConverter;
 
-        private readonly IOrderRepository _orderRepository = ServiceLocator.Current.GetInstance<IOrderRepository>();
-        private readonly IPromotionEngine _promotionEngine = ServiceLocator.Current.GetInstance<IPromotionEngine>();
 
-        public QuickSilverCartAdapter(IContentLoaderWrapper contentLoaderWrapper)
+        public QuickSilverCartAdapter(IContentLoaderWrapper contentLoaderWrapper, 
+            IOrderRepository orderRepository, 
+            IPromotionEngine promotionEngine, 
+            IVsfPriceService priceService, 
+            ReferenceConverter referenceConverter)
         {
             _contentLoaderWrapper = contentLoaderWrapper;
+            _orderRepository = orderRepository;
+            _promotionEngine = promotionEngine;
+            _priceService = priceService;
+            _referenceConverter = referenceConverter;
         }
 
         public string DefaultCartName => "vsf-default-cart";
@@ -187,17 +197,15 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
 
         private void UpdateCartLine(ILineItem updatedItem)
         {
-            var referenceConverter = ServiceLocator.Current.GetInstance<ReferenceConverter>();
-//            var contentLoader = ServiceLocator.Current.GetInstance<IContentLoader>();
-            var priceService = ServiceLocator.Current.GetInstance<IVsfPriceService>();
+
             
-            var variationLinkt = referenceConverter.GetContentLink(updatedItem.Code);
+            var variationLinkt = _referenceConverter.GetContentLink(updatedItem.Code);
             var variation = _contentLoaderWrapper.Get<VariationContent>(variationLinkt);
 
             if (variation != null)
             {
                 updatedItem.DisplayName = variation.DisplayName;
-                updatedItem.PlacedPrice = priceService.GetDefaultPrice(variation.PriceReference);
+                updatedItem.PlacedPrice = _priceService.GetDefaultPrice(variation.PriceReference);
             }
         }
 
