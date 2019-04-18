@@ -1,4 +1,4 @@
-﻿namespace EPiServer.Vsf.ApiBridge.Authorization.Model
+﻿namespace EPiServer.Vsf.ApiBridge.Authorization.Token.Model
 {
     public class RefreshToken
     {

@@ -291,9 +291,7 @@
     <Compile Include="Authorization\Claims\IUserClaimsProvider.cs" />
     <Compile Include="Authorization\Token\IUserTokenProvider.cs" />
     <Compile Include="Authorization\Token\MemoryRefreshTokenRepository.cs" />
-    <Compile Include="Authorization\Model\AuthTokenOptions.cs" />
-    <Compile Include="Authorization\Model\RefreshToken.cs" />
-    <Compile Include="Authorization\Model\TokenValidationResult.cs" />
+    <Compile Include="Authorization\Token\Model\RefreshToken.cs" />
     <Compile Include="Authorization\VsfAuthorizeAttribute.cs" />
     <Compile Include="Controllers\StockController.cs" />
     <Compile Include="Authorization\Token\JwtUserTokenProvider.cs" />
