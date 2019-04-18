@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using EPiServer.Vsf.ApiBridge.Authorization.Model;
+using EPiServer.Vsf.ApiBridge.Authorization.Token.Model;
 
 namespace EPiServer.Vsf.ApiBridge.Authorization.Token
 {

@@ -4,7 +4,7 @@ using System.IdentityModel.Tokens;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using EPiServer.Vsf.ApiBridge.Authorization.Model;
+using EPiServer.Vsf.ApiBridge.Authorization.Token.Model;
 using EPiServer.Vsf.ApiBridge.Utils;
 
 namespace EPiServer.Vsf.ApiBridge.Authorization.Token
