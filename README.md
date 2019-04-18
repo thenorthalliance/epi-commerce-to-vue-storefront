@@ -5,4 +5,5 @@ Demo is based on the [Episerver Commerce Quicksilver sample site](https://github
 
 ## Project setup
 1. Setup Quicksilver demo - you can find an instruction in a [Quicksilver directory](https://github.com/makingwaves/epi-commerce-to-vue-storefront/tree/master/Quicksilver)
-2. [Install VueStorefront](https://docs.vuestorefront.io/guide/installation/windows.html)
+2. [Install VueStorefront](https://docs.vuestorefront.io/guide/installation/windows.html) - both vue-storefront-api and vue-storefront
+3. Copy VueStorefront configuration files
