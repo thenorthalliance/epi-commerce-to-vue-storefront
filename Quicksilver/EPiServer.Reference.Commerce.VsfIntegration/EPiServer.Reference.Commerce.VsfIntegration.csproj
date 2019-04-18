@@ -278,6 +278,7 @@
   <ItemGroup>
     <Compile Include="Adapter\QuickSilverCartAdapter.cs" />
     <Compile Include="Adapter\QuickSilverUserAdapter.cs" />
+    <Compile Include="Mapping\FashionNodeMapper.cs" />
     <Compile Include="Mapping\FashionVsfProduct.cs" />
     <Compile Include="Mapping\FashionProductMapper.cs" />
     <Compile Include="InitializationModule.cs" />

@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Core;
 using EPiServer.Vsf.Core.Mapping;
 using EPiServer.Vsf.DataExport.Model;
@@ -8,9 +9,9 @@ namespace EPiServer.Vsf.DataExport.Mapping
     public interface ICategoryMapper : IMapper<EpiCategory, VsfCategory>
     {}
 
-    public class CategoryMapper : ICategoryMapper
+    public abstract class CategoryBaseMapper : ICategoryMapper
     {
-        public VsfCategory Map(EpiCategory source)
+        public virtual VsfCategory Map(EpiCategory source)
         {
             var isPublished = source.Category.Status.Equals(VersionStatus.Published);
 
@@ -20,7 +21,7 @@ namespace EPiServer.Vsf.DataExport.Mapping
                 Name = source.Category.DisplayName,
                 AvailableSortBy = null,
                 ParentId = source.Category.ParentLink.ID,
-                Description = GetDescription(source),
+                Description = GetDescription(source.Category),
                 IsActive = isPublished,
                 IncludeInMenu = isPublished,
                 UrlKey = source.Category.RouteSegment,
@@ -32,7 +33,9 @@ namespace EPiServer.Vsf.DataExport.Mapping
             };
         }
 
-        private static VsfCategory MapCategory(EpiCategory epiCategory)
+        protected abstract string GetDescription(NodeContent nodeContent);
+
+        private VsfCategory MapCategory(EpiCategory epiCategory)
         {
             var isPublished = epiCategory.Category.Status.Equals(VersionStatus.Published);
 
@@ -42,7 +45,7 @@ namespace EPiServer.Vsf.DataExport.Mapping
                 Name = epiCategory.Category.DisplayName,
                 AvailableSortBy = null,
                 ParentId = epiCategory.Category.ParentLink.ID,
-                Description = GetDescription(epiCategory),
+                Description = GetDescription(epiCategory.Category),
                 IsActive = isPublished,
                 IncludeInMenu = isPublished,
                 UrlKey = epiCategory.Category.RouteSegment,
@@ -54,11 +57,6 @@ namespace EPiServer.Vsf.DataExport.Mapping
             };
 
             return category;
-        }
-        
-        private static string GetDescription(EpiCategory category)
-        {
-            return category.Category.GetType().GetProperty("Description")?.GetValue(category.Category, null)?.ToString();
         }
     }
 }

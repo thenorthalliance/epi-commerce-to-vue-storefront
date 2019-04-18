@@ -15,7 +15,6 @@ namespace EPiServer.Vsf.DataExport
             services.AddSingleton(vsfExporterConfiguration);
 
             services.AddTransient<IAttributeMapper, AttributeMapper>();
-            services.AddTransient<ICategoryMapper, CategoryMapper>();
 
             services.AddTransient<IContentExtractor, ContentExtractor>();
             services.AddSingleton<IVsfPriceService, VsfPriceService>();
