@@ -77,5 +77,10 @@ namespace EPiServer.Vsf.ApiBridge.Utils
             await resourceLocker.Wait();
             return resourceLocker;
         }
+
+        public static ResourceLocker<T> Lock(T resourceId)
+        {
+            return LockAsync(resourceId).Result;
+        }
     }
 }

@@ -31,7 +31,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
 
         public string CreateCart(Guid contactId)
         {
-            using (CartLocker.LockAsync(contactId))
+            using (CartLocker.Lock(contactId))
             {
                 var cart = _orderRepository.LoadOrCreateCart<ICart>(contactId, DefaultCartName);
                 _orderRepository.Save(cart);
@@ -41,7 +41,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
 
         public IEnumerable<CartItem> Pull(Guid contactId)
         {
-            using (CartLocker.LockAsync(contactId))
+            using (CartLocker.Lock(contactId))
             {
                 var cart = GetCart(contactId);
                 var cartItems = cart?.GetAllLineItems();
@@ -51,7 +51,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
 
         public CartItem Update(Guid contactId, CartItem cartItem)
         {
-            using (CartLocker.LockAsync(contactId))
+            using (CartLocker.Lock(contactId))
             {
                 var cart = GetCart(contactId);
 
@@ -80,7 +80,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
 
         public bool Delete(Guid contactId, CartItem cartItem)
         {
-            using (CartLocker.LockAsync(contactId))
+            using (CartLocker.Lock(contactId))
             {
                 var cart = GetCart(contactId);
                 var itemToDelete = cart.GetAllLineItems().FirstOrDefault(item => item.LineItemId == cartItem.ItemId);
