@@ -1,0 +1,21 @@
+@startuml
+
+package EPiServer.Vsf.Core {
+    interface ICartEndpoint
+    interface ICartAdapter
+}
+
+package EPiServer.Vsf.ApiBridge {
+    class CartController <<ApiController>>
+    class CartEndpoint
+}
+
+package EPiServer.Reference.Commerce.VsfIntegration {
+    class QuickSilverCartAdapter
+}
+
+CartEndpoint -up-|> ICartEndpoint
+QuickSilverCartAdapter -up-|> ICartAdapter
+CartController --> ICartEndpoint
+CartEndpoint --> ICartAdapter
+@enduml

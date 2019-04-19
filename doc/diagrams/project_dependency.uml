@@ -1,0 +1,27 @@
+@startuml
+skinparam component  {
+  BackgroundColor<<Quicksilver>> Yellow
+  BackgroundColor Gold
+}
+
+
+[EPiServer.Reference.Commerce.Site] as Site <<Quicksilver>>
+[EPiServer.Reference.Commerce.Shared] as Shared <<Quicksilver>>
+[EPiServer.Reference.Commerce.Manager] as Manager <<Quicksilver>>
+[EPiServer.Reference.Commerce.VsfIntegration] as VsfIntegration
+[EPiServer.Vsf.ApiBridge] as ApiBridge
+[EPiServer.Vsf.Core] as Core
+[EPiServer.Vsf.DataExport] as DataExport
+
+Site -up-> Shared 
+Manager -up-> Shared 
+VsfIntegration -up-> Shared 
+Site -up-> VsfIntegration
+
+ApiBridge -up-> Core
+DataExport -up-> Core
+
+VsfIntegration -up-> ApiBridge
+VsfIntegration -up-> DataExport
+
+@enduml

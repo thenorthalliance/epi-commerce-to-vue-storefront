@@ -1,0 +1,24 @@
+@startuml
+
+package EPiServer.Vsf.Core {
+    class VsfUser
+    interface IUserEndpoint
+    interface IUserAdapter<TUser>
+}
+
+
+package EPiServer.Vsf.ApiBridge {
+    class UserController <<ApiController>>
+    class UserEndpoint<TUser>
+}
+
+package EPiServer.Reference.Commerce.VsfIntegration {
+    class QuickSilverUserAdapter
+}
+
+UserEndpoint -up-|> IUserEndpoint
+QuickSilverUserAdapter -up-|> IUserAdapter: <TUser>=VsfUser
+UserController --> IUserEndpoint
+UserEndpoint --> IUserAdapter
+VsfUser .right. IUserAdapter: "where TUser:VsfUser"
+@enduml
