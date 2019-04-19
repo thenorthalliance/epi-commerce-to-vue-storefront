@@ -5,7 +5,7 @@ using EPiServer.Vsf.DataExport.Mapping;
 
 namespace EPiServer.Reference.Commerce.VsfIntegration.Mapping
 {
-    public class FashionNodeMapper : CategoryBaseMapper
+    public class QuicksilverNodeMapper : CategoryBaseMapper
     {
         protected override string GetDescription(NodeContent nodeContent)
         {

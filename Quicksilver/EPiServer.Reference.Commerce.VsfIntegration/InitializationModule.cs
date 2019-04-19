@@ -33,7 +33,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration
             services.RegisterVueStorefrontBridgeDefaultService(vsfApiBridgeConfiguration);
 
             services.AddTransient<IProductMapper<QuicksilverVsfProduct>, QuicksilverProductMapper>();
-            services.AddTransient<ICategoryMapper, FashionNodeMapper>();
+            services.AddTransient<ICategoryMapper, QuicksilverNodeMapper>();
 
             services.AddTransient<IUserAdapter<VsfUser>, QuickSilverUserAdapter>();
             services.AddTransient<ICartAdapter, QuickSilverCartAdapter>();
