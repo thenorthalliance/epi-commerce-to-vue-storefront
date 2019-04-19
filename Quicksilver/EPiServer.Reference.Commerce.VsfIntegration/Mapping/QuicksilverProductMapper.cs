@@ -9,13 +9,14 @@ using Mediachase.Commerce.InventoryService;
 
 namespace EPiServer.Reference.Commerce.VsfIntegration.Mapping
 {
-    public class FashionProductMapper : ProductBaseMapper<FashionVsfProduct>
+    
+    public class QuicksilverProductMapper : ProductBaseMapper<QuicksilverVsfProduct>
     {
-        public FashionProductMapper(IVsfPriceService priceService, IContentLoaderWrapper contentLoaderWrapper, IInventoryService inventoryService) :
+        public QuicksilverProductMapper(IVsfPriceService priceService, IContentLoaderWrapper contentLoaderWrapper, IInventoryService inventoryService) :
             base(priceService, contentLoaderWrapper, inventoryService)
         {}
 
-        public override FashionVsfProduct Map(ProductContent source)
+        public override QuicksilverVsfProduct Map(ProductContent source)
         {
             if (source.GetOriginalType() == typeof(FashionProduct))
             {

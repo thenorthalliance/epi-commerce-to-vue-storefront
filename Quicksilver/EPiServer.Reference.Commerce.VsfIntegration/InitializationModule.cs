@@ -29,10 +29,10 @@ namespace EPiServer.Reference.Commerce.VsfIntegration
             var vsfExporterConfiguration = ConfigurationManager.GetSection("vsf.export") as VsfExporterConfiguration;
             var vsfApiBridgeConfiguration = ConfigurationManager.GetSection("vsf.apiBridge") as VsfApiBridgeConfiguration;
 
-            services.RegisterVueStorefrontExporterDefaultService<FashionVsfProduct>(vsfExporterConfiguration);
+            services.RegisterVueStorefrontExporterDefaultService<QuicksilverVsfProduct>(vsfExporterConfiguration);
             services.RegisterVueStorefrontBridgeDefaultService(vsfApiBridgeConfiguration);
 
-            services.AddTransient<IProductMapper<FashionVsfProduct>, FashionProductMapper>();
+            services.AddTransient<IProductMapper<QuicksilverVsfProduct>, QuicksilverProductMapper>();
             services.AddTransient<ICategoryMapper, FashionNodeMapper>();
 
             services.AddTransient<IUserAdapter<VsfUser>, QuickSilverUserAdapter>();

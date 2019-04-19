@@ -4,7 +4,7 @@ using Nest;
 
 namespace EPiServer.Reference.Commerce.VsfIntegration.Mapping
 {
-    public class FashionVsfProduct : VsfBaseProduct
+    public class QuicksilverVsfProduct : VsfBaseProduct
     {
         [Keyword(Name = "color_options")]
         public IEnumerable<string> ColorOptions { get; set; }
