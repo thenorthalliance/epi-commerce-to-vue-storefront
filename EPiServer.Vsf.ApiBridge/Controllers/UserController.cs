@@ -70,7 +70,7 @@ namespace EPiServer.Vsf.ApiBridge.Controllers
         [ActionName("me")]
         public async Task<IHttpActionResult> UpdateUser(UserUpdateModel updateModel)
         {
-            return base.Ok(_userEndpoint.UpdateUser(User.Identity.GetUserId(), updateModel));
+            return base.Ok(await _userEndpoint.UpdateUser(User.Identity.GetUserId(), updateModel));
         }
     }
 }
