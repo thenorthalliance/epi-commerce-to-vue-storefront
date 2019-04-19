@@ -18,7 +18,7 @@ Although the example implementation in based on Quicksilver, both ApiBridge and 
 ## How to run this demo
 ### 1. Configuration 
 #### 1. vue-storefront local.config
-An working example can be found [HERE] <--- TODO <br>
+An working example can be found [HERE](https://github.com/makingwaves/epi-commerce-to-vue-storefront/blob/master/doc/vue-storefront-local.json) <br>
 List of customized properties with example values:
 ```
 {
@@ -67,7 +67,7 @@ List of customized properties with example values:
 ```
 
 #### 2. vue-storefront-api local.config
-An working example file can be found [HERE] <--- TODO <br>
+An working example file can be found [HERE](https://github.com/makingwaves/epi-commerce-to-vue-storefront/blob/master/doc/vue-storefront-api-local.json) <br>
 List of customized properties with example values:
 ```
 {
