@@ -16,6 +16,6 @@ package EPiServer.Reference.Commerce.VsfIntegration {
 
 StockEndpoint -up-|> IStockEndpoint
 QuickSilverStockAdapter -up-|> IStockAdapter
-StockController --> IStockEndpoint
-StockEndpoint --> IStockAdapter
+StockController -up-> IStockEndpoint
+StockEndpoint -up-> IStockAdapter
 @enduml

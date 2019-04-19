@@ -90,9 +90,6 @@ namespace EPiServer.Reference.Commerce.Site.Infrastructure
 
             services.AddSingleton<ServiceAccessor<IContentRouteHelper>>(locator => locator.GetInstance<IContentRouteHelper>);
             
-
-
-
             DependencyResolver.SetResolver(new StructureMapDependencyResolver(context.StructureMap()));
             GlobalConfiguration.Configure(config =>
             {

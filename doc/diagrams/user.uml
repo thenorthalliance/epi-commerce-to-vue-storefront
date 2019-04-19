@@ -18,7 +18,7 @@ package EPiServer.Reference.Commerce.VsfIntegration {
 
 UserEndpoint -up-|> IUserEndpoint
 QuickSilverUserAdapter -up-|> IUserAdapter: <TUser>=VsfUser
-UserController --> IUserEndpoint
-UserEndpoint --> IUserAdapter
-VsfUser .right. IUserAdapter: "where TUser:VsfUser"
+UserController -up-> IUserEndpoint
+UserEndpoint -up-> IUserAdapter
+VsfUser .left. IUserAdapter: "where TUser:VsfUser"
 @enduml

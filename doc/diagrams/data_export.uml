@@ -1,0 +1,48 @@
+@startuml
+
+interface IContentExtractor
+interface IExtractedContentHandler
+interface IIndexingService
+
+class ContentExtractor
+class IndexingService<TProduct>
+class ExtractedContentHandler<TProduct>
+
+interface "IMapper<ProductContent, TProduct>" as prod_mapper
+interface "IMapper<EpiCategory, VsfCategory>" as cat_mapper
+interface "IMapper<EpiContentProperty, VsfAttribute>" as attr_mapper
+
+class VsfBaseProduct
+class AttributeMapper
+class CategoryBaseMapper
+class ProductBaseMapper<TProduct>
+
+
+package EPiServer.Reference.Commerce.VsfIntegration {
+    class QuicksilverProductMapper
+    class QuicksilverNodeMapper
+    class QuicksilverVsfProduct
+}
+
+ContentExtractor -up-|> IContentExtractor
+IContentExtractor .right.> IExtractedContentHandler: uses
+ExtractedContentHandler -up-|> IExtractedContentHandler
+IndexingService -up-|> IIndexingService
+
+ExtractedContentHandler --o IIndexingService
+ExtractedContentHandler -up-o prod_mapper
+ExtractedContentHandler -up-o cat_mapper
+ExtractedContentHandler -up-o attr_mapper
+
+ProductBaseMapper -up-|> prod_mapper
+CategoryBaseMapper -up-|> cat_mapper
+AttributeMapper -up-|> attr_mapper
+
+QuicksilverNodeMapper -up-|> CategoryBaseMapper
+QuicksilverProductMapper -up-|> ProductBaseMapper: <TProduct>=QuicksilverVsfProduct
+
+QuicksilverVsfProduct -up-|> VsfBaseProduct
+
+note top of ExtractedContentHandler: where TProduct: VsfBaseProduct
+
+@enduml

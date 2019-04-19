@@ -16,6 +16,6 @@ package EPiServer.Reference.Commerce.VsfIntegration {
 
 CartEndpoint -up-|> ICartEndpoint
 QuickSilverCartAdapter -up-|> ICartAdapter
-CartController --> ICartEndpoint
-CartEndpoint --> ICartAdapter
+CartController -up-> ICartEndpoint
+CartEndpoint -up-> ICartAdapter
 @enduml
