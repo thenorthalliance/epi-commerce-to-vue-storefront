@@ -22,7 +22,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration
 
             _vsfExporter.Extract(this);
             
-            return $"VSF export finished. {_nodeExportCounter} nodes and {_productExportCounter} product exported.";
+            return $"VSF export finished. {_nodeExportCounter} nodes and {_productExportCounter} products exported.";
         }
 
         public void OnBeginExtraction()

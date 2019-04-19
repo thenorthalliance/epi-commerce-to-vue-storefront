@@ -27,12 +27,13 @@ namespace EPiServer.Vsf.DataExport.Exporting
             return newIndexName;
         }
 
-        public int BulkIndex<T>(IEnumerable<T> data, string indexName) where T : class
+        public void BulkIndex<T>(IEnumerable<T> data, string indexName) where T : class
         {
             var descriptor = new BulkDescriptor();
             descriptor.IndexMany(data, (desc, content) => desc.Type(content.GetType()).Index(indexName));
             var response = _client.Bulk(descriptor);
-            return response.Items.Count;
+            if(response.Errors)
+                throw new Exception("Failed while indexing items.", response.OriginalException);
         }
 
         public void SwitchAliasToIndex(string indexName)

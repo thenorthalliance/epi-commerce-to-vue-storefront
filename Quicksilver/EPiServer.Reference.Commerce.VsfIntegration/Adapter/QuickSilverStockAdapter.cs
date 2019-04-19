@@ -26,19 +26,19 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
         [AllowAnonymous]
         public async Task<VsfStockCheck> Check(string code)
         {
-            var variationLinkt = _referenceConverter.GetContentLink(code);
-            var variation = _contentLoaderWrapper.Get<VariationContent>(variationLinkt);
-            var productLink = variation.GetParentProducts().FirstOrDefault();
+            var variationLink = _referenceConverter.GetContentLink(code);
+            var variation = _contentLoaderWrapper.Get<VariationContent>(variationLink);
+            var productLink = variation.GetParentProducts().First();
 //            var product = _contentLoader.Get<ProductContent>(productLink);
-            var qauantity = _inventoryService.QueryByEntry(new[] {code}).Sum(x => x.PurchaseAvailableQuantity);
+            var quantity = _inventoryService.QueryByEntry(new[] {code}).Sum(x => x.PurchaseAvailableQuantity);
 
             return new VsfStockCheck
             {
-                ItemId = variationLinkt.ID,
+                ItemId = variationLink.ID,
                 ProductId = productLink.ID,
                 StockId = 1, //todo
-                Qty = qauantity,
-                IsInStock = qauantity > 0,
+                Qty = quantity,
+                IsInStock = quantity > 0,
                 IsQtyDecimal = false,
                 ShowDefaultNotificationMessage = false,
                 UseConfigMinQty = true,
