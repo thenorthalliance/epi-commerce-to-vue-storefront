@@ -97,5 +97,10 @@ namespace EPiServer.Vsf.ApiBridge.Endpoints
                 return new VsfErrorResponse("User update failed.");
             }
         }
+
+        public Task<VsfResponse> OrderHistory(string userId)
+        {
+            return Task.FromResult((VsfResponse)new VsfSuccessResponse<OrderHistoryModel>(new OrderHistoryModel()));
+        }
     }
 }

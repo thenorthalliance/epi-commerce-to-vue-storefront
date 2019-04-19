@@ -53,9 +53,9 @@ namespace EPiServer.Vsf.ApiBridge.Controllers
         [HttpGet]
         [ActionName("order-history")]
         [VsfAuthorize]
-        public IHttpActionResult OrderHistory()
+        public async Task<IHttpActionResult> OrderHistory()
         {
-            return Ok(new VsfSuccessResponse<OrderHistoryModel>(new OrderHistoryModel()));
+            return Ok(await _userEndpoint.OrderHistory(User.Identity.GetUserId()));
         }
 
         [HttpGet]

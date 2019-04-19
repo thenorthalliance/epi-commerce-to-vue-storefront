@@ -17,5 +17,7 @@ namespace EPiServer.Vsf.Core.ApiBridge.Endpoint
         Task<VsfResponse> ChangePassword(string userId, ChangePasswordModel changePasswordModel);
         Task<VsfResponse> GetUser(string userId);
         Task<VsfResponse> UpdateUser(string userId, UserUpdateModel userUpdateModel);
+
+        Task<VsfResponse> OrderHistory(string userId);
     }
 }
