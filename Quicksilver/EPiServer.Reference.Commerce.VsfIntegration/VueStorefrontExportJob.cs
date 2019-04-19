@@ -1,7 +1,6 @@
 ﻿using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.PlugIn;
 using EPiServer.Scheduler;
-using EPiServer.ServiceLocation;
 using EPiServer.Vsf.Core.Exporting;
 
 namespace EPiServer.Reference.Commerce.VsfIntegration
@@ -9,12 +8,18 @@ namespace EPiServer.Reference.Commerce.VsfIntegration
     [ScheduledPlugIn(DisplayName = "Export to Vue Storefront")]
     public class VueStorefrontExportJob : ScheduledJobBase, IExtractedContentHandler
     {
-        private readonly IContentExtractor _vsfExporter = ServiceLocator.Current.GetInstance<IContentExtractor>();
-        private readonly IExtractedContentHandler _contentHandler = ServiceLocator.Current.GetInstance<IExtractedContentHandler>();
+        private readonly IContentExtractor _vsfExporter;
+        private readonly IExtractedContentHandler _contentHandler;
 
-        private int _nodeExportCounter = 0;
-        private int _productExportCounter = 0;
-        
+        private int _nodeExportCounter;
+        private int _productExportCounter;
+
+        public VueStorefrontExportJob(IContentExtractor vsfExporter, IExtractedContentHandler contentHandler)
+        {
+            _vsfExporter = vsfExporter;
+            _contentHandler = contentHandler;
+        }
+
         public override string Execute()
         {
             _nodeExportCounter = 0;

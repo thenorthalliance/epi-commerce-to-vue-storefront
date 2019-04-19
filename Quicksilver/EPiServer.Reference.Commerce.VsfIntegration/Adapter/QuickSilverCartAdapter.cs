@@ -4,7 +4,6 @@ using System.Linq;
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Commerce.Marketing;
 using EPiServer.Commerce.Order;
-using EPiServer.ServiceLocation;
 using EPiServer.Vsf.ApiBridge.Utils;
 using EPiServer.Vsf.Core.ApiBridge.Adapter;
 using EPiServer.Vsf.Core.ApiBridge.Model.Cart;
