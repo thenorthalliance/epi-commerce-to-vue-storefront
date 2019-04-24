@@ -1,14 +1,14 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using EPiServer.Commerce.Order;
-using EPiServer.Reference.Commerce.Site.Features.Checkout.Models;
+using EPiServer.Reference.Commerce.VsfIntegration.Model;
 using EPiServer.ServiceLocation;
 using Mediachase.Commerce;
 using Mediachase.Commerce.Orders;
 using Mediachase.Commerce.Orders.Managers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace EPiServer.Reference.Commerce.Site.Features.Checkout.Services
+namespace EPiServer.Reference.Commerce.VsfIntegration.Service
 {
     [ServiceConfiguration(Lifecycle = ServiceInstanceScope.Singleton)]
     public class ShippingManagerFacade

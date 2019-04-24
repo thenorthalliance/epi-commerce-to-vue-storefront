@@ -18,10 +18,10 @@ namespace EPiServer.Vsf.Core.ApiBridge.Model.Cart
         public string MethodTitle { get; set; }
 
         [JsonProperty("amount")]
-        public long Amount { get; set; }
+        public decimal Amount { get; set; }
 
         [JsonProperty("base_amount")]
-        public long BaseAmount { get; set; }
+        public decimal BaseAmount { get; set; }
 
         [JsonProperty("available")]
         public bool Available { get; set; }
@@ -30,9 +30,9 @@ namespace EPiServer.Vsf.Core.ApiBridge.Model.Cart
         public string ErrorMessage { get; set; }
 
         [JsonProperty("price_excl_tax")]
-        public long PriceExclTax { get; set; }
+        public decimal PriceExclTax { get; set; }
 
         [JsonProperty("price_incl_tax")]
-        public long PriceInclTax { get; set; }
+        public decimal PriceInclTax { get; set; }
     }
 }

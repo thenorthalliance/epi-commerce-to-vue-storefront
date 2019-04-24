@@ -387,8 +387,6 @@
     <Compile Include="Features\Checkout\ViewModelFactories\CheckoutViewModelFactory.cs" />
     <Compile Include="Features\Checkout\ViewModelFactories\MultiShipmentViewModelFactory.cs" />
     <Compile Include="Features\Checkout\ViewModelFactories\OrderSummaryViewModelFactory.cs" />
-    <Compile Include="Features\Checkout\Services\ShippingManagerFacade.cs" />
-    <Compile Include="Features\Checkout\Models\ShippingMethodInfoModel.cs" />
     <Compile Include="Features\Checkout\ViewModels\ShipmentConfirmationViewModel.cs" />
     <Compile Include="Features\Checkout\ViewModels\UpdateAddressViewModel.cs" />
     <Compile Include="Features\Login\Controllers\RegistrationConfirmationMailController.cs" />

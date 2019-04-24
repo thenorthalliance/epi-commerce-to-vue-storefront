@@ -4,13 +4,18 @@ using System.Linq;
 using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Commerce.Marketing;
 using EPiServer.Commerce.Order;
+using EPiServer.Reference.Commerce.VsfIntegration.Service;
 using EPiServer.Vsf.ApiBridge.Utils;
 using EPiServer.Vsf.Core.ApiBridge.Adapter;
 using EPiServer.Vsf.Core.ApiBridge.Model.Cart;
 using EPiServer.Vsf.Core.ApiBridge.Model.User;
 using EPiServer.Vsf.Core.Exporting;
 using EPiServer.Vsf.DataExport.Utils.Epi;
+using Mediachase.Commerce;
 using Mediachase.Commerce.Catalog;
+using Mediachase.Commerce.Markets;
+using Mediachase.Commerce.Orders;
+using PaymentMethod = EPiServer.Vsf.Core.ApiBridge.Model.Cart.PaymentMethod;
 
 namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
 {
@@ -20,19 +25,25 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
         private readonly IOrderRepository _orderRepository;
         private readonly IPromotionEngine _promotionEngine;
         private readonly IVsfPriceService _priceService;
+        private readonly IMarketService _marketService;
+        private readonly ShippingManagerFacade _shippingManagerFacade;
         private readonly ReferenceConverter _referenceConverter;
 
 
         public QuickSilverCartAdapter(IContentLoaderWrapper contentLoaderWrapper, 
             IOrderRepository orderRepository, 
             IPromotionEngine promotionEngine, 
-            IVsfPriceService priceService, 
+            IVsfPriceService priceService,
+            IMarketService marketService,
+            ShippingManagerFacade shippingManagerFacade,
             ReferenceConverter referenceConverter)
         {
             _contentLoaderWrapper = contentLoaderWrapper;
             _orderRepository = orderRepository;
             _promotionEngine = promotionEngine;
             _priceService = priceService;
+            _marketService = marketService;
+            _shippingManagerFacade = shippingManagerFacade;
             _referenceConverter = referenceConverter;
         }
 
@@ -121,7 +132,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
         public IEnumerable<ShippingMethod> GetShippingMethods(Guid contactId, UserAddressModel address)
         {
             var cart = GetCart(contactId);
-            return cart.GetFirstForm().Shipments.Select(CreateShippingMethod);
+            return cart.GetFirstForm().Shipments.SelectMany(shipment => CreateShippingMethod(cart.MarketId, cart.Currency, shipment));
         }
 
         public bool AddCoupon(Guid contactId, string couponCode)
@@ -208,15 +219,27 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             }
         }
 
-        private static ShippingMethod CreateShippingMethod(IShipment shipment)
+        private IEnumerable<ShippingMethod> CreateShippingMethod(MarketId marketId, Currency currency, IShipment shipment)
         {
-            return new ShippingMethod
-            {
-                MethodCode = shipment.ShippingMethodName?.Replace(" ", "").ToLower(),
-                MethodTitle = shipment.ShippingMethodName,
-                Available = shipment.CanBePacked()
-            };
+            var market = _marketService.GetMarket(marketId);
+            var shippingRates = GetShippingRates(market, currency, shipment);
+            return shippingRates.Any()
+                ? shippingRates.Select(r => new ShippingMethod { CarrierCode = shipment.ShippingMethodId.ToString(), MethodCode = r.Id.ToString(), MethodTitle = r.Name, Amount = r.Money.Amount, Available = true})
+                : Enumerable.Empty<ShippingMethod>();
         }
+
+        private IEnumerable<ShippingRate> GetShippingRates(IMarket market, Currency currency, IShipment shipment)
+        {
+            var methods = _shippingManagerFacade.GetShippingMethodsByMarket(market.MarketId.Value, false);
+            var currentLanguage = market.DefaultLanguage.TwoLetterISOLanguageName;
+
+            return methods.Where(shippingMethodRow => string.Equals(currentLanguage, shippingMethodRow.LanguageId, StringComparison.OrdinalIgnoreCase)
+                                                      && string.Equals(currency, shippingMethodRow.Currency, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(shippingMethodRow => shippingMethodRow.Ordering)
+                .Select(shippingMethodRow => _shippingManagerFacade.GetRate(shipment, shippingMethodRow, market))
+                .Where(rate => rate != null);
+        }
+
 
         private static Total CreateTotal(ICart cart)
         {

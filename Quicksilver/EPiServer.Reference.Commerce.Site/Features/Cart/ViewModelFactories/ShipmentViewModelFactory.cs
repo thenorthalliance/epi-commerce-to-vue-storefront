@@ -2,7 +2,6 @@ using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Commerce.Order;
 using EPiServer.Reference.Commerce.Site.Features.AddressBook.Services;
 using EPiServer.Reference.Commerce.Site.Features.Cart.ViewModels;
-using EPiServer.Reference.Commerce.Site.Features.Checkout.Services;
 using EPiServer.Reference.Commerce.Site.Features.Market.Services;
 using EPiServer.Reference.Commerce.Site.Features.Shared.Services;
 using EPiServer.ServiceLocation;
@@ -12,6 +11,7 @@ using Mediachase.Commerce.Orders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using EPiServer.Reference.Commerce.VsfIntegration.Service;
 
 namespace EPiServer.Reference.Commerce.Site.Features.Cart.ViewModelFactories
 {
