@@ -15,6 +15,7 @@ using Mediachase.Commerce;
 using Mediachase.Commerce.Catalog;
 using Mediachase.Commerce.Markets;
 using Mediachase.Commerce.Orders;
+using Mediachase.Commerce.Orders.Managers;
 using PaymentMethod = EPiServer.Vsf.Core.ApiBridge.Model.Cart.PaymentMethod;
 
 namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
@@ -26,6 +27,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
         private readonly IPromotionEngine _promotionEngine;
         private readonly IVsfPriceService _priceService;
         private readonly IMarketService _marketService;
+        private readonly IEnumerable<IPaymentMethod> _paymentMethods;
         private readonly ShippingManagerFacade _shippingManagerFacade;
         private readonly ReferenceConverter _referenceConverter;
 
@@ -35,6 +37,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             IPromotionEngine promotionEngine, 
             IVsfPriceService priceService,
             IMarketService marketService,
+            IEnumerable<IPaymentMethod> paymentMethods,
             ShippingManagerFacade shippingManagerFacade,
             ReferenceConverter referenceConverter)
         {
@@ -43,6 +46,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             _promotionEngine = promotionEngine;
             _priceService = priceService;
             _marketService = marketService;
+            _paymentMethods = paymentMethods;
             _shippingManagerFacade = shippingManagerFacade;
             _referenceConverter = referenceConverter;
         }
@@ -125,8 +129,22 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
         public IEnumerable<PaymentMethod> GetPaymentMethods(Guid contactId)
         {
             var cart = GetCart(contactId);
-            return cart.GetFirstForm().Payments.Select(payment =>
-                new PaymentMethod {Code = payment.PaymentMethodName.Replace(" ", "").ToLower(), Title = payment.PaymentMethodName});
+            var market = _marketService.GetMarket(cart.MarketId);
+
+            return PaymentManager.GetPaymentMethodsByMarket(market.MarketId.Value)
+                .PaymentMethod
+                .Where(x => x.IsActive && string.Equals(market.DefaultLanguage.TwoLetterISOLanguageName, x.LanguageId,
+                                StringComparison.OrdinalIgnoreCase))
+                .OrderBy(x => x.Ordering)
+                .Select(x =>
+                {
+                    var pm = _paymentMethods.SingleOrDefault(method => method.SystemKeyword == x.SystemKeyword);
+                    return new PaymentMethod()
+                    {
+                        Title = pm.Name,
+                        Code = pm.PaymentMethodId.ToString()
+                    };
+                });
         }
 
         public IEnumerable<ShippingMethod> GetShippingMethods(Guid contactId, UserAddressModel address)
