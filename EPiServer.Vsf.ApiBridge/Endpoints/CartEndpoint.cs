@@ -64,15 +64,13 @@ namespace EPiServer.Vsf.ApiBridge.Endpoints
 
         public Task<VsfResponse> ShippingInformation(Guid cartId, ShippingInformationRequest request)
         {
-            //TODO Implement real ShippingInformation endpoint
+            var paymentMethods = _cartAdapter.GetPaymentMethods(cartId);
+            var totals = _cartAdapter.GetTotals(cartId);
+
             var result = new VsfSuccessResponse<ShippingInformation>(new ShippingInformation
             {
-                PaymentMethods = new List<PaymentMethod>(),
-                Totals = new Total
-                {
-                    Items = new List<TotalItem>(),
-                    TotalSegments = new List<TotalSegment>()
-                }
+                PaymentMethods = paymentMethods,
+                Totals = totals
             });
 
             return Task.FromResult((VsfResponse) result);

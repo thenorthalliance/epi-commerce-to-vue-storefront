@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace EPiServer.Reference.Commerce.Site.Features.Checkout.Models
+namespace EPiServer.Reference.Commerce.VsfIntegration.Model
 {
     public class ShippingMethodInfoModel
     {
