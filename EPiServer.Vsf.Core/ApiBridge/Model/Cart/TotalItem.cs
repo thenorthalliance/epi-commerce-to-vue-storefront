@@ -8,40 +8,52 @@ namespace EPiServer.Vsf.Core.ApiBridge.Model.Cart
         public long ItemId { get; set; }
 
         [JsonProperty("price")]
-        public long Price { get; set; }
+        public decimal Price { get; set; }
 
         [JsonProperty("base_price")]
-        public long BasePrice { get; set; }
+        public decimal BasePrice { get; set; }
 
         [JsonProperty("qty")]
-        public long Qty { get; set; }
+        public decimal Qty { get; set; }
 
         [JsonProperty("row_total")]
-        public long RowTotal { get; set; }
+        public decimal RowTotal { get; set; }
 
         [JsonProperty("base_row_total")]
-        public long BaseRowTotal { get; set; }
+        public decimal BaseRowTotal { get; set; }
 
         [JsonProperty("row_total_with_discount")]
-        public long RowTotalWithDiscount { get; set; }
+        public decimal RowTotalWithDiscount { get; set; }
 
         [JsonProperty("tax_amount")]
-        public long TaxAmount { get; set; }
+        public decimal TaxAmount { get; set; }
 
         [JsonProperty("base_tax_amount")]
-        public long BaseTaxAmount { get; set; }
+        public decimal BaseTaxAmount { get; set; }
 
         [JsonProperty("tax_percent")]
         public long TaxPercent { get; set; }
 
         [JsonProperty("discount_amount")]
-        public long DiscountAmount { get; set; }
+        public decimal DiscountAmount { get; set; }
 
         [JsonProperty("base_discount_amount")]
-        public long BaseDiscountAmount { get; set; }
+        public decimal BaseDiscountAmount { get; set; }
 
         [JsonProperty("discount_percent")]
         public long DiscountPercent { get; set; }
+
+        [JsonProperty("price_incl_tax")]
+        public decimal PriceIncludingTax { get; set; }
+
+        [JsonProperty("base_price_incl_tax")]
+        public decimal BasePriceIncludingTax { get; set; }
+
+        [JsonProperty("row_total_incl_tax")]
+        public decimal RowTotalIncludingTax { get; set; }
+
+        [JsonProperty("base_row_total_incl_tax")]
+        public decimal BaseRowTotalIncludingTax { get; set; }
 
         [JsonProperty("options")]
         public string Options { get; set; }

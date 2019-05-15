@@ -215,9 +215,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ApiBridge\Adapter\IOrderAdapter.cs" />
     <Compile Include="ApiBridge\Adapter\ICartAdapter.cs" />
     <Compile Include="ApiBridge\Adapter\IStockAdapter.cs" />
     <Compile Include="ApiBridge\Adapter\IUserAdapter.cs" />
+    <Compile Include="ApiBridge\Endpoint\IOrderEndpoint.cs" />
     <Compile Include="ApiBridge\Endpoint\ICartEndpoint.cs" />
     <Compile Include="ApiBridge\Endpoint\IStockEndpoint.cs" />
     <Compile Include="ApiBridge\Endpoint\IUserEndpoint.cs" />
@@ -239,9 +241,20 @@
     <Compile Include="ApiBridge\Model\Cart\TotalItem.cs" />
     <Compile Include="ApiBridge\Model\Cart\TotalSegment.cs" />
     <Compile Include="ApiBridge\Model\Cart\TotalSegmentExtensionAttributes.cs" />
+    <Compile Include="ApiBridge\Model\Order\OrderAddress.cs" />
+    <Compile Include="ApiBridge\Model\Order\OrderDetails.cs" />
+    <Compile Include="ApiBridge\Model\Order\OrderPayment.cs" />
+    <Compile Include="ApiBridge\Model\Order\OrderProductDetails.cs" />
+    <Compile Include="ApiBridge\Model\Order\OrderRequestModel.cs" />
+    <Compile Include="ApiBridge\Model\Order\OrderAddressInformation.cs" />
+    <Compile Include="ApiBridge\Model\Order\OrderShipping.cs" />
+    <Compile Include="ApiBridge\Model\Order\OrderShippingAssignments.cs" />
+    <Compile Include="ApiBridge\Model\Order\PaymentMethodAdditional.cs" />
+    <Compile Include="ApiBridge\Model\Order\Product.cs" />
     <Compile Include="ApiBridge\Model\User\ChangePasswordModel.cs" />
+    <Compile Include="ApiBridge\Model\Order\ExtensionAttributes.cs" />
     <Compile Include="ApiBridge\Model\User\InvoiceInformation.cs" />
-    <Compile Include="ApiBridge\Model\User\OrderHistoryModel.cs" />
+    <Compile Include="ApiBridge\Model\Order\OrderHistoryModel.cs" />
     <Compile Include="ApiBridge\Model\User\ResetPasswordModel.cs" />
     <Compile Include="ApiBridge\Model\Stock\VsfStockCheck.cs" />
     <Compile Include="ApiBridge\Model\User\UserAddressModel.cs" />

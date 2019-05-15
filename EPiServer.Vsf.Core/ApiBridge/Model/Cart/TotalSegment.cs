@@ -11,7 +11,7 @@ namespace EPiServer.Vsf.Core.ApiBridge.Model.Cart
         public string Title { get; set; }
 
         [JsonProperty("value")]
-        public long? Value { get; set; }
+        public decimal? Value { get; set; }
 
         [JsonProperty("extension_attributes", NullValueHandling = NullValueHandling.Ignore)]
         public TotalSegmentExtensionAttributes ExtensionAttributes { get; set; }

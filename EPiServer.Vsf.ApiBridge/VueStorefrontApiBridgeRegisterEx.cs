@@ -20,6 +20,7 @@ namespace EPiServer.Vsf.ApiBridge
             services.AddTransient<IUserEndpoint, UserEndpoint<VsfUser>>();
             services.AddTransient<ICartEndpoint, CartEndpoint>();
             services.AddTransient<IStockEndpoint, StockEndpoint>();
+            services.AddTransient<IOrderEndpoint, OrderEndpoint>();
 
             services.Add(typeof(IUserClaimsProvider<VsfUser>), typeof(UserClaimsProvider<VsfUser>), ServiceInstanceScope.Transient);
             services.Add(typeof(IUserTokenProvider), new JwtUserTokenProvider(bridgeConfiguration, new MemoryRefreshTokenRepository()));

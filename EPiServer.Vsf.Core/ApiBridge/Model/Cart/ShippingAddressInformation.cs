@@ -1,17 +1,18 @@
-﻿using EPiServer.Vsf.Core.ApiBridge.Model.User;
+﻿using System;
+using EPiServer.Vsf.Core.ApiBridge.Model.User;
 using Newtonsoft.Json;
 
 namespace EPiServer.Vsf.Core.ApiBridge.Model.Cart
 {
     public class ShippingAddressInformation
     {
-        [JsonProperty("shipping_address")]
+        [JsonProperty("shippingAddress")]
         public UserAddressModel ShippingAddress { get; set; }
 
-        [JsonProperty("shipping_method_code")]
+        [JsonProperty("shippingMethodCode")]
         public string ShippingMethodCode { get; set; }
 
-        [JsonProperty("shipping_carrier_code")]
+        [JsonProperty("shippingCarrierCode")]
         public string ShippingCarrierCode { get; set; }
     }
 }

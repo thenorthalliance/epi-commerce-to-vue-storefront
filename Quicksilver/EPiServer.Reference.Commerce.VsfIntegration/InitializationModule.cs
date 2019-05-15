@@ -38,6 +38,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration
             services.AddTransient<IUserAdapter<VsfUser>, QuickSilverUserAdapter>();
             services.AddTransient<ICartAdapter, QuickSilverCartAdapter>();
             services.AddTransient<IStockAdapter, QuickSilverStockAdapter>();
+            services.AddTransient<IOrderAdapter, QuickSilverOrderAdapter>();
         }
     }
 }

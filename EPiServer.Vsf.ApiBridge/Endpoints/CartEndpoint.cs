@@ -64,6 +64,13 @@ namespace EPiServer.Vsf.ApiBridge.Endpoints
 
         public Task<VsfResponse> ShippingInformation(Guid cartId, ShippingInformationRequest request)
         {
+            //do not update if the parse fails (means we do not know what is this shipping method)
+            if (Guid.TryParse(request.AddressInformation.ShippingMethodCode, out var shippingMethod) &&
+                int.TryParse(request.AddressInformation.ShippingCarrierCode, out var shipmentId))
+            {
+                _cartAdapter.UpdateShippingMethod(cartId, shipmentId, shippingMethod);
+            }
+
             var paymentMethods = _cartAdapter.GetPaymentMethods(cartId);
             var totals = _cartAdapter.GetTotals(cartId);
 

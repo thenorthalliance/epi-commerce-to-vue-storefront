@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using EPiServer.Vsf.ApiBridge.Authorization.Claims;
 using EPiServer.Vsf.ApiBridge.Authorization.Token;
@@ -7,6 +8,7 @@ using EPiServer.Vsf.Core.ApiBridge.Adapter;
 using EPiServer.Vsf.Core.ApiBridge.Endpoint;
 using EPiServer.Vsf.Core.ApiBridge.Model;
 using EPiServer.Vsf.Core.ApiBridge.Model.Authorization;
+using EPiServer.Vsf.Core.ApiBridge.Model.Order;
 using EPiServer.Vsf.Core.ApiBridge.Model.User;
 
 namespace EPiServer.Vsf.ApiBridge.Endpoints
@@ -16,12 +18,14 @@ namespace EPiServer.Vsf.ApiBridge.Endpoints
         private readonly IUserAdapter<TUser> _userAdapter;
         private readonly IUserTokenProvider _userTokenProvider;
         private readonly IUserClaimsProvider<TUser> _userClaimsProvider;
+        private readonly IOrderAdapter _orderAdapter;
 
-        public UserEndpoint(IUserAdapter<TUser> userAdapter, IUserTokenProvider userTokenProvider, IUserClaimsProvider<TUser> userClaimsProvider)
+        public UserEndpoint(IUserAdapter<TUser> userAdapter, IUserTokenProvider userTokenProvider, IUserClaimsProvider<TUser> userClaimsProvider, IOrderAdapter orderAdapter)
         {
             _userAdapter = userAdapter;
             _userTokenProvider = userTokenProvider;
             _userClaimsProvider = userClaimsProvider;
+            _orderAdapter = orderAdapter;
         }
 
         public async Task<VsfResponse> CreateLoginResponse(UserLoginModel userLoginModel)
@@ -100,7 +104,9 @@ namespace EPiServer.Vsf.ApiBridge.Endpoints
 
         public Task<VsfResponse> OrderHistory(string userId)
         {
-            return Task.FromResult((VsfResponse)new VsfSuccessResponse<OrderHistoryModel>(new OrderHistoryModel()));
+            var orders = _orderAdapter.GetOrders(userId);
+
+            return Task.FromResult((VsfResponse)new VsfSuccessResponse<OrderHistoryModel>(orders));
         }
     }
 }

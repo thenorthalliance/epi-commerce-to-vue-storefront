@@ -30,7 +30,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
         private readonly IEnumerable<IPaymentMethod> _paymentMethods;
         private readonly ShippingManagerFacade _shippingManagerFacade;
         private readonly ReferenceConverter _referenceConverter;
-
+        private readonly OrderValidationService _orderValidationService;
 
         public QuickSilverCartAdapter(IContentLoaderWrapper contentLoaderWrapper, 
             IOrderRepository orderRepository, 
@@ -39,7 +39,8 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             IMarketService marketService,
             IEnumerable<IPaymentMethod> paymentMethods,
             ShippingManagerFacade shippingManagerFacade,
-            ReferenceConverter referenceConverter)
+            ReferenceConverter referenceConverter,
+            OrderValidationService orderValidationService)
         {
             _contentLoaderWrapper = contentLoaderWrapper;
             _orderRepository = orderRepository;
@@ -49,6 +50,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             _paymentMethods = paymentMethods;
             _shippingManagerFacade = shippingManagerFacade;
             _referenceConverter = referenceConverter;
+            _orderValidationService = orderValidationService;
         }
 
         public string DefaultCartName => "vsf-default-cart";
@@ -150,7 +152,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
         public IEnumerable<ShippingMethod> GetShippingMethods(Guid contactId, UserAddressModel address)
         {
             var cart = GetCart(contactId);
-            return cart.GetFirstForm().Shipments.SelectMany(shipment => CreateShippingMethod(cart.MarketId, cart.Currency, shipment));
+            return cart.GetFirstForm().Shipments.SelectMany(shipment => GetShippingMethods(cart.MarketId, cart.Currency, shipment));
         }
 
         public bool AddCoupon(Guid contactId, string couponCode)
@@ -202,7 +204,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             return cart.ApplyDiscounts(_promotionEngine, new PromotionEngineSettings());
         }
 
-        private ICart GetCart(Guid contactId)
+        public ICart GetCart(Guid contactId)
         {
             return _orderRepository.Load<ICart>(contactId, DefaultCartName).FirstOrDefault();
         }
@@ -225,8 +227,6 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
 
         private void UpdateCartLine(ILineItem updatedItem)
         {
-
-            
             var variationLinkt = _referenceConverter.GetContentLink(updatedItem.Code);
             var variation = _contentLoaderWrapper.Get<VariationContent>(variationLinkt);
 
@@ -237,12 +237,12 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             }
         }
 
-        private IEnumerable<ShippingMethod> CreateShippingMethod(MarketId marketId, Currency currency, IShipment shipment)
+        private IEnumerable<ShippingMethod> GetShippingMethods(MarketId marketId, Currency currency, IShipment shipment)
         {
             var market = _marketService.GetMarket(marketId);
-            var shippingRates = GetShippingRates(market, currency, shipment);
+            var shippingRates = GetShippingRates(market, currency, shipment).ToList();
             return shippingRates.Any()
-                ? shippingRates.Select(r => new ShippingMethod { CarrierCode = shipment.ShippingMethodId.ToString(), MethodCode = r.Id.ToString(), MethodTitle = r.Name, Amount = r.Money.Amount, Available = true})
+                ? shippingRates.Select(r => new ShippingMethod { CarrierCode = shipment.ShipmentId.ToString(), MethodCode = r.Id.ToString(), MethodTitle = r.Name, Amount = r.Money.Amount, Available = true})
                 : Enumerable.Empty<ShippingMethod>();
         }
 
@@ -258,8 +258,21 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
                 .Where(rate => rate != null);
         }
 
+        public void UpdateShippingMethod(Guid contactId, int shipmentId, Guid shippingMethodId)
+        {
+            var cart = GetCart(contactId);
+            var shipment = cart.GetFirstForm().Shipments.First(x => x.ShipmentId == shipmentId);
+            shipment.ShippingMethodId = shippingMethodId;
+            ValidateCart(cart);
+            _orderRepository.Save(cart);
+        }
 
-        private static Total CreateTotal(ICart cart)
+        public IDictionary<ILineItem, IList<ValidationIssue>> ValidateCart(ICart cart)
+        {
+            return _orderValidationService.ValidateOrder(cart);
+        }
+
+        private Total CreateTotal(ICart cart)
         {
             var items = cart.GetAllLineItems().ToList();
 
@@ -270,70 +283,109 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
                 BaseCurrencyCode = cart.Currency.CurrencyCode,
                 QuoteCurrencyCode = cart.Currency.CurrencyCode,
                 ItemsQty = items.Count(),
-                Items = items.Select(CreateTotalItem).ToList(),
+                Items = items.Select(item => CreateTotalItem(item, cart)).ToList(),
                 TotalSegments = CreateSegments(cart)
             };
         }
 
-        private static List<TotalSegment> CreateSegments(ICart cart)
+        private List<TotalSegment> CreateSegments(ICart cart)
         {
             var result = new List<TotalSegment>();
-            var subTotal = cart.GetSubTotal();
+            var totals = cart.GetOrderGroupTotals();
+            
             result.Add(new TotalSegment
             {
                 Code = "subtotal",
                 Title = "Subtotal",
-                Value = (long?)subTotal.Amount
+                Value = totals.SubTotal.Amount
             });
 
-            var shippingTotal = cart.GetShippingTotal();
-            result.Add(new TotalSegment
+            if (totals.TaxTotal.Amount > 0)
             {
-                Code = "shipping",
-                Title = "Shipping",
-                Value = (long?)shippingTotal.Amount
-            });
-            result.Add(new TotalSegment
+                result.Add(new TotalSegment
+                {
+                    Code = "tax",
+                    Title = "Tax",
+                    Value = totals.TaxTotal.Amount
+                });
+            }
+
+            if (totals.ShippingTotal.Amount > 0)
             {
-                Code = "handling",
-                Title = "Handling",
-                Value = (long?)shippingTotal.Amount
-            });
-            var grandTotal = cart.GetTotal();
+                result.Add(new TotalSegment
+                {
+                    Code = "shipping",
+                    Title = "Shipping Cost",
+                    Value = totals.ShippingTotal.Amount
+                });
+            }
+
+            var shippingDiscount = cart.GetShippingDiscountTotal();
+
+            if (shippingDiscount.Amount > 0)
+            {
+                result.Add(new TotalSegment
+                {
+                    Code = "shippingDiscount",
+                    Title = "Shipping Discount",
+                    Value = -shippingDiscount.Amount
+                });
+            }
+
+            var orderDiscount = cart.GetOrderDiscountTotal();
+
+            if (orderDiscount.Amount > 0)
+            {
+                result.Add(new TotalSegment
+                {
+                    Code = "orderDiscount",
+                    Title = "Order Discount",
+                    Value = -orderDiscount.Amount
+                });
+            }
+
             result.Add(new TotalSegment
             {
                 Code = "grand_total",
-                Title = "Grant Total",
-                Value = (long?)grandTotal.Amount
+                Title = "Grand Total",
+                Value = totals.Total.Amount
             });
+
             return result;
         }
 
-        private static TotalItem CreateTotalItem(ILineItem item)
+        private TotalItem CreateTotalItem(ILineItem item, ICart cart)
         {
-            //TODO this may not be fully implemented
-            
-            return new TotalItem
+            var lineItemPrices = item.GetLineItemPrices(cart.Currency);
+
+            //TODO: implement taxes, GetSalesTax??
+            var totalItem = new TotalItem
             {
                 ItemId = item.LineItemId,
-                Price = (long)item.PlacedPrice,
-                BasePrice = (long)item.PlacedPrice,
-                Qty = (long)item.Quantity,
-                RowTotal = 0,
-                BaseRowTotal = 0,
-                RowTotalWithDiscount = 0,
-                TaxAmount = 0,
-                BaseTaxAmount = 0,
-                TaxPercent = 0,
-                DiscountAmount = 0,
-                BaseDiscountAmount = 0,
+                Price = item.PlacedPrice,
+                BasePrice = item.PlacedPrice,
+                Qty = item.Quantity,
+                RowTotal = item.Quantity * item.PlacedPrice,
+                BaseRowTotal = item.Quantity * item.PlacedPrice,
+                RowTotalWithDiscount = lineItemPrices.DiscountedPrice.Amount,
+                TaxAmount = 0, //TODO: taxes, GetSalesTax??
+                BaseTaxAmount = 0, //TODO: taxes, GetSalesTax??
+                TaxPercent = 0, //TODO: taxes, GetSalesTax??
+                DiscountAmount = item.GetDiscountTotal(cart.Currency).Amount,
+                BaseDiscountAmount = item.GetDiscountTotal(cart.Currency).Amount,
                 DiscountPercent = 0,
-                Options = "",
+                PriceIncludingTax = 0, //TODO: taxes, GetSalesTax??
+                BasePriceIncludingTax = 0, //TODO: taxes, GetSalesTax??
+                RowTotalIncludingTax = item.Quantity * item.PlacedPrice, //TODO: taxes, GetSalesTax??
+                BaseRowTotalIncludingTax = item.Quantity * item.PlacedPrice, //TODO: taxes, GetSalesTax??
+                Options = "", //TODO: options like colors etc?
                 WeeeTaxAppliedAmount = null,
                 WeeeTaxApplied = null,
                 Name = item.DisplayName,
                 ProductOption = new ProductOption()
             };
+
+            return totalItem;
         }
     }
 }

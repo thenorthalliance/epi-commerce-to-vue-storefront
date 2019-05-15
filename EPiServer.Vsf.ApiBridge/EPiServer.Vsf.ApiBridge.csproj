@@ -283,6 +283,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Authorization\Claims\UserClaimsProvider.cs" />
+    <Compile Include="Controllers\OrderController.cs" />
+    <Compile Include="Endpoints\OrderEndpoint.cs" />
     <Compile Include="Endpoints\CartEndpoint.cs" />
     <Compile Include="Endpoints\StockEndpoint.cs" />
     <Compile Include="Endpoints\UserEndpoint.cs" />
