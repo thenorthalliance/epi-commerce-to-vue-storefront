@@ -279,6 +279,8 @@
     <Compile Include="Adapter\QuickSilverOrderAdapter.cs" />
     <Compile Include="Adapter\QuickSilverCartAdapter.cs" />
     <Compile Include="Adapter\QuickSilverUserAdapter.cs" />
+    <Compile Include="Service\IPaymentManagerFacade.cs" />
+    <Compile Include="Service\PaymentManagerFacade.cs" />
     <Compile Include="Service\ShippingManagerFacade.cs" />
     <Compile Include="Mapping\QuicksilverNodeMapper.cs" />
     <Compile Include="Mapping\QuicksilverVsfProduct.cs" />
@@ -312,6 +314,8 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Model\Payment\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

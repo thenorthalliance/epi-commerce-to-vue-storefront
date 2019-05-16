@@ -2,116 +2,100 @@
 using System.Collections.Generic;
 using System.Linq;
 using EPiServer.Commerce.Order;
+using EPiServer.Reference.Commerce.VsfIntegration.Service;
 using EPiServer.Vsf.Core.ApiBridge.Adapter;
 using EPiServer.Vsf.Core.ApiBridge.Model.Order;
+using EPiServer.Vsf.Core.ApiBridge.Model.User;
+using Mediachase.Commerce.Markets;
 
 namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
 {
     public class QuickSilverOrderAdapter : IOrderAdapter
     {
         private readonly IOrderRepository _orderRepository;
-        private readonly ICartAdapter _cartAdapter;
-        private readonly IOrderGroupCalculator _orderGroupCalculator;
-        private readonly IPaymentProcessor _paymentProcessor;
+        private readonly IPaymentManagerFacade _paymentManagerFacade;
+        private readonly IMarketService _marketService;
+        private readonly IEnumerable<IPaymentMethod> _paymentMethods;
 
 
-        public QuickSilverOrderAdapter(ICartAdapter cartAdapter,
-            IOrderGroupCalculator orderGroupCalculator,
-            IPaymentProcessor paymentProcessor,
-            IOrderRepository orderRepository)
+        public QuickSilverOrderAdapter(
+            IOrderRepository orderRepository,
+            IPaymentManagerFacade paymentManagerFacade,
+            IMarketService marketService,
+            IEnumerable<IPaymentMethod> paymentMethods)
         {
-            _cartAdapter = cartAdapter;
-            _cartAdapter = cartAdapter;
-            _orderGroupCalculator = orderGroupCalculator;
-            _paymentProcessor = paymentProcessor;
             _orderRepository = orderRepository;
+            _paymentManagerFacade = paymentManagerFacade;
+            _marketService = marketService;
+            _paymentMethods = paymentMethods;
         }
 
         public string DefaultCartName => "vsf-default-cart";
 
         public void CreateOrder(OrderRequestModel request)
         {
-            var cart = _cartAdapter.GetCart(request.CartId);
+            var cart = _orderRepository.Load<ICart>(request.CartId, DefaultCartName).First();
 
-            var shippingAddress = cart.CreateOrderAddress("ShippingAddressId");
-            var billingAddress = cart.CreateOrderAddress("BillingAddressId");
-
-            billingAddress.City = request.AddressInformation.BillingAddress.City;
-            billingAddress.CountryCode = request.AddressInformation.BillingAddress.CountryId;
-            billingAddress.DaytimePhoneNumber = request.AddressInformation.BillingAddress.Telephone;
-            //billingAddress.Email = //take from user;
-            billingAddress.FirstName = request.AddressInformation.BillingAddress.Firstname;
-            billingAddress.LastName = request.AddressInformation.BillingAddress.Lastname;
-            billingAddress.PostalCode = request.AddressInformation.BillingAddress.Postcode;
-            billingAddress.Line1 = string.Join(", ", request.AddressInformation.BillingAddress.Street);
-
-            var payment = cart.CreatePayment();
-            payment.BillingAddress = billingAddress;
-
-            _cartAdapter.UpdateShippingMethod(request.CartId, request.AddressInformation.ShippingCarrierCode,
-                request.AddressInformation.ShippingMethodCode);
-
-
-            shippingAddress.City = request.AddressInformation.ShippingAddress.City;
-            shippingAddress.CountryCode = request.AddressInformation.ShippingAddress.CountryId;
-            shippingAddress.DaytimePhoneNumber = request.AddressInformation.ShippingAddress.Telephone;
-            //billingAddress.Email = //take from user;
-            shippingAddress.FirstName = request.AddressInformation.ShippingAddress.Firstname;
-            shippingAddress.LastName = request.AddressInformation.ShippingAddress.Lastname;
-            shippingAddress.PostalCode = request.AddressInformation.ShippingAddress.Postcode;
-            shippingAddress.Line1 = string.Join(", ", request.AddressInformation.ShippingAddress.Street);
-
-            cart.GetFirstShipment().ShippingAddress = shippingAddress;
-
-            //var paymentProcessingResults = cart.ProcessPayments(_paymentProcessor, _orderGroupCalculator).ToList();
-
-            //if (paymentProcessingResults.Any(r => !r.IsSuccessful))
-            //{
-            //    modelState.AddModelError("", _localizationService.GetString("/Checkout/Payment/Errors/ProcessingPaymentFailure") + string.Join(", ", paymentProcessingResults.Select(p => p.Message)));
-            //    return null;
-            //}
-
-            //var redirectPayment = paymentProcessingResults.FirstOrDefault(r => !string.IsNullOrEmpty(r.RedirectUrl));
-            //if (redirectPayment != null)
-            //{
-            //    checkoutViewModel.RedirectUrl = redirectPayment.RedirectUrl;
-            //    return null;
-            //}
-
-            //var processedPayments = cart.GetFirstForm().Payments.Where(x => x.Status.Equals(PaymentStatus.Processed.ToString())).ToList();
-            //if (!processedPayments.Any())
-            //{
-            //    // Return null in case there is no payment was processed.
-            //    return null;
-            //}
-
-            //var totalProcessedAmount = processedPayments.Sum(x => x.Amount);
-            //if (totalProcessedAmount != cart.GetTotal(_orderGroupCalculator).Amount)
-            //{
-            //    throw new InvalidOperationException("Wrong amount");
-            //}
-
-            //PurchaseValidation validation;
-            //if (checkoutViewModel.IsAuthenticated)
-            //{
-            //    validation = AuthenticatedPurchaseValidation;
-            //}
-            //else
-            //{
-            //    validation = AnonymousPurchaseValidation;
-            //}
-
-            //if (!validation.ValidateOrderOperation(modelState, _cartService.RequestInventory(cart)))
-            //{
-            //    return null;
-            //}
+            AddPaymentToCart(cart, request.AddressInformation.PaymentMethodCode, request.AddressInformation.BillingAddress);
+            AddShippingMethod(cart, request.AddressInformation.ShippingMethodCode);
+            AddShippingAddress(cart, request.AddressInformation.ShippingAddress);
 
             //Assign cart to user if there is one
             if (!string.IsNullOrEmpty(request.UserId))
                 cart.CustomerId = Guid.Parse(request.UserId);
 
-            var orderReference = _orderRepository.SaveAsPurchaseOrder(cart);
+            _orderRepository.SaveAsPurchaseOrder(cart);
             _orderRepository.Delete(cart.OrderLink);
+        }
+
+        private void AddShippingAddress(ICart cart, UserAddressModel shippingAddress)
+        {
+            var orderShippingAddress = cart.CreateOrderAddress("ShippingAddressId");
+
+            orderShippingAddress.City = shippingAddress.City;
+            orderShippingAddress.CountryCode = shippingAddress.CountryId;
+            orderShippingAddress.DaytimePhoneNumber = shippingAddress.Telephone;
+            orderShippingAddress.FirstName = shippingAddress.Firstname;
+            orderShippingAddress.LastName = shippingAddress.Lastname;
+            orderShippingAddress.PostalCode = shippingAddress.Postcode;
+            orderShippingAddress.Line1 = string.Join(", ", shippingAddress.Street);
+
+            cart.GetFirstShipment().ShippingAddress = orderShippingAddress;
+        }
+
+        private void AddShippingMethod(ICart cart, Guid shippingMethodId)
+        {
+            var shipment = cart.GetFirstShipment();
+            shipment.ShippingMethodId = shippingMethodId;
+        }
+
+        private void AddPaymentToCart(ICart cart, Guid paymentMethodGuid, UserAddressModel billingAddress)
+        {
+            var market = _marketService.GetMarket(cart.MarketId);
+
+            var paymentMethod = _paymentManagerFacade
+                .GetPaymentMethodsByMarket(market.MarketId.Value, market.DefaultLanguage.TwoLetterISOLanguageName)
+                .PaymentMethod
+                .FindByPaymentMethodId(paymentMethodGuid);
+
+            var paymentMethodImplementation = _paymentMethods.SingleOrDefault(x => x.PaymentMethodId == paymentMethod.PaymentMethodId);
+
+            if (paymentMethodImplementation != null)
+            {
+                var payment = paymentMethodImplementation.CreatePayment(cart.GetTotal().Amount, cart);
+
+                var orderBillingAddress = cart.CreateOrderAddress("BillingAddressId");
+                orderBillingAddress.City = billingAddress.City;
+                orderBillingAddress.CountryCode = billingAddress.CountryId;
+                orderBillingAddress.DaytimePhoneNumber = billingAddress.Telephone;
+                orderBillingAddress.FirstName = billingAddress.Firstname;
+                orderBillingAddress.LastName = billingAddress.Lastname;
+                orderBillingAddress.PostalCode = billingAddress.Postcode;
+                orderBillingAddress.Line1 = string.Join(", ", billingAddress.Street);
+
+                payment.BillingAddress = orderBillingAddress;
+                cart.AddPayment(payment);
+            }
         }
 
         public OrderHistoryModel GetOrders(string userId)
@@ -127,15 +111,16 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             foreach (var purchaseOrder in purchaseOrders)
             {
                 var orderForm = purchaseOrder.GetFirstForm();
-                var billingAddress = purchaseOrder.GetFirstForm().Payments.FirstOrDefault()?.BillingAddress;
+                var payment = purchaseOrder.GetFirstForm().Payments.FirstOrDefault();
+                var billingAddress = payment?.BillingAddress;
                 var shipment = purchaseOrder.GetFirstShipment();
 
                 var orderDetails = new OrderDetails()
                 {
                     OrderNumber = orderForm.OrderFormId,
                     CreatedAt = purchaseOrder.Created,
-                    CustomerFirstname = billingAddress?.FirstName ?? "Test",
-                    CustomerLastname = billingAddress?.LastName ?? "Was",
+                    CustomerFirstname = billingAddress?.FirstName,
+                    CustomerLastname = billingAddress?.LastName,
                     Status = purchaseOrder.OrderStatus.ToString(),
                     GrandTotal = purchaseOrder.GetTotal().Amount,
                     Subtotal = purchaseOrder.GetSubTotal().Amount,
@@ -143,32 +128,25 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
                     TaxAmount = purchaseOrder.GetTaxTotal().Amount,
                     OrderedProducts = new List<OrderProductDetails>(),
                     ShippingDescription = shipment.ShippingMethodName,
-                    Payment = new OrderPayment
-                    {
-                        AdditionalInformation = new List<string>()
-                        {
-                            "Credit Card Direct Post (Authorize.net)"
-                        }
-                    },
                     BillingAddress = new OrderAddress
                     {
                         AddressType = "billing",
-                        City = "California",
-                        CountryId = "US",
-                        Email = "test2@test.pl",
-                        EntityId = "8361",
-                        Firstname = "test",
-                        Lastname = "test",
+                        City = billingAddress?.City,
+                        CountryId = billingAddress?.CountryCode,
+                        Email = billingAddress?.Email,
+                        EntityId = billingAddress?.Id,
+                        Firstname = billingAddress?.FirstName,
+                        Lastname = billingAddress?.LastName,
                         ParentOrderId = orderForm.OrderFormId,
-                        Postcode = "81120",
+                        Postcode = billingAddress?.PostalCode,
                         Street = new List<string>()
                         {
-                            "Test",
-                            "34"
+                            billingAddress?.Line1,
+                            billingAddress?.Line2
                         },
-                        Telephone = "1234567890"
+                        Telephone = billingAddress?.DaytimePhoneNumber
                     },
-                    ExtensionAttributes = new ExtensionAttributes()
+                    ExtensionAttributes = new OrderExtensionAttributes()
                     {
                         ShippingAssignments = new List<OrderShippingAssignments>()
                         {
@@ -216,14 +194,30 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
                             PriceIncludingTax = lineItem.PlacedPrice, //TODO: taxes
                             QuantityOrdered = lineItem.Quantity,
                             ItemId = lineItem.LineItemId,
-                            RowTotalIncludingTax = extendedPrice, //probably incorrect if item quantity can be 1.3
-                            Sku = lineItem.Code
+                            RowTotalIncludingTax = extendedPrice,
+                            Sku = lineItem.Code,
+                            ProductType = "configurable"
                         });
                 }
 
-                // show full discount, so add order discount + per item discounts + shipping discount if applicable
-                orderDetails.DiscountAmount = purchaseOrder.GetOrderDiscountTotal().Amount
-                                              + purchaseOrder.GetShippingDiscountTotal().Amount;
+                orderDetails.DiscountAmount = 
+                    purchaseOrder.GetOrderDiscountTotal().Amount + 
+                    purchaseOrder.GetShippingDiscountTotal().Amount;
+
+                if (payment != null)
+                {
+                    var paymentName = _paymentMethods.FirstOrDefault(x => x.SystemKeyword == payment.PaymentMethodName)?.Name;
+                    if (paymentName != null)
+                    {
+                        orderDetails.Payment = new OrderPayment
+                        {
+                            AdditionalInformation = new List<string>()
+                            {
+                                paymentName
+                            }
+                        };
+                    }
+                }
 
                 orderHistoryModel.Orders.Add(orderDetails);
             }

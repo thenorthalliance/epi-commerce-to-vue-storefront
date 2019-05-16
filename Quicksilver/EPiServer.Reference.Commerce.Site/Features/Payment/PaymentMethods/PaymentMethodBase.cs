@@ -1,9 +1,9 @@
 ﻿using EPiServer.Commerce.Order;
 using EPiServer.Framework.Localization;
 using EPiServer.Reference.Commerce.Site.Features.Market.Services;
-using EPiServer.Reference.Commerce.Site.Features.Payment.Services;
 using System;
 using System.Linq;
+using EPiServer.Reference.Commerce.VsfIntegration.Service;
 
 namespace EPiServer.Reference.Commerce.Site.Features.Payment.PaymentMethods
 {

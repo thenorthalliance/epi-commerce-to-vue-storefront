@@ -249,10 +249,9 @@
     <Compile Include="ApiBridge\Model\Order\OrderAddressInformation.cs" />
     <Compile Include="ApiBridge\Model\Order\OrderShipping.cs" />
     <Compile Include="ApiBridge\Model\Order\OrderShippingAssignments.cs" />
-    <Compile Include="ApiBridge\Model\Order\PaymentMethodAdditional.cs" />
-    <Compile Include="ApiBridge\Model\Order\Product.cs" />
+    <Compile Include="ApiBridge\Model\Order\OrderProduct.cs" />
     <Compile Include="ApiBridge\Model\User\ChangePasswordModel.cs" />
-    <Compile Include="ApiBridge\Model\Order\ExtensionAttributes.cs" />
+    <Compile Include="ApiBridge\Model\Order\OrderExtensionAttributes.cs" />
     <Compile Include="ApiBridge\Model\User\InvoiceInformation.cs" />
     <Compile Include="ApiBridge\Model\Order\OrderHistoryModel.cs" />
     <Compile Include="ApiBridge\Model\User\ResetPasswordModel.cs" />

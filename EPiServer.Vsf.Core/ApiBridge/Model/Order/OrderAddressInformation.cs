@@ -16,10 +16,10 @@ namespace EPiServer.Vsf.Core.ApiBridge.Model.Order
         public Guid ShippingMethodCode { get; set; }
 
         [JsonProperty("shipping_carrier_code")]
-        public int ShippingCarrierCode { get; set; }
+        public string ShippingCarrierCode { get; set; }
 
         [JsonProperty("payment_method_code")]
-        public string PaymentMethodCode { get; set; }
+        public Guid PaymentMethodCode { get; set; }
 
         [JsonProperty("payment_method_additional")]
         public object PaymentMethodAdditional { get; set; }

@@ -266,7 +266,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\EPiServer.Vsf.Core\EPiServer.Vsf.Core.csproj">
-      <Project>{51DDA385-D610-4673-8562-BDE9197291FB}</Project>
+      <Project>{51dda385-d610-4673-8562-bde9197291fb}</Project>
       <Name>EPiServer.Vsf.Core</Name>
     </ProjectReference>
   </ItemGroup>

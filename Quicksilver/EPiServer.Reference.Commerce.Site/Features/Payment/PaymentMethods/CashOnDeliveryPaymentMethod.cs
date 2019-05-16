@@ -1,7 +1,7 @@
 ﻿using EPiServer.Commerce.Order;
 using EPiServer.Framework.Localization;
 using EPiServer.Reference.Commerce.Site.Features.Market.Services;
-using EPiServer.Reference.Commerce.Site.Features.Payment.Services;
+using EPiServer.Reference.Commerce.VsfIntegration.Service;
 using EPiServer.ServiceLocation;
 using Mediachase.Commerce.Orders;
 

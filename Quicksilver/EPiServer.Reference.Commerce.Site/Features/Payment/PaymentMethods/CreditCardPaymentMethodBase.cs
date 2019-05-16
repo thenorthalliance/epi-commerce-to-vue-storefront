@@ -1,7 +1,6 @@
 ﻿using EPiServer.Commerce.Order;
 using EPiServer.Framework.Localization;
 using EPiServer.Reference.Commerce.Site.Features.Market.Services;
-using EPiServer.Reference.Commerce.Site.Features.Payment.Services;
 using EPiServer.Reference.Commerce.Site.Infrastructure.Attributes;
 using EPiServer.ServiceLocation;
 using System;
@@ -11,6 +10,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web.Mvc;
+using EPiServer.Reference.Commerce.VsfIntegration.Service;
 
 namespace EPiServer.Reference.Commerce.Site.Features.Payment.PaymentMethods
 {

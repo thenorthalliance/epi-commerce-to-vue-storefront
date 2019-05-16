@@ -1,12 +1,12 @@
 using EPiServer.Commerce.Order;
 using EPiServer.Reference.Commerce.Site.Features.Market.Services;
-using EPiServer.Reference.Commerce.Site.Features.Payment.Services;
 using EPiServer.Reference.Commerce.Site.Features.Payment.ViewModels;
 using EPiServer.ServiceLocation;
 using Mediachase.Commerce;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using EPiServer.Reference.Commerce.VsfIntegration.Service;
 
 namespace EPiServer.Reference.Commerce.Site.Features.Payment.ViewModelFactories
 {

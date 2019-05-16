@@ -1,8 +1,9 @@
-﻿using EPiServer.ServiceLocation;
+﻿using System;
+using EPiServer.ServiceLocation;
 using Mediachase.Commerce.Orders.Dto;
 using Mediachase.Commerce.Orders.Managers;
 
-namespace EPiServer.Reference.Commerce.Site.Features.Payment.Services
+namespace EPiServer.Reference.Commerce.VsfIntegration.Service
 {
     [ServiceConfiguration(typeof (IPaymentManagerFacade))]
     public class PaymentManagerFacade : IPaymentManagerFacade
@@ -15,6 +16,11 @@ namespace EPiServer.Reference.Commerce.Site.Features.Payment.Services
         public PaymentMethodDto GetPaymentMethodsByMarket(string marketId)
         {
             return PaymentManager.GetPaymentMethodsByMarket(marketId);
+        }
+
+        public PaymentMethodDto GetPaymentMethodsByMarket(string marketId, string languageId)
+        {
+            return PaymentManager.GetPaymentMethodsByMarket(marketId, languageId);
         }
 
         public void SavePaymentMethod(PaymentMethodDto dto)

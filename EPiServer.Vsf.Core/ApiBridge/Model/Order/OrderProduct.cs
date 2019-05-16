@@ -2,7 +2,7 @@
 
 namespace EPiServer.Vsf.Core.ApiBridge.Model.Order
 {
-    public class Product
+    public class OrderProduct
     {
         [JsonProperty("sku")]
         public string Sku { get; set; }

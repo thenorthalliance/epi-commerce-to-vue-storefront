@@ -12,7 +12,7 @@ namespace EPiServer.Vsf.Core.ApiBridge.Model.Order
         public Guid CartId { get; set; }
 
         [JsonProperty("products")]
-        public Product[] products { get; set; }
+        public OrderProduct[] products { get; set; }
 
         [JsonProperty("addressInformation")]
         public OrderAddressInformation AddressInformation { get; set; }

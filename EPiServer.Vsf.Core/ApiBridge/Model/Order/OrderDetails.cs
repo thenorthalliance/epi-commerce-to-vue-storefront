@@ -39,7 +39,7 @@ namespace EPiServer.Vsf.Core.ApiBridge.Model.Order
         //public object[] status_histories { get; set; }
 
         [JsonProperty("extension_attributes")] // Vue storefront reads shipping address from here...
-        public ExtensionAttributes ExtensionAttributes { get; set; }
+        public OrderExtensionAttributes ExtensionAttributes { get; set; }
 
         [JsonProperty("shipping_amount")]
         public decimal ShippingAmount { get; set; }

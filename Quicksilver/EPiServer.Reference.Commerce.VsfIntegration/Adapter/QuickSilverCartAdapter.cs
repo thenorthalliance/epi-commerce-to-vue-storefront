@@ -204,7 +204,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             return cart.ApplyDiscounts(_promotionEngine, new PromotionEngineSettings());
         }
 
-        public ICart GetCart(Guid contactId)
+        private ICart GetCart(Guid contactId)
         {
             return _orderRepository.Load<ICart>(contactId, DefaultCartName).FirstOrDefault();
         }
@@ -258,10 +258,10 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
                 .Where(rate => rate != null);
         }
 
-        public void UpdateShippingMethod(Guid contactId, int shipmentId, Guid shippingMethodId)
+        public void UpdateShippingMethod(Guid contactId, Guid shippingMethodId)
         {
             var cart = GetCart(contactId);
-            var shipment = cart.GetFirstForm().Shipments.First(x => x.ShipmentId == shipmentId);
+            var shipment = cart.GetFirstShipment();
             shipment.ShippingMethodId = shippingMethodId;
             ValidateCart(cart);
             _orderRepository.Save(cart);

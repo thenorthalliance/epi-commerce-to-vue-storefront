@@ -28,6 +28,9 @@ namespace EPiServer.Vsf.Core.ApiBridge.Model.Order
         [JsonProperty("sku")]
         public string Sku { get; set; }
 
+        [JsonProperty("product_type")]
+        public string ProductType { get; set; }
+
         //public int amount_refunded { get; set; }
         //public string applied_rule_ids { get; set; }
         //public int base_amount_refunded { get; set; }
@@ -51,20 +54,15 @@ namespace EPiServer.Vsf.Core.ApiBridge.Model.Order
         //public int is_qty_decimal { get; set; }
         //public int is_virtual { get; set; }
         //public int no_discount { get; set; }
-
         //public int original_price { get; set; }
-
         //public int product_id { get; set; }
-        //public string product_type { get; set; }
         //public int qty_canceled { get; set; }
         //public int qty_invoiced { get; set; }
-
         //public int qty_refunded { get; set; }
         //public int qty_shipped { get; set; }
         //public int quote_item_id { get; set; }
         //public int row_invoiced { get; set; }
         //public int row_total { get; set; }
-
         //public int row_weight { get; set; }
         //public int store_id { get; set; }
         //public float tax_amount { get; set; }

@@ -400,8 +400,6 @@
     <Compile Include="Features\Payment\PaymentMethods\CashOnDeliveryPaymentMethod.cs" />
     <Compile Include="Features\Payment\PaymentMethods\CreditCardPaymentMethodBase.cs" />
     <Compile Include="Features\Payment\PaymentMethods\GenericCreditCardPaymentMethod.cs" />
-    <Compile Include="Features\Payment\Services\IPaymentManagerFacade.cs" />
-    <Compile Include="Features\Payment\Services\PaymentManagerFacade.cs" />
     <Compile Include="Features\Payment\ViewModelFactories\PaymentMethodViewModelFactory.cs" />
     <Compile Include="Features\Payment\ViewModels\PaymentMethodSelectionViewModel.cs" />
     <Compile Include="Features\Payment\ViewModels\PaymentMethodViewModel.cs" />

@@ -8,7 +8,6 @@ using EPiServer.DataAbstraction.RuntimeModel;
 using EPiServer.DataAccess;
 using EPiServer.Enterprise;
 using EPiServer.Logging;
-using EPiServer.Reference.Commerce.Site.Features.Payment.Services;
 using EPiServer.Security;
 using EPiServer.ServiceLocation;
 using EPiServer.Web;
@@ -38,6 +37,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
+using EPiServer.Reference.Commerce.VsfIntegration.Service;
 using AppContext = Mediachase.Commerce.Core.AppContext;
 
 namespace EPiServer.Reference.Commerce.Site.Infrastructure.SiteImport
