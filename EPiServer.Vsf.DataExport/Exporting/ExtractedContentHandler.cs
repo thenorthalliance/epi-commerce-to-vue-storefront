@@ -1,4 +1,5 @@
-﻿using EPiServer.Commerce.Catalog.ContentTypes;
+﻿using System.Linq;
+using EPiServer.Commerce.Catalog.ContentTypes;
 using EPiServer.Vsf.Core.Exporting;
 using EPiServer.Vsf.Core.Mapping;
 using EPiServer.Vsf.DataExport.Model;
@@ -13,20 +14,24 @@ namespace EPiServer.Vsf.DataExport.Exporting
         private readonly IMapper<ProductContent, TProduct> _productMapper;
         private readonly IMapper<EpiCategory, VsfCategory> _categoryMapper;
         private readonly IMapper<EpiContentProperty, VsfAttribute> _attributeMapper;
+        private readonly IMapper<VariationContent, VsfSimpleProduct> _simpleProductMapper;
         private readonly CategoryTreeBuilder _categoryTreeBuilder = new CategoryTreeBuilder();
+        private readonly IContentLoaderWrapper _contentLoaderWrapper;
 
         public ExtractedContentHandler(
             IIndexingService indexingService,
-            IContentLoaderWrapper contentLoaderWrapper,
             IMapper<ProductContent, TProduct> productMapper,
             IMapper<EpiCategory, VsfCategory> categoryMapper,
-            IMapper<EpiContentProperty, VsfAttribute> attributeMapper)
+            IMapper<EpiContentProperty, VsfAttribute> attributeMapper,
+            IMapper<VariationContent, VsfSimpleProduct> simpleProductMapper,
+            IContentLoaderWrapper contentLoaderWrapper)
         {
             _indexingService = indexingService;
             _productMapper = productMapper;
             _categoryMapper = categoryMapper;
             _attributeMapper = attributeMapper;
-
+            _simpleProductMapper = simpleProductMapper;
+            _contentLoaderWrapper = contentLoaderWrapper;
             _contentPropertyLoader = new ContentPropertyReader(contentLoaderWrapper);
         }
 
@@ -37,10 +42,23 @@ namespace EPiServer.Vsf.DataExport.Exporting
 
         public void OnProductContent(NodeContent parent, ProductContent productContent)
         {
-            var vsfProduct = _productMapper.Map(productContent);
-
             _categoryTreeBuilder.AddProductCount(parent);
+
+            var vsfProduct = _productMapper.Map(productContent);
             _indexingService.AddForIndexing(vsfProduct);
+
+            var productVariations = productContent
+                .GetVariants()
+                .ToList();
+
+            foreach (var variantContent in productVariations)
+            {
+                var variant = _contentLoaderWrapper.Get<VariationContent>(variantContent);
+                var vsfProductSimple = _simpleProductMapper.Map(variant);
+
+                _indexingService.AddForIndexing(vsfProductSimple);
+            }
+
             _contentPropertyLoader.ReadProperties(productContent);
         }
 
@@ -59,7 +77,6 @@ namespace EPiServer.Vsf.DataExport.Exporting
             _indexingService.ApplyChanges();
         }
         
-
         private void IndexCategoryTree(EpiCategory node)
         {
             foreach (var child in node.Children)

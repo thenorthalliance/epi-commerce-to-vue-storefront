@@ -276,8 +276,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Adapter\QuickSilverOrderAdapter.cs" />
     <Compile Include="Adapter\QuickSilverCartAdapter.cs" />
+    <Compile Include="Adapter\QuickSilverOrderAdapter.cs" />
     <Compile Include="Adapter\QuickSilverUserAdapter.cs" />
     <Compile Include="Service\IPaymentManagerFacade.cs" />
     <Compile Include="Service\PaymentManagerFacade.cs" />

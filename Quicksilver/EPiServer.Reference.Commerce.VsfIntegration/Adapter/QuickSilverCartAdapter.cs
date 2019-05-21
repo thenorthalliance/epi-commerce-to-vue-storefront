@@ -71,7 +71,10 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             {
                 var cart = GetCart(contactId);
                 var cartItems = cart?.GetAllLineItems();
-                return cartItems?.Select(item => CreateCartItem(item, contactId.ToString()));
+                if(cartItems == null)
+                    return new List<CartItem>();
+                
+                return cartItems.Select(item => CreateCartItem(item, contactId.ToString()));
             }
         }
 
@@ -378,7 +381,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
                 BasePriceIncludingTax = 0, //TODO: taxes, GetSalesTax??
                 RowTotalIncludingTax = item.Quantity * item.PlacedPrice, //TODO: taxes, GetSalesTax??
                 BaseRowTotalIncludingTax = item.Quantity * item.PlacedPrice, //TODO: taxes, GetSalesTax??
-                Options = "", //TODO: options like colors etc?
+                Options = "", 
                 WeeeTaxAppliedAmount = null,
                 WeeeTaxApplied = null,
                 Name = item.DisplayName,

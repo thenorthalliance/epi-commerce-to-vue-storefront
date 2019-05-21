@@ -1,5 +1,7 @@
-﻿using EPiServer.ServiceLocation;
+﻿using EPiServer.Commerce.Catalog.ContentTypes;
+using EPiServer.ServiceLocation;
 using EPiServer.Vsf.Core.Exporting;
+using EPiServer.Vsf.Core.Mapping;
 using EPiServer.Vsf.DataExport.Configuration;
 using EPiServer.Vsf.DataExport.Exporting;
 using EPiServer.Vsf.DataExport.Mapping;
@@ -15,6 +17,7 @@ namespace EPiServer.Vsf.DataExport
             services.AddSingleton(vsfExporterConfiguration);
 
             services.AddTransient<IAttributeMapper, AttributeMapper>();
+            services.AddTransient<IMapper<VariationContent, VsfSimpleProduct>, SimpleProductMapper>();
 
             services.AddTransient<IContentExtractor, ContentExtractor>();
             services.AddSingleton<IVsfPriceService, VsfPriceService>();

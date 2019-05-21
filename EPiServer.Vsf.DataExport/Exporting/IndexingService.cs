@@ -49,6 +49,7 @@ namespace EPiServer.Vsf.DataExport.Exporting
                 client => client
                     .Map<TProduct>(map => map.AutoMap()
                         .Properties(MapConfigurableChildrenSkuProperty))
+                    .Map<VsfSimpleProduct>(map => map.AutoMap())
                     .Map<VsfAttribute>(map => map.AutoMap())
                     .Map<VsfCategory>(map => map.AutoMap())
             ));
@@ -117,6 +118,7 @@ namespace EPiServer.Vsf.DataExport.Exporting
             var connectionPool = new StaticConnectionPool(nodes);
             var connectionSettings = new ConnectionSettings(connectionPool)
                 .DefaultMappingFor<TProduct>(m => m.TypeName("product"))
+                .DefaultMappingFor<VsfSimpleProduct>(m => m.TypeName("product"))
                 .DefaultMappingFor<VsfAttribute>(m => m.TypeName("attribute"))
                 .DefaultMappingFor<VsfCategory>(m => m.TypeName("category"));
             

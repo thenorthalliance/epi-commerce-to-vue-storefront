@@ -17,7 +17,6 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
         private readonly IMarketService _marketService;
         private readonly IEnumerable<IPaymentMethod> _paymentMethods;
 
-
         public QuickSilverOrderAdapter(
             IOrderRepository orderRepository,
             IPaymentManagerFacade paymentManagerFacade,
@@ -45,7 +44,11 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
                 cart.CustomerId = Guid.Parse(request.UserId);
 
             _orderRepository.SaveAsPurchaseOrder(cart);
+
+            //recreate cart after successfull order
             _orderRepository.Delete(cart.OrderLink);
+            var newCart = _orderRepository.Create<ICart>(request.CartId, DefaultCartName);
+            _orderRepository.Save(newCart);
         }
 
         private void AddShippingAddress(ICart cart, UserAddressModel shippingAddress)
@@ -196,7 +199,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
                             ItemId = lineItem.LineItemId,
                             RowTotalIncludingTax = extendedPrice,
                             Sku = lineItem.Code,
-                            ProductType = "configurable"
+                            ProductType = "simple"
                         });
                 }
 

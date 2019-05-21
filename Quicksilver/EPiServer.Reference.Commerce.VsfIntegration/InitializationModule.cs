@@ -5,6 +5,7 @@ using EPiServer.Reference.Commerce.VsfIntegration.Adapter;
 using EPiServer.Reference.Commerce.VsfIntegration.Mapping;
 using EPiServer.ServiceLocation;
 using EPiServer.Vsf.ApiBridge;
+using EPiServer.Vsf.ApiBridge.Authorization;
 using EPiServer.Vsf.Core.ApiBridge.Adapter;
 using EPiServer.Vsf.Core.ApiBridge.Model.User;
 using EPiServer.Vsf.DataExport;

@@ -233,8 +233,10 @@
     <Compile Include="Exporting\ContentExtractor.cs" />
     <Compile Include="Exporting\ContentLoaderWrapper.cs" />
     <Compile Include="Exporting\ExtractedContentHandler.cs" />
+    <Compile Include="Mapping\SimpleProductMapper.cs" />
     <Compile Include="Model\EpiCategory.cs" />
     <Compile Include="Model\EpiContentProperty.cs" />
+    <Compile Include="Model\VsfSimpleProduct.cs" />
     <Compile Include="Utils\Epi\ContentPropertyLoader.cs" />
     <Compile Include="Attributes\VsfOptionAttribute.cs" />
     <Compile Include="Utils\Epi\IPriceService.cs" />
