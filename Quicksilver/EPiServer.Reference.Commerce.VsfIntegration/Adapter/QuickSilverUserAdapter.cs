@@ -66,7 +66,10 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
 
             var newContact = CustomerContact.CreateInstance();
             newContact.PrimaryKeyId = new PrimaryKeyId(new Guid(appUser.Id));
-            newContact.UserId = "String:" + newUser.Customer.Email; //See UserService.cs:124        
+            /* Before it was email here, this is incorrect as epi server looks for customer contact every time the request is authorized (see BusinessFoundationInitializeModule).
+            In this module epi will look for customercontact bu user Id that is set in principal.Name. SInce we set email here before it was not found and there were concurrency exceptions
+            since when epi does not find a contactCustomer, it tries to create it and save to database in GET METHOD in every async request - WTF!!!*/
+            newContact.UserId = "String:" + appUser.Id; 
             newContact.AcceptMarketingEmail = false;
             newContact.FirstName = newUser.Customer.FirstName;
             newContact.LastName = newUser.Customer.LastName;
