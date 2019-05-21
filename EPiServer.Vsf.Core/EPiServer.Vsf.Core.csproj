@@ -247,6 +247,7 @@
     <Compile Include="ApiBridge\Model\Order\OrderProductDetails.cs" />
     <Compile Include="ApiBridge\Model\Order\OrderRequestModel.cs" />
     <Compile Include="ApiBridge\Model\Order\OrderAddressInformation.cs" />
+    <Compile Include="ApiBridge\Model\Order\OrderResponseModel.cs" />
     <Compile Include="ApiBridge\Model\Order\OrderShipping.cs" />
     <Compile Include="ApiBridge\Model\Order\OrderShippingAssignments.cs" />
     <Compile Include="ApiBridge\Model\Order\OrderProduct.cs" />

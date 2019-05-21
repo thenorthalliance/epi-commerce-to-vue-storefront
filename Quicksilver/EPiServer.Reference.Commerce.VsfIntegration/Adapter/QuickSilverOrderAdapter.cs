@@ -31,7 +31,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
 
         public string DefaultCartName => "vsf-default-cart";
 
-        public void CreateOrder(OrderRequestModel request)
+        public OrderResponseModel CreateOrder(OrderRequestModel request)
         {
             var cart = _orderRepository.Load<ICart>(request.CartId, DefaultCartName).First();
 
@@ -43,12 +43,18 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             if (!string.IsNullOrEmpty(request.UserId))
                 cart.CustomerId = Guid.Parse(request.UserId);
 
-            _orderRepository.SaveAsPurchaseOrder(cart);
+            var savedOrderReference = _orderRepository.SaveAsPurchaseOrder(cart);
+            var savedOrderId = savedOrderReference.OrderGroupId;
 
             //recreate cart after successfull order
             _orderRepository.Delete(cart.OrderLink);
             var newCart = _orderRepository.Create<ICart>(request.CartId, DefaultCartName);
             _orderRepository.Save(newCart);
+
+            return new OrderResponseModel
+            {
+                OrderId = savedOrderId
+            };
         }
 
         private void AddShippingAddress(ICart cart, UserAddressModel shippingAddress)

@@ -20,9 +20,9 @@ namespace EPiServer.Vsf.ApiBridge.Endpoints
         {
             try
             {
-                _orderAdapter.CreateOrder(request);
+                var response = _orderAdapter.CreateOrder(request);
 
-                return Task.FromResult((VsfResponse)new VsfSuccessResponse<string>("OK"));
+                return Task.FromResult((VsfResponse)new VsfSuccessResponse<OrderResponseModel>(response));
             }
             catch (Exception)
             {

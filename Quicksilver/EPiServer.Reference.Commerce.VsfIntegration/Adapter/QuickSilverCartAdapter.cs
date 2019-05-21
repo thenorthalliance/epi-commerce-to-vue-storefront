@@ -102,6 +102,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
                     cart.AddLineItem(updatedItem);
                 }
 
+                ValidateCart(cart);
                 _orderRepository.Save(cart);
                 return CreateCartItem(updatedItem, contactId.ToString());
             }

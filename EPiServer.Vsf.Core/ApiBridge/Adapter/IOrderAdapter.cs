@@ -4,7 +4,7 @@ namespace EPiServer.Vsf.Core.ApiBridge.Adapter
 {
     public interface IOrderAdapter
     {
-        void CreateOrder(OrderRequestModel request);
+        OrderResponseModel CreateOrder(OrderRequestModel request);
         OrderHistoryModel GetOrders(string userId);
     }
 }
