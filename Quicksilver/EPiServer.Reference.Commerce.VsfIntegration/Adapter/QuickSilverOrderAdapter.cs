@@ -200,7 +200,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
                             Name = lineItem.DisplayName,
                             OrderId = orderForm.OrderFormId,
                             Price = lineItem.PlacedPrice,
-                            PriceIncludingTax = lineItem.PlacedPrice, //TODO: taxes
+                            PriceIncludingTax = lineItem.PlacedPrice,
                             QuantityOrdered = lineItem.Quantity,
                             ItemId = lineItem.LineItemId,
                             RowTotalIncludingTax = extendedPrice,

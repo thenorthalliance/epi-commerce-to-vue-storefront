@@ -70,6 +70,11 @@ namespace EPiServer.Vsf.ApiBridge.Endpoints
                 _cartAdapter.UpdateShippingMethod(cartId, shippingMethod);
             }
 
+            if (request.AddressInformation.ShippingAddress != null)
+            {
+                _cartAdapter.UpdateShippingAddress(cartId, request.AddressInformation.ShippingAddress);
+            }
+
             var paymentMethods = _cartAdapter.GetPaymentMethods(cartId);
             var totals = _cartAdapter.GetTotals(cartId);
 

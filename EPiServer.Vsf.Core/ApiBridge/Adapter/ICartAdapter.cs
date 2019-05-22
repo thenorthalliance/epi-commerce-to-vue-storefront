@@ -16,6 +16,7 @@ namespace EPiServer.Vsf.Core.ApiBridge.Adapter
         IEnumerable<PaymentMethod> GetPaymentMethods(Guid contactId);
         IEnumerable<ShippingMethod> GetShippingMethods(Guid contactId, UserAddressModel address);
         void UpdateShippingMethod(Guid contactId, Guid shippingMethodId);
+        void UpdateShippingAddress(Guid contactId, UserAddressModel shippingAddress);
         bool AddCoupon(Guid contactId, string couponCode);
         string GetCartCoupon(Guid contactId);
         bool DeleteCoupon(Guid contactId);

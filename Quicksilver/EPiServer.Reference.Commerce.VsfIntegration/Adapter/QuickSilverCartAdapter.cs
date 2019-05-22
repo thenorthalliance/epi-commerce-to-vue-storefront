@@ -271,6 +271,23 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             _orderRepository.Save(cart);
         }
 
+        public void UpdateShippingAddress(Guid contactId, UserAddressModel shippingAddress)
+        {
+            var cart = GetCart(contactId);
+            var orderShippingAddress = cart.CreateOrderAddress("ShippingAddressId");
+
+            orderShippingAddress.CountryCode = shippingAddress.CountryId;
+            orderShippingAddress.City = shippingAddress.City;
+            orderShippingAddress.DaytimePhoneNumber = shippingAddress.Telephone;
+            orderShippingAddress.FirstName = shippingAddress.Firstname;
+            orderShippingAddress.LastName = shippingAddress.Lastname;
+            orderShippingAddress.PostalCode = shippingAddress.Postcode;
+            orderShippingAddress.Line1 = string.Join(", ", shippingAddress.Street);
+
+            cart.GetFirstShipment().ShippingAddress = orderShippingAddress;
+            _orderRepository.Save(cart);
+        }
+
         public IDictionary<ILineItem, IList<ValidationIssue>> ValidateCart(ICart cart)
         {
             return _orderValidationService.ValidateOrder(cart);
@@ -362,7 +379,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
         {
             var lineItemPrices = item.GetLineItemPrices(cart.Currency);
 
-            //TODO: implement taxes, GetSalesTax??
+            //TODO: Implement taxes if they are needed per item. For taxes to work, order needs to have shipping adress set as the address is needed by epi to calculate tax.
             var totalItem = new TotalItem
             {
                 ItemId = item.LineItemId,
@@ -372,16 +389,16 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
                 RowTotal = item.Quantity * item.PlacedPrice,
                 BaseRowTotal = item.Quantity * item.PlacedPrice,
                 RowTotalWithDiscount = lineItemPrices.DiscountedPrice.Amount,
-                TaxAmount = 0, //TODO: taxes, GetSalesTax??
-                BaseTaxAmount = 0, //TODO: taxes, GetSalesTax??
-                TaxPercent = 0, //TODO: taxes, GetSalesTax??
+                TaxAmount = 0, 
+                BaseTaxAmount = 0,
+                TaxPercent = 0,
                 DiscountAmount = item.GetDiscountTotal(cart.Currency).Amount,
                 BaseDiscountAmount = item.GetDiscountTotal(cart.Currency).Amount,
                 DiscountPercent = 0,
-                PriceIncludingTax = 0, //TODO: taxes, GetSalesTax??
-                BasePriceIncludingTax = 0, //TODO: taxes, GetSalesTax??
-                RowTotalIncludingTax = item.Quantity * item.PlacedPrice, //TODO: taxes, GetSalesTax??
-                BaseRowTotalIncludingTax = item.Quantity * item.PlacedPrice, //TODO: taxes, GetSalesTax??
+                PriceIncludingTax = 0,
+                BasePriceIncludingTax = 0,
+                RowTotalIncludingTax = item.Quantity * item.PlacedPrice,
+                BaseRowTotalIncludingTax = item.Quantity * item.PlacedPrice,
                 Options = "", 
                 WeeeTaxAppliedAmount = null,
                 WeeeTaxApplied = null,

@@ -29,7 +29,7 @@ namespace EPiServer.Vsf.Core.ApiBridge.Model.User
         public string Lastname { get; set; }
 
         [JsonProperty("street")]
-        public List<string> Street { get; set; }
+        public List<string> Street { get; set; } = new List<string>();
 
         [JsonProperty("city")]
         public string City { get; set; }
@@ -39,6 +39,12 @@ namespace EPiServer.Vsf.Core.ApiBridge.Model.User
 
         [JsonProperty("country_id")]
         public string CountryId { get; set; }
+
+        [JsonProperty("countryId")]
+        private string ShippingCountryId
+        {
+            set => CountryId = value;
+        }
 
         [JsonProperty("postcode")]
         public string Postcode { get; set; }
