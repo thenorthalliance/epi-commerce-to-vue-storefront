@@ -129,10 +129,7 @@ Actual Demo projects:<br>
 
 1. <b>RefreshTokenRepository</b> - Currently there is only one class that implements <b>IRefreshTokenRepository</b> interface, and it is <b>MemoryRefreshTokenRepository</b>. 
 2. <b>StockAdapter</b> - <b>QuickSilverStockAdapter</b> is not fully implemented. The returned <b>VsfStockCheck</b> object is in grate part mocked.
-3. <b>UserEndpoint.OrderHistory</b> - /vsbridge/user/order-history api is mocked.
-4. <b>CartEndpoint.ShippingInformation</b> - is mocked.
-5. <b>OrderApi</b> - not implemented
-6. TBD
+3. Placing order after checkout process with account creation does not properly assing order (due to userId) not being sent.
 
 # EPiServer.Vsf.Core
 
@@ -182,7 +179,7 @@ More information about VSF authentication can be found
 <b>GET /vsbridge/cart/totals</b> - implemented (further testing needed)<br>
 <b>GET /vsbridge/cart/payment-methods</b> - implemented (further testing needed)<br>
 <b>POST /vsbridge/cart/shipping-methods</b> - implemented (further testing needed)<br>
-<b>POST /vsbridge/cart/shipping-information</b> - MOCKED<br>
+<b>POST /vsbridge/cart/shipping-information</b> - implemented (further testing needed)<br>
 <b>POST /vsbridge/cart/collect-totals</b> - implemented (further testing needed)<br>
 
 <b>POST /vsbridge/user/create</b> - implemented<br>
@@ -190,13 +187,13 @@ More information about VSF authentication can be found
 <b>POST /vsbridge/user/refresh</b> - implemented<br>
 <b>POST /vsbridge/user/resetPassword</b> - implemented<br>
 <b>POST /vsbridge/user/changePassword</b> - implemented<br>
-<b>GET /vsbridge/user/order-history</b> - MOCKED<br>
+<b>GET /vsbridge/user/order-history</b> - implemented (further testing needed)<br>
 <b>GET /vsbridge/user/me</b> - implemented<br>
 <b>POST /vsbridge/user/me</b> - implemented<br>
 
 <b>GET /vsbridge/stock/check/:sku</b> - partially implemented<br>
 
-<b>POST /vsbridge/order/create</b> - NOT IMPLEMENTED<br>
+<b>POST /vsbridge/order/create</b> - implemented (further testing needed)<br>
 
 ## Overall class design
 
