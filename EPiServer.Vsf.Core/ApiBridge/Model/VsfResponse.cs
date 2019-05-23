@@ -20,6 +20,11 @@ namespace EPiServer.Vsf.Core.ApiBridge.Model
         public T Result { get; set; }
     }
 
+    public class VsfCustomResponse<T> : VsfResponse<T>
+    {
+        public VsfCustomResponse(int code, T result) : base(code, result){ }
+    }
+
     public class VsfSuccessResponse<T> : VsfResponse<T>
     {
         public VsfSuccessResponse(T result) : base(200, result)

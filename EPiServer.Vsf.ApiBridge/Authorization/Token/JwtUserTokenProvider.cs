@@ -30,7 +30,7 @@ namespace EPiServer.Vsf.ApiBridge.Authorization.Token
                 issuer: _configuration.ValidIssuer,
                 audience: _configuration.ValidAudience,
                 claims: claims,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(_configuration.AccessTokenExpirationMinutes)),
+                expires: DateTime.UtcNow.Add(TimeSpan.FromSeconds(1)),
                 signingCredentials: signingCredentials
             );
 

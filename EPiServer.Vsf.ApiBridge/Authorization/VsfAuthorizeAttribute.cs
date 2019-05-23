@@ -13,10 +13,12 @@ namespace EPiServer.Vsf.ApiBridge.Authorization
         {
             if (!actionContext.RequestContext.Principal.Identity.IsAuthenticated)
             {
-                actionContext.Response = new HttpResponseMessage(HttpStatusCode.InternalServerError);
-                actionContext.Response.Content = new ObjectContent(typeof(VsfErrorResponse), 
-                        new VsfErrorResponse("You did not sign in correctly or your account is temporarily disabled."),
-                        new JsonMediaTypeFormatter());
+                actionContext.Response = new HttpResponseMessage(HttpStatusCode.InternalServerError)
+                {
+                    Content = new ObjectContent(typeof(VsfCustomResponse<string>),
+                        new VsfCustomResponse<string>(500, "not authorized"),
+                        new JsonMediaTypeFormatter())
+                };
             }
         }
     }

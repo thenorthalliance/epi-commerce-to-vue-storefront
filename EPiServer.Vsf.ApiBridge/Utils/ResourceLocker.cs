@@ -23,24 +23,28 @@ namespace EPiServer.Vsf.ApiBridge.Utils
         {
             private readonly SemaphoreSlim _semaphoreSlim = new SemaphoreSlim(1);
 
-            public int ThreadsWaiting { get; private set; }
-
+            private int _threadsWaiting;
 
             public Task Acquire()
             {
-                ThreadsWaiting++;
+                _threadsWaiting++;
                 return _semaphoreSlim.WaitAsync();
             }
 
             public void Release()
             {
                 _semaphoreSlim.Release();
-                ThreadsWaiting--;
+                _threadsWaiting--;
+            }
+
+            public bool IsFree()
+            {
+                return _threadsWaiting == 0;
             }
         }
-        
-        private static readonly object Locker = new object();
-        private static readonly ConcurrentDictionary<T, ResourceSemaphore> Semaphores = new ConcurrentDictionary<T, ResourceSemaphore>();
+
+        private static readonly object locker = new object();
+        private static readonly Dictionary<T, ResourceSemaphore> Semaphores = new Dictionary<T, ResourceSemaphore>();
 
         private readonly Task _semapthoreTask;
         private readonly T _resourceId;
@@ -48,10 +52,10 @@ namespace EPiServer.Vsf.ApiBridge.Utils
         public ResourceLocker(T resourceId)
         {
             _resourceId = resourceId;
-            lock (Locker)
+            lock (locker)
             {
                 if (!Semaphores.ContainsKey(_resourceId))
-                    Semaphores.TryAdd(_resourceId, new ResourceSemaphore());
+                    Semaphores.Add(_resourceId, new ResourceSemaphore());
 
                 _semapthoreTask = Semaphores[_resourceId].Acquire();
             }
@@ -59,17 +63,18 @@ namespace EPiServer.Vsf.ApiBridge.Utils
 
         public void Dispose()
         {
-            lock (Locker)
+            lock (locker)
             {
-                Semaphores[_resourceId].Release();
-                if (Semaphores[_resourceId].ThreadsWaiting == 0)
+                var semaphoreResurce = Semaphores[_resourceId];
+                semaphoreResurce.Release();
+                if (semaphoreResurce.IsFree())
                 {
-                    Semaphores.TryRemove(_resourceId, out var resourceSemaphore);
+                    Semaphores.Remove(_resourceId);
                 }
             }
         }
 
-        public async Task Wait()
+        public async Task WaitAsync()
         {
             await _semapthoreTask;
         }
@@ -77,7 +82,7 @@ namespace EPiServer.Vsf.ApiBridge.Utils
         public static async Task<ResourceLocker<T>> LockAsync(T resourceId)
         {
             var resourceLocker = new ResourceLocker<T>(resourceId);
-            await resourceLocker.Wait();
+            await resourceLocker.WaitAsync();
             return resourceLocker;
         }
 
