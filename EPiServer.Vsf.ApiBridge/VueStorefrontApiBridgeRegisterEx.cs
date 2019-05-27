@@ -8,6 +8,7 @@ using EPiServer.Vsf.ApiBridge.Endpoints;
 using EPiServer.Vsf.ApiBridge.Utils;
 using EPiServer.Vsf.Core.ApiBridge.Endpoint;
 using EPiServer.Vsf.Core.ApiBridge.Model.User;
+using EPiServer.Vsf.DataAccess;
 using Microsoft.Owin.Security.Jwt;
 using Owin;
 
@@ -17,13 +18,15 @@ namespace EPiServer.Vsf.ApiBridge
     {
         public static void RegisterVueStorefrontBridgeDefaultService(this IServiceConfigurationProvider services, VsfApiBridgeConfiguration bridgeConfiguration)
         {
+            services.AddSingleton(bridgeConfiguration);
             services.AddTransient<IUserEndpoint, UserEndpoint<VsfUser>>();
             services.AddTransient<ICartEndpoint, CartEndpoint>();
             services.AddTransient<IStockEndpoint, StockEndpoint>();
             services.AddTransient<IOrderEndpoint, OrderEndpoint>();
-
-            services.Add(typeof(IUserClaimsProvider<VsfUser>), typeof(UserClaimsProvider<VsfUser>), ServiceInstanceScope.Transient);
-            services.Add(typeof(IUserTokenProvider), new JwtUserTokenProvider(bridgeConfiguration, new MemoryRefreshTokenRepository()));
+            services.AddScoped<QuicksilverDbContext>();
+            services.AddScoped<IRefreshTokenRepository, DatabaseRefreshTokenRepository>();
+            services.AddScoped<IUserTokenProvider, JwtUserTokenProvider>();
+            services.AddTransient<IUserClaimsProvider<VsfUser>, UserClaimsProvider<VsfUser>>();
         }
 
         public static void RegisterVueStorefrontBridge(this HttpConfiguration configuration)

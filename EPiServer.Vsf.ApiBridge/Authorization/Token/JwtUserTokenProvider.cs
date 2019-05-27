@@ -30,7 +30,7 @@ namespace EPiServer.Vsf.ApiBridge.Authorization.Token
                 issuer: _configuration.ValidIssuer,
                 audience: _configuration.ValidAudience,
                 claims: claims,
-                expires: DateTime.UtcNow.Add(TimeSpan.FromSeconds(1)),
+                expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(_configuration.AccessTokenExpirationMinutes)),
                 signingCredentials: signingCredentials
             );
 
@@ -45,6 +45,7 @@ namespace EPiServer.Vsf.ApiBridge.Authorization.Token
                 throw new Exception("NameIdentifier claim is missing.");
 
             var tokenId = Guid.NewGuid().ToString();
+
             await _refreshTokenRepository.StoreToken(new RefreshToken
             {
                 UserId = nameId,

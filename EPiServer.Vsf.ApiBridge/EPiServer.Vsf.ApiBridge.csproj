@@ -226,6 +226,7 @@
       <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Security.AccessControl, Version=4.1.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.AccessControl.4.4.0\lib\net461\System.Security.AccessControl.dll</HintPath>
@@ -282,6 +283,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authorization\Token\DatabaseRefreshTokenRepository.cs" />
     <Compile Include="Authorization\Claims\UserClaimsProvider.cs" />
     <Compile Include="Controllers\OrderController.cs" />
     <Compile Include="Endpoints\OrderEndpoint.cs" />
@@ -318,11 +320,14 @@
       <Project>{51DDA385-D610-4673-8562-BDE9197291FB}</Project>
       <Name>EPiServer.Vsf.Core</Name>
     </ProjectReference>
+    <ProjectReference Include="..\EPiServer.Vsf.DataAccess\EPiServer.Vsf.DataAccess.csproj">
+      <Project>{728F89C4-4221-440F-BC7A-E9998FE5FB04}</Project>
+      <Name>EPiServer.Vsf.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\EPiServer.Vsf.DataExport\EPiServer.Vsf.DataExport.csproj">
       <Project>{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}</Project>
       <Name>DataMigration</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
