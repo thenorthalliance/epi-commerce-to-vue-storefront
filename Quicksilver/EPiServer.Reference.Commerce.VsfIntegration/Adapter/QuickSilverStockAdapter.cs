@@ -32,35 +32,36 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
 //            var product = _contentLoader.Get<ProductContent>(productLink);
             var quantity = _inventoryService.QueryByEntry(new[] {code}).Sum(x => x.PurchaseAvailableQuantity);
 
-            return new VsfStockCheck
-            {
-                ItemId = variationLink.ID,
-                ProductId = productLink.ID,
-                StockId = 1, //todo
-                Qty = quantity,
-                IsInStock = quantity > 0,
-                IsQtyDecimal = false,
-                ShowDefaultNotificationMessage = false,
-                UseConfigMinQty = true,
-                MinQty = variation.MinQuantity ?? 0,
-                UseConfigMinSaleQty = true,
-                MinSaleQty = 1,
-                UseConfigMaxSaleQty = true,
-                MaxSaleQty = variation.MaxQuantity ?? 10000,
-                UseConfigBackorders = true,
-                Backorders = 0,
-                UseConfigNotifyStockQty = true,
-                NotifyStockQty = 1,
-                UseConfigQtyIncrements = true,
-                QtyIncrements = 0,
-                UseConfigEnableQtyInc = true,
-                EnableQtyIncrements = false,
-                UseConfigManageStock = true,
-                ManageStock = true,
-                LowStockDate = null,
-                IsDecimalDivided = false,
-                StockStatusChangedAuto = 0
-            };
+            return await Task.FromResult(
+                new VsfStockCheck
+                {
+                    ItemId = variationLink.ID,
+                    ProductId = productLink.ID,
+                    StockId = 1, //todo
+                    Qty = quantity,
+                    IsInStock = quantity > 0,
+                    IsQtyDecimal = false,
+                    ShowDefaultNotificationMessage = false,
+                    UseConfigMinQty = true,
+                    MinQty = variation.MinQuantity ?? 0,
+                    UseConfigMinSaleQty = true,
+                    MinSaleQty = 1,
+                    UseConfigMaxSaleQty = true,
+                    MaxSaleQty = variation.MaxQuantity ?? 10000,
+                    UseConfigBackorders = true,
+                    Backorders = 0,
+                    UseConfigNotifyStockQty = true,
+                    NotifyStockQty = 1,
+                    UseConfigQtyIncrements = true,
+                    QtyIncrements = 0,
+                    UseConfigEnableQtyInc = true,
+                    EnableQtyIncrements = false,
+                    UseConfigManageStock = true,
+                    ManageStock = true,
+                    LowStockDate = null,
+                    IsDecimalDivided = false,
+                    StockStatusChangedAuto = 0
+                });
         }
     }
 }
