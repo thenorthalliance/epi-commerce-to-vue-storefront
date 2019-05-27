@@ -100,8 +100,7 @@ List of customized properties with example values:
         auth.audience="quicksilver_audience"
         auth.accessTokenExpiration="60" />
 ```
-
-### 2. Data Export
+### 4. Data Export
 Quicksilver to VSF export procedure.<br>
 1. Before exporting make sure that:<br>
 1.1 VSF (vsf and vsf-api) is up and running<br>
@@ -110,6 +109,12 @@ Quicksilver to VSF export procedure.<br>
 3. Start Manually
 
 After the job has finished, refresh VSF application - all product should be visible.
+
+### 5. Run migration for refresh tokens store
+1. Enable package manager console (tools > nuget package manager > package manager console
+2. Set default project as EpiServer.Vsf.DataAccess in package manager console
+3. Run "Update-Database" command
+4. Check your Quicksilver.Commerce database got new table "AspNetRefreshTokens"
 
 ## Solution structure
 Quicksilver example default projects:<br>
@@ -127,8 +132,8 @@ Actual Demo projects:<br>
 
 ## Todo/Known bugs
 
-1. <b>RefreshTokenRepository</b> - Currently there is only one class that implements <b>IRefreshTokenRepository</b> interface, and it is <b>MemoryRefreshTokenRepository</b>. 
-2. <b>StockAdapter</b> - <b>QuickSilverStockAdapter</b> is not fully implemented. The returned <b>VsfStockCheck</b> object is in grate part mocked.
+1. <b>StockAdapter</b> - <b>QuickSilverStockAdapter</b> is not fully implemented. The returned <b>VsfStockCheck</b> object is in grate part mocked.
+2. Taxes only counted per countryId (if properly set up in Epi Commerce)
 3. Placing order after checkout process with account creation does not properly assing order (due to userId) not being sent.
 
 # EPiServer.Vsf.Core
