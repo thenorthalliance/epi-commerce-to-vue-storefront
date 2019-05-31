@@ -67,6 +67,13 @@ namespace EPiServer.Vsf.ApiBridge.Controllers
         }
 
         [HttpPost]
+        [ActionName("empty")]
+        public async Task<IHttpActionResult> EmptyCart(Guid cartId)
+        {
+            return Ok(await _cartEndpoint.EmptyCart(cartId));
+        }
+
+        [HttpPost]
         [ActionName("collect-totals")]
         public async Task<IHttpActionResult> CollectTotals(Guid cartId, CollectTotalsRequest request)
         {

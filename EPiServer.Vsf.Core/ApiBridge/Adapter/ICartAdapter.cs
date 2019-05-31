@@ -20,5 +20,6 @@ namespace EPiServer.Vsf.Core.ApiBridge.Adapter
         bool AddCoupon(Guid contactId, string couponCode);
         string GetCartCoupon(Guid contactId);
         bool DeleteCoupon(Guid contactId);
+        void EmptyCart(Guid contactId);
     }
 }

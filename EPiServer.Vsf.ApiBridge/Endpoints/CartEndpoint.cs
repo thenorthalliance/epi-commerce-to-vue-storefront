@@ -87,6 +87,12 @@ namespace EPiServer.Vsf.ApiBridge.Endpoints
             return Task.FromResult((VsfResponse) result);
         }
 
+        public Task<VsfResponse> EmptyCart(Guid cartId)
+        {
+            _cartAdapter.EmptyCart(cartId);
+            return Task.FromResult((VsfResponse)new VsfSuccessResponse<string>("OK"));
+        }
+
         public Task<VsfResponse> CollectTotals(Guid cartId, CollectTotalsRequest request)
         {
             var totals = _cartAdapter.GetTotals(cartId);

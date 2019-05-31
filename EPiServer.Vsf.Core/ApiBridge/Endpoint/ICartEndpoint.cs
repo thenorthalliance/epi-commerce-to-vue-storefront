@@ -15,6 +15,7 @@ namespace EPiServer.Vsf.Core.ApiBridge.Endpoint
         Task<VsfResponse> Totals(Guid cartId);
         Task<VsfResponse> ShippingMethods(Guid cartId, ShipmentMethodRequest request);
         Task<VsfResponse> ShippingInformation(Guid cartId, ShippingInformationRequest request);
+        Task<VsfResponse> EmptyCart(Guid cartId);
         Task<VsfResponse> CollectTotals(Guid cartId, CollectTotalsRequest request);
         Task<VsfResponse> ApplyCoupon(Guid cartId, string coupon);
         Task<VsfResponse> DeleteCoupon(Guid cartId);

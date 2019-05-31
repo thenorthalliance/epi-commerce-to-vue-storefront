@@ -288,6 +288,15 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             _orderRepository.Save(cart);
         }
 
+        public void EmptyCart(Guid contactId)
+        {
+            var cart = GetCart(contactId);
+            var shipment = cart.GetFirstShipment();
+            shipment?.LineItems.Clear();
+
+            _orderRepository.Save(cart);
+        }
+
         public IDictionary<ILineItem, IList<ValidationIssue>> ValidateCart(ICart cart)
         {
             return _orderValidationService.ValidateOrder(cart);
