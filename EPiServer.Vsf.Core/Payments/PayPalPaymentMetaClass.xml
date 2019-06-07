@@ -1,0 +1,72 @@
+<MetaDataPlusBackup version="1.0">
+  <MetaClass>
+    <Namespace>Mediachase.Commerce.Orders.System</Namespace>
+    <Name>OrderFormPayment</Name>
+    <FriendlyName>Order Form Payment</FriendlyName>
+    <MetaClassType>System</MetaClassType>
+    <ParentClass></ParentClass>
+    <TableName>OrderFormPayment</TableName>
+    <Description>OrderFormPayment Class</Description>
+    <IsSystem>True</IsSystem>
+    <IsAbstract>False</IsAbstract>
+    <FieldListChangedSqlScript></FieldListChangedSqlScript>
+    <Tag></Tag>
+    <Attributes></Attributes>
+  </MetaClass>
+  <MetaClass>
+    <Namespace>Mediachase.Commerce.Orders.User</Namespace>
+    <Name>PayPalPayment</Name>
+    <FriendlyName>PayPal payment</FriendlyName>
+    <MetaClassType>User</MetaClassType>
+    <ParentClass>OrderFormPayment</ParentClass>
+    <TableName>OrderFormPaymentEx_PayPalPayment</TableName>
+    <Description>Information used by PayPal types of payment</Description>
+    <IsSystem>False</IsSystem>
+    <IsAbstract>False</IsAbstract>
+    <FieldListChangedSqlScript></FieldListChangedSqlScript>
+    <Tag></Tag>
+    <Attributes></Attributes>
+  </MetaClass>
+  <MetaField>
+    <Namespace>Mediachase.Commerce.Orders</Namespace>
+    <Name>PayPalExpToken</Name>
+    <FriendlyName>PayPal Exp token</FriendlyName>
+    <Description>PayPal Exp token</Description>
+    <DataType>ShortString</DataType>
+    <Length>512</Length>
+    <AllowNulls>True</AllowNulls>
+    <SaveHistory>False</SaveHistory>
+    <AllowSearch>False</AllowSearch>
+    <MultiLanguageValue>False</MultiLanguageValue>
+    <IsSystem>False</IsSystem>
+    <Tag></Tag>
+    <Attributes>
+      <Attribute>
+        <Key>useincomparing</Key>
+        <Value>False</Value>
+      </Attribute>
+    </Attributes>
+    <OwnerMetaClass>PayPalPayment</OwnerMetaClass>
+  </MetaField>
+  <MetaField>
+    <Namespace>Mediachase.Commerce.Orders</Namespace>
+    <Name>PayPalOrderNumber</Name>
+    <FriendlyName>PayPal order number</FriendlyName>
+    <Description>PayPal order number</Description>
+    <DataType>ShortString</DataType>
+    <Length>512</Length>
+    <AllowNulls>True</AllowNulls>
+    <SaveHistory>False</SaveHistory>
+    <AllowSearch>False</AllowSearch>
+    <MultiLanguageValue>False</MultiLanguageValue>
+    <IsSystem>False</IsSystem>
+    <Tag></Tag>
+    <Attributes>
+      <Attribute>
+        <Key>useincomparing</Key>
+        <Value>False</Value>
+      </Attribute>
+    </Attributes>
+    <OwnerMetaClass>PayPalPayment</OwnerMetaClass>
+  </MetaField>
+</MetaDataPlusBackup>

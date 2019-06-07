@@ -37,6 +37,12 @@
     <Reference Include="AuthorizeNet, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\AuthorizeNet.1.9.4\lib\AuthorizeNet.dll</HintPath>
     </Reference>
+    <Reference Include="AutoMapper, Version=8.1.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.8.1.1\lib\net461\AutoMapper.dll</HintPath>
+    </Reference>
+    <Reference Include="BraintreeHttp-Dotnet, Version=0.1.5.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\BraintreeHttp-Dotnet.0.1.5\lib\netstandard2.0\BraintreeHttp-Dotnet.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
@@ -154,6 +160,9 @@
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
+    <Reference Include="PayPalCheckoutSdk, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\PayPalCheckoutSdk.1.0.0\lib\netstandard2.0\PayPalCheckoutSdk.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Annotations, Version=4.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.ComponentModel.Annotations.4.4.0\lib\net461\System.ComponentModel.Annotations.dll</HintPath>
@@ -241,6 +250,24 @@
     <Compile Include="ApiBridge\Model\Cart\TotalItem.cs" />
     <Compile Include="ApiBridge\Model\Cart\TotalSegment.cs" />
     <Compile Include="ApiBridge\Model\Cart\TotalSegmentExtensionAttributes.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\AddressDetails.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\AddressPortable.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\AmountBreakdown.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\AmountWithBreakdown.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\Authorization.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\Capture.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\Customer.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\DisplayableMerchantInformation.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\ExchangeRate.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\Item.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\LinkDescription.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\MerchantBase.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\MerchantPayableBreakdown.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\MerchantReceivableBreakdown.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\Money.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\Name.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\NetAmountBreakdownItem.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\Order.cs" />
     <Compile Include="ApiBridge\Model\Order\OrderAddress.cs" />
     <Compile Include="ApiBridge\Model\Order\OrderDetails.cs" />
     <Compile Include="ApiBridge\Model\Order\OrderPayment.cs" />
@@ -251,6 +278,22 @@
     <Compile Include="ApiBridge\Model\Order\OrderShipping.cs" />
     <Compile Include="ApiBridge\Model\Order\OrderShippingAssignments.cs" />
     <Compile Include="ApiBridge\Model\Order\OrderProduct.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\Payee.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\PaymentCollection.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\PaymentInstruction.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\Requests\PayPalCaptureRequest.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\Requests\PayPalCreateOrderRequest.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\Requests\PayPalTransaction.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\Requests\PayPalTransactionDetails.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\Phone.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\PlatformFee.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\PurchaseUnit.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\Refund.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\Responses\OrderResponse.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\SellerProtection.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\ShippingDetails.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\StatusDetails.cs" />
+    <Compile Include="ApiBridge\Model\Order\PayPal\TaxInformation.cs" />
     <Compile Include="ApiBridge\Model\User\ChangePasswordModel.cs" />
     <Compile Include="ApiBridge\Model\Order\OrderExtensionAttributes.cs" />
     <Compile Include="ApiBridge\Model\User\InvoiceInformation.cs" />
@@ -264,15 +307,63 @@
     <Compile Include="ApiBridge\Model\Authorization\UserRefreshTokenModel.cs" />
     <Compile Include="ApiBridge\Model\User\UserUpdateModel.cs" />
     <Compile Include="ApiBridge\Model\VsfResponse.cs" />
+    <Compile Include="AutoMapper\PayPalDomainMappingProfile.cs" />
+    <Compile Include="CoreBootstrapper.cs" />
     <Compile Include="Exporting\IContentExtractor.cs" />
     <Compile Include="Exporting\IContentLoaderWrapper.cs" />
     <Compile Include="Exporting\IExtractedContentHandler.cs" />
     <Compile Include="Exporting\IIndexingService.cs" />
     <Compile Include="Mapping\IMapper.cs" />
+    <Compile Include="Models\PayPal\Orders\AddressDetails.cs" />
+    <Compile Include="Models\PayPal\Orders\AddressPortable.cs" />
+    <Compile Include="Models\PayPal\Orders\AmountBreakdown.cs" />
+    <Compile Include="Models\PayPal\Orders\AmountWithBreakdown.cs" />
+    <Compile Include="Models\PayPal\Orders\Authorization.cs" />
+    <Compile Include="Models\PayPal\Orders\Capture.cs" />
+    <Compile Include="Models\PayPal\Orders\Customer.cs" />
+    <Compile Include="Models\PayPal\Orders\DisplayableMerchantInformation.cs" />
+    <Compile Include="Models\PayPal\Orders\ExchangeRate.cs" />
+    <Compile Include="Models\PayPal\Orders\Item.cs" />
+    <Compile Include="Models\PayPal\Orders\LinkDescription.cs" />
+    <Compile Include="Models\PayPal\Orders\MerchantBase.cs" />
+    <Compile Include="Models\PayPal\Orders\MerchantPayableBreakdown.cs" />
+    <Compile Include="Models\PayPal\Orders\MerchantReceivableBreakdown.cs" />
+    <Compile Include="Models\PayPal\Orders\Money.cs" />
+    <Compile Include="Models\PayPal\Orders\Name.cs" />
+    <Compile Include="Models\PayPal\Orders\NetAmountBreakdownItem.cs" />
+    <Compile Include="Models\PayPal\Orders\Order.cs" />
+    <Compile Include="Models\PayPal\Orders\Payee.cs" />
+    <Compile Include="Models\PayPal\Orders\PaymentCollection.cs" />
+    <Compile Include="Models\PayPal\Orders\PaymentInstruction.cs" />
+    <Compile Include="Models\PayPal\Orders\Phone.cs" />
+    <Compile Include="Models\PayPal\Orders\PlatformFee.cs" />
+    <Compile Include="Models\PayPal\Orders\PurchaseUnit.cs" />
+    <Compile Include="Models\PayPal\Orders\Refund.cs" />
+    <Compile Include="Models\PayPal\Orders\SellerProtection.cs" />
+    <Compile Include="Models\PayPal\Orders\ShippingDetails.cs" />
+    <Compile Include="Models\PayPal\Orders\StatusDetails.cs" />
+    <Compile Include="Models\PayPal\Orders\TaxInformation.cs" />
+    <Compile Include="Models\PayPal\Payments\PayPalCapture.cs" />
+    <Compile Include="Models\PayPal\PayPalCaptureRequest.cs" />
+    <Compile Include="Models\PayPal\PayPalCreateOrder.cs" />
+    <Compile Include="Models\PayPal\PayPalShippingData.cs" />
+    <Compile Include="Models\PayPal\PayPalTransaction.cs" />
+    <Compile Include="Models\PayPal\PayPalTransactionDetails.cs" />
+    <Compile Include="Payments\PayPalConfiguration.cs" />
+    <Compile Include="Payments\PayPalPayment.cs" />
+    <Compile Include="Payments\PayPalPaymentGateway.cs" />
+    <Compile Include="Payments\PayPalPaymentMethod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\IPayPalService.cs" />
+    <Compile Include="Services\PayPalClient.cs" />
+    <Compile Include="Services\PayPalService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Payments\PayPalPaymentMetaClass.xml" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

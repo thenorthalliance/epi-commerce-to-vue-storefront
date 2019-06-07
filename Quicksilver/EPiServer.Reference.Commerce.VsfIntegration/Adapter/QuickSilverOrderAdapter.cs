@@ -1,32 +1,47 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using EPiServer.Commerce.Order;
 using EPiServer.Reference.Commerce.VsfIntegration.Service;
 using EPiServer.Vsf.Core.ApiBridge.Adapter;
 using EPiServer.Vsf.Core.ApiBridge.Model.Order;
+using EPiServer.Vsf.Core.ApiBridge.Model.Order.PayPal;
 using EPiServer.Vsf.Core.ApiBridge.Model.User;
+using EPiServer.Vsf.Core.Models.PayPal;
+using EPiServer.Vsf.Core.Payments;
+using EPiServer.Vsf.Core.Services;
 using Mediachase.Commerce.Markets;
+using Order = EPiServer.Vsf.Core.Models.PayPal.Orders.Order;
 
 namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
 {
     public class QuickSilverOrderAdapter : IOrderAdapter
     {
+        private readonly IPaymentProcessor _paymentProcessor;
         private readonly IOrderRepository _orderRepository;
         private readonly IPaymentManagerFacade _paymentManagerFacade;
         private readonly IMarketService _marketService;
         private readonly IEnumerable<IPaymentMethod> _paymentMethods;
+        private readonly IPayPalService _payPalService;
+        private readonly IOrderGroupCalculator _orderGroupCalculator;
 
         public QuickSilverOrderAdapter(
+            IPaymentProcessor paymentProcessor,
             IOrderRepository orderRepository,
             IPaymentManagerFacade paymentManagerFacade,
             IMarketService marketService,
-            IEnumerable<IPaymentMethod> paymentMethods)
+            IEnumerable<IPaymentMethod> paymentMethods,
+            IPayPalService payPalService,
+            IOrderGroupCalculator orderGroupCalculator)
         {
+            _paymentProcessor = paymentProcessor;
             _orderRepository = orderRepository;
             _paymentManagerFacade = paymentManagerFacade;
             _marketService = marketService;
             _paymentMethods = paymentMethods;
+            _payPalService = payPalService;
+            _orderGroupCalculator = orderGroupCalculator;
         }
 
         public string DefaultCartName => "vsf-default-cart";
@@ -46,7 +61,9 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             var savedOrderReference = _orderRepository.SaveAsPurchaseOrder(cart);
             var savedOrderId = savedOrderReference.OrderGroupId;
 
-            //recreate cart after successfull order
+            var purchaseOrder = _orderRepository.Load<IPurchaseOrder>(savedOrderReference.OrderGroupId);
+            purchaseOrder.ProcessPayments(_paymentProcessor, _orderGroupCalculator);
+
             _orderRepository.Delete(cart.OrderLink);
             var newCart = _orderRepository.Create<ICart>(request.CartId, DefaultCartName);
             _orderRepository.Save(newCart);
@@ -91,8 +108,6 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
 
             if (paymentMethodImplementation != null)
             {
-                var payment = paymentMethodImplementation.CreatePayment(cart.GetTotal().Amount, cart);
-
                 var orderBillingAddress = cart.CreateOrderAddress("BillingAddressId");
                 orderBillingAddress.City = billingAddress.City;
                 orderBillingAddress.CountryCode = billingAddress.CountryId;
@@ -102,8 +117,17 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
                 orderBillingAddress.PostalCode = billingAddress.Postcode;
                 orderBillingAddress.Line1 = string.Join(", ", billingAddress.Street);
 
-                payment.BillingAddress = orderBillingAddress;
-                cart.AddPayment(payment);
+                var existingPayment = cart.GetFirstForm().Payments.FirstOrDefault(x => x.PaymentMethodId == paymentMethodGuid);
+                if (existingPayment != null)
+                {
+                    existingPayment.BillingAddress = orderBillingAddress;
+                }
+                else
+                {
+                    var payment = paymentMethodImplementation.CreatePayment(cart.GetTotal().Amount, cart);
+                    payment.BillingAddress = orderBillingAddress;
+                    cart.AddPayment(payment);
+                }
             }
         }
 
@@ -232,6 +256,57 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             }
 
             return orderHistoryModel;
+        }
+
+        public async Task<Order> CreatePaypalOrder(PayPalCreateOrder request)
+        {
+            var cart = _orderRepository.Load<ICart>(request.CartId, DefaultCartName).First();
+            var shipment = cart.GetFirstShipment();
+            var shippingAddress = shipment.ShippingAddress;
+
+            if (shippingAddress == null)
+                throw new Exception("ShippingAddress must be set on current cart");
+
+            request.ShippingData = new PayPalShippingData
+            {
+                City = shippingAddress.City,
+                CountryCode = shippingAddress.CountryCode,
+                PostalCode = shippingAddress.PostalCode
+            };
+
+            var order = await _payPalService.CreateOrderAsync(request).ConfigureAwait(false);
+
+            _orderRepository.Save(cart);
+
+            return order;
+        }
+
+        public async Task<Order> AuthorizePaypalOrder(PayPalCaptureRequest request)
+        {
+            var cart = _orderRepository.Load<ICart>(request.CartId, DefaultCartName).First();
+
+            var market = _marketService.GetMarket(cart.MarketId);
+
+            var paymentMethod = _paymentManagerFacade
+                .GetPaymentMethodsByMarket(market.MarketId.Value, market.DefaultLanguage.TwoLetterISOLanguageName)
+                .PaymentMethod
+                .First(p => p.SystemKeyword == PayPalConfiguration.PayPalSystemName);
+
+            var paymentMethodImplementation = _paymentMethods.Single(x => x.PaymentMethodId == paymentMethod.PaymentMethodId);
+            var payment = paymentMethodImplementation.CreatePayment(cart.GetTotal().Amount, cart);
+
+            var order = await _payPalService.AuthorizeOrderAsync(request.OrderId).ConfigureAwait(false);
+
+            payment.Properties[PayPalConfiguration.PayPalOrderNumber] = order.Id;
+            payment.Properties[PayPalConfiguration.PayPalExpToken] = order.PurchaseUnits.First().Payments.Authorizations.First().Id; //needed for capture later on
+            payment.TransactionType = "Capture";
+
+            cart.GetFirstForm().Payments.Clear();
+
+            cart.AddPayment(payment);
+            _orderRepository.Save(cart);
+
+            return order;
         }
     }
 }

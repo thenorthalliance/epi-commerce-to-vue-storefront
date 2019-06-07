@@ -1,5 +1,4 @@
-﻿using System.IO;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using EPiServer.Vsf.ApiBridge.Authorization.Claims;
 using EPiServer.Vsf.ApiBridge.Authorization.Token;
