@@ -274,7 +274,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
                 PostalCode = shippingAddress.PostalCode
             };
 
-            var order = await _payPalService.CreateOrderAsync(request).ConfigureAwait(false);
+            var order = await _payPalService.CreateOrderAsync(request);
 
             _orderRepository.Save(cart);
 
@@ -295,7 +295,7 @@ namespace EPiServer.Reference.Commerce.VsfIntegration.Adapter
             var paymentMethodImplementation = _paymentMethods.Single(x => x.PaymentMethodId == paymentMethod.PaymentMethodId);
             var payment = paymentMethodImplementation.CreatePayment(cart.GetTotal().Amount, cart);
 
-            var order = await _payPalService.AuthorizeOrderAsync(request.OrderId).ConfigureAwait(false);
+            var order = await _payPalService.AuthorizeOrderAsync(request.OrderId);
 
             payment.Properties[PayPalConfiguration.PayPalOrderNumber] = order.Id;
             payment.Properties[PayPalConfiguration.PayPalExpToken] = order.PurchaseUnits.First().Payments.Authorizations.First().Id; //needed for capture later on

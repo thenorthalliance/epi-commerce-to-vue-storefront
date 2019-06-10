@@ -1,32 +1,29 @@
-﻿using BraintreeHttp;
-using EPiServer.Vsf.Core.Payments;
+﻿using EPiServer.Vsf.Core.Payments;
 using PayPalCheckoutSdk.Core;
 
 namespace EPiServer.Vsf.Core.Services
 {
     public class PayPalClient
     {
-        /**
-            Set up PayPal environment with sandbox credentials.
-            In production, use ProductionEnvironment.
-         */
-        public static PayPalEnvironment Environment()
-        {
-            var configuration = new PayPalConfiguration();
-            return new SandboxEnvironment(configuration.ClientId, configuration.Secret);
-        }
+        private static PayPalHttpClient _instance;
+        private static readonly object _lock = new object();
 
-        /**
-            Returns PayPalHttpClient instance to invoke PayPal APIs.
-         */
-        public static HttpClient Client()
+        public static PayPalHttpClient Instance
         {
-            return new PayPalHttpClient(Environment());
-        }
+            get
+            {
+                lock (_lock)
+                {
+                    if (_instance == null)
+                    {
+                        var configuration = new PayPalConfiguration();
+                        var environment = new SandboxEnvironment(configuration.ClientId, configuration.Secret);
+                        _instance = new PayPalHttpClient(environment);
+                    }
+                    return _instance;
+                }
+            }
 
-        public static HttpClient Client(string refreshToken)
-        {
-            return new PayPalHttpClient(Environment(), refreshToken);
         }
     }
 }

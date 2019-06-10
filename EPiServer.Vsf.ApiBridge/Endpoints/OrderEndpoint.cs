@@ -5,7 +5,6 @@ using EPiServer.Vsf.Core.ApiBridge.Adapter;
 using EPiServer.Vsf.Core.ApiBridge.Endpoint;
 using EPiServer.Vsf.Core.ApiBridge.Model;
 using EPiServer.Vsf.Core.ApiBridge.Model.Order;
-using EPiServer.Vsf.Core.ApiBridge.Model.Order.PayPal;
 using EPiServer.Vsf.Core.ApiBridge.Model.Order.PayPal.Responses;
 using EPiServer.Vsf.Core.Models.PayPal;
 using PayPalCaptureRequest = EPiServer.Vsf.Core.Models.PayPal.PayPalCaptureRequest;

@@ -350,6 +350,7 @@
     <Compile Include="Models\PayPal\PayPalTransaction.cs" />
     <Compile Include="Models\PayPal\PayPalTransactionDetails.cs" />
     <Compile Include="Payments\PayPalConfiguration.cs" />
+    <Compile Include="Services\PayPalHttpClient.cs" />
     <Compile Include="Payments\PayPalPayment.cs" />
     <Compile Include="Payments\PayPalPaymentGateway.cs" />
     <Compile Include="Payments\PayPalPaymentMethod.cs" />
@@ -541,6 +542,7 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Content Include="Payments\readme.txt" />
     <Content Include="Payments\VueStoreFront\src\themes\default-mw\assets\android-icon-144x144.png" />
     <Content Include="Payments\VueStoreFront\src\themes\default-mw\assets\android-icon-168x168.png" />
     <Content Include="Payments\VueStoreFront\src\themes\default-mw\assets\android-icon-192x192.png" />

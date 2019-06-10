@@ -45,8 +45,7 @@ namespace EPiServer.Vsf.Core.Services
 
             request.Prefer("return=representation");
             request.RequestBody(orderRequest);
-            var client = PayPalClient.Client(); //TODO: The client is crap, change
-            var response = await Task.Run(() => client.Execute(request)).ConfigureAwait(false); //TODO: The client is crap, change
+            var response = await PayPalClient.Instance.Execute(request);
             var payPalOrder = response.Result<Order>();
             var result = _mapper.Map<Models.PayPal.Orders.Order>(payPalOrder);
 
@@ -60,8 +59,7 @@ namespace EPiServer.Vsf.Core.Services
 
             request.Prefer("return=representation");
             request.RequestBody(new OrderActionRequest());
-            var client = PayPalClient.Client(); //TODO: The client is crap, change
-            var response = await Task.Run(() => client.Execute(request)).ConfigureAwait(false); //TODO: The client is crap, change
+            var response = await PayPalClient.Instance.Execute(request);
 
             var payPalOrder = response.Result<Order>();
             var result = _mapper.Map<Models.PayPal.Orders.Order>(payPalOrder);
@@ -73,8 +71,8 @@ namespace EPiServer.Vsf.Core.Services
         {
             var request = new AuthorizationsCaptureRequest(authorizationId);
             request.Prefer("return=representation");
-            request.RequestBody(new CaptureRequest()); //TODO: The client is crap, change
-            var response = await Task.Run(() => PayPalClient.Client().Execute(request)).ConfigureAwait(false); //TODO: The client is crap, change
+            request.RequestBody(new CaptureRequest());
+            var response = await PayPalClient.Instance.Execute(request);
 
             var payPalCapture = response.Result<PayPalCheckoutSdk.Payments.Capture>();
             var result = _mapper.Map<Models.PayPal.Payments.PayPalCapture>(payPalCapture);
