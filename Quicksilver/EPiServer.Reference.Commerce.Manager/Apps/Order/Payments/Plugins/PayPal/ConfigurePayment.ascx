@@ -73,8 +73,7 @@
               <td class="FormLabelCell"><asp:Literal ID="Literal9" runat="server" Text="Payment action" />:</td>
 	          <td class="FormFieldCell">
                   <asp:DropDownList ID="DropDownListPaymentAction" runat="server">
-                <asp:ListItem Text ="Authorization" Value ="Authorization" Selected ="True"></asp:ListItem>
-                   <asp:ListItem Text ="Capture" Value ="Capture" Selected ="True"></asp:ListItem>
+                     <asp:ListItem Text ="Authorization" Value ="Authorization" Selected ="True"></asp:ListItem>
                   </asp:DropDownList>
 	          </td>
         </tr>
