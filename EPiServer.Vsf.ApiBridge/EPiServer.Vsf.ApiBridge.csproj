@@ -331,7 +331,7 @@
     </ProjectReference>
     <ProjectReference Include="..\EPiServer.Vsf.DataExport\EPiServer.Vsf.DataExport.csproj">
       <Project>{07CAA40B-7D3F-43A9-88DC-3B5D7BC5C0A0}</Project>
-      <Name>DataMigration</Name>
+      <Name>EPiServer.Vsf.DataExport</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />
