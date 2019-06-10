@@ -540,7 +540,18 @@
   <ItemGroup>
     <None Include="Payments\PayPalPaymentMetaClass.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\hooks\beforeRegistration.ts" />
+    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\index.ts" />
+    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\store\actions.ts" />
+    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\store\getters.ts" />
+    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\store\index.ts" />
+    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\store\mutation-types.ts" />
+    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\store\mutations.ts" />
+    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\store\plugin.ts" />
+    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\store\state.ts" />
+    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\types\PaypalState.ts" />
+  </ItemGroup>
   <ItemGroup>
     <Content Include="Payments\readme.txt" />
     <Content Include="Payments\VueStoreFront\src\themes\default-mw\assets\android-icon-144x144.png" />
@@ -588,18 +599,6 @@
     <Content Include="Payments\VueStoreFront\src\themes\default-mw\templates\index.minimal.template.html" />
     <Content Include="Payments\VueStoreFront\src\themes\default-mw\templates\index.template.html" />
     <Content Include="Payments\VueStoreFront\src\themes\default-mw\webpack.config.js" />
-  </ItemGroup>
-  <ItemGroup>
-    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\hooks\beforeRegistration.ts" />
-    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\index.ts" />
-    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\store\actions.ts" />
-    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\store\getters.ts" />
-    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\store\index.ts" />
-    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\store\mutation-types.ts" />
-    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\store\mutations.ts" />
-    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\store\plugin.ts" />
-    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\store\state.ts" />
-    <TypeScriptCompile Include="Payments\VueStoreFront\src\modules\paypal\types\PaypalState.ts" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

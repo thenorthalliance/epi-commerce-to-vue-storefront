@@ -347,7 +347,6 @@
     <Content Include="Styles\Images\page_type.png" />
     <Content Include="Styles\Fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Styles\Images\favicon.ico" />
-    <Content Include="Styles\Images\PayPal-logo.jpg" />
     <Content Include="Styles\Images\sprite.png" />
     <Content Include="Scripts\js\Quicksilver.js" />
     <Content Include="Scripts\bootstrap.js" />
