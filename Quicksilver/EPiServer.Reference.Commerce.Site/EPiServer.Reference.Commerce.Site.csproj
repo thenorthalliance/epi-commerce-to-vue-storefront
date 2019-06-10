@@ -320,18 +320,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="lang\PayPalPayment_DA.xml" />
-    <Content Include="lang\PayPalPayment_DE.xml" />
-    <Content Include="lang\PayPalPayment_EN.xml" />
-    <Content Include="lang\PayPalPayment_ES.xml" />
-    <Content Include="lang\PayPalPayment_FI.xml" />
-    <Content Include="lang\PayPalPayment_FR.xml" />
-    <Content Include="lang\PayPalPayment_IT.xml" />
-    <Content Include="lang\PayPalPayment_JA.xml" />
-    <Content Include="lang\PayPalPayment_NL.xml" />
-    <Content Include="lang\PayPalPayment_NO.xml" />
-    <Content Include="lang\PayPalPayment_SV.xml" />
-    <Content Include="lang\PayPalPayment_ZH.xml" />
     <Content Include="lang\Quicksilver_SV.xml" />
     <Content Include="lang\Display_en.xml" />
     <Content Include="Scripts\jquery-1.11.1.js" />

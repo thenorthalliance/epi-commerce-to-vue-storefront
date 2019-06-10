@@ -10,7 +10,7 @@ src/themes
 
 https://github.com/DivanteLtd/vue-storefront/blob/master/docs/guide/core-themes/themes.md
 
-add to your local.config:
+add to your local.config (located in vue store frontend folder /config):
 
 "paypal": {
   "env": "sandbox",
