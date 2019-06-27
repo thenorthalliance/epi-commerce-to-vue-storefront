@@ -1,4 +1,7 @@
-# Vue Storefront & EPiServer Commerce connector
+# Vue Storefront for EPiServer Commerce 
+
+![Episervre Commerce](doc/diagrams/epivsf.png)
+
 This connector lets you set up an e-commerce website in no time. It allows you to seamlessly integrate the progressive web application (PWA) Vue Storefront with EPiServer Commerce. You can now combine the best of both worlds: the solid technological backbone of an e-commerce platform and the smooth user experience of a native application.
 The connector, developed by Making Waves, is a piece of open-source code that easily connects Vue Storefront and EPiServer Commerce to create one integrated e-commerce experience. 
 Features
