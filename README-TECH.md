@@ -5,7 +5,7 @@ This demo is based on the [Episerver Commerce Quicksilver sample site](https://g
 1. ApiBridge - implements web api required by VSF
 2. DataExporter - reading, converting and exporting data models from EpiServer to Elasticsearch (where it can be accessed by VSF)
 
-Although the example implementation in based on Quicksilver, both ApiBridge and DataExporter have ben developed with customization in mind. 
+Although the example implementation in based on Quicksilver, both ApiBridge and DataExporter have been developed with customization in mind. 
 
 ## Project setup
 1. Setup Quicksilver demo - [Quicksilver project](https://github.com/makingwaves/epi-commerce-to-vue-storefront/tree/master/Quicksilver)
