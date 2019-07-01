@@ -5,7 +5,7 @@ This demo is based on the [Episerver Commerce Quicksilver sample site](https://g
 1. ApiBridge - implements web api required by VSF
 2. DataExporter - reading, converting and exporting data models from EpiServer to Elasticsearch (where it can be accessed by VSF)
 
-Although the example implementation in based on Quicksilver, both ApiBridge and DataExporter have been developed with customization in mind. 
+Although the example implementation is based on Quicksilver, both ApiBridge and DataExporter have been developed with customization in mind. 
 
 ## Project setup
 1. Setup Quicksilver demo - [Quicksilver project](https://github.com/makingwaves/epi-commerce-to-vue-storefront/tree/master/Quicksilver)
@@ -123,8 +123,6 @@ Actual Demo projects:<br>
 <b>EPiServer.Vsf.DataExport</b> - implementation of exporting and model mapping algorithms <br>
 <b>EPiServer.Reference.Commerce.VsfIntegration</b> - quick silver customization. This project contains examples of custom model mappers (e.g. FashionProductMapper) and service adapters (e.g. QuickSilverUserAdapter).<br>
 
-![Project dependency diagram](./doc/diagrams/project_dependency.png)
-
 ## Todo/Known bugs
 
 1. <b>RefreshTokenRepository</b> - Currently there is only one class that implements <b>IRefreshTokenRepository</b> interface, and it is <b>MemoryRefreshTokenRepository</b>. 
@@ -195,12 +193,6 @@ More information about VSF authentication can be found
 
 <b>POST /vsbridge/order/create</b> - implemented (further testing needed)<br>
 
-## Overall class design
-
-![Cart](./doc/diagrams/cart.png)
-![Stock](./doc/diagrams/stock.png)
-![User](./doc/diagrams/user.png)
-
 # EPiServer.Vsf.DataExport
 
 This project provides support for exporting EPiServer Commerce models (mainly products, categories and variants) to Elasticsearch index, where it can consumed by VSF frontend app.
@@ -217,9 +209,6 @@ VSF is using model structure similar to Magento2, and it is assumed that the rea
     +-- Model - set of models suited for indexing in elasticsearch 
     +-- Utils
         +-- Epi
-
-## Overall class layout
-![data_export](./doc/diagrams/data_export.png)
 
 ## Important classes description
 <b>ContentExtractor</b> - is responsible for extracting data (nodes and products) from EpiServer Commerce. <b>ExtractedContentHandler</b> implements logic for handling that data (e.g. mapping to VSF model, indexing in Elasticsearch)<br>
