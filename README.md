@@ -66,7 +66,7 @@ Please [contact us](post-poland@makingwaves.com) to request a demo.
 ## About Making Waves
 
 <img src="https://github.com/makingwaves/epi-commerce-to-vue-storefront/blob/kaluckig-patch-1/doc/diagrams/MW_VSF_logos.jpg" align="right"
-     title="Making Waves Core Partner of Vue Storefront " width="200" >
+     title="Making Waves Core Partner of Vue Storefront " width="250" >
      
 [**Making Waves**](https://makingwaves.com) is a trusted technology partner that combines the skills and strengths of a creative software house, a digital agency and a content editing business.
 
