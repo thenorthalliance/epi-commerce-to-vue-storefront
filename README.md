@@ -65,6 +65,9 @@ Please [contact us](post-poland@makingwaves.com) to request a demo.
 
 ## About Making Waves
 
+<img src="https://ai.github.io/size-limit/logo.svg" align="right"
+     title="Size Limit logo by Anton Lovchikov" width="120" height="178">
+     
 ![Making Waves Core Partner](doc/diagrams/MW_VSF_logos.jpg)
 
 [**Making Waves**](https://makingwaves.com) is a trusted technology partner that combines the skills and strengths of a creative software house, a digital agency and a content editing business.
