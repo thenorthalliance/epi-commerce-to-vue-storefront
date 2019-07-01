@@ -6,12 +6,18 @@ Vue Storefront is one of the most complete PWAs (Progressive Web Applications) f
 
 This project allows you to seamlessly integrate the Vue Storefront with EPiServer Commerce. You can now combine the best of both worlds: the solid technological backbone of an e-commerce platform and the smooth user experience of a native application. The connector developed by Making Waves, is a piece of open-source code that easily connects Vue Storefront and EPiServer Commerce to create one integrated e-commerce experience.
 ### Features
-At Making Waves we developed, tested and optimised different e-commerce platform functionalities that offer smooth integration and a minimal R&D cost. Some of those functionalities include:
+We have integrated VSF and Episerver to create solid baseline for mobile e-commerce platform and have included the following set of features: 
 -	Registration and login
--	Search function and product catalogue
--	Order placing and history 
--	Shopping cart and checkout process
--	Coupon and discount functionalities
+-   Registration and login
+-   Product list, browsing products
+-   Product details
+-   Products comparison
+-   Shopping cart and checkout process
+-   Order placing and history
+-   Payments (eg.: PayPal)
+-   Search function and product catalogue
+-   Coupon and discount functionalities
+
 
 ## Benefits
 ![VueStorefront for Episerver Commerce ](doc/diagrams/VSF_Epi_baner2.jpg)
