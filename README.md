@@ -65,8 +65,8 @@ Please [contact us](post-poland@makingwaves.com) to request a demo.
 
 ## About Making Waves
 
-<img src="https://ai.github.io/size-limit/logo.svg" align="right"
-     title="Size Limit logo by Anton Lovchikov" width="120" height="178">
+<img src="https://github.com/makingwaves/epi-commerce-to-vue-storefront/blob/kaluckig-patch-1/doc/diagrams/MW_VSF_logos.jpg" align="right"
+     title="Making Waves Core Partner of Vue Storefront " width="200" >
      
 ![Making Waves Core Partner](doc/diagrams/MW_VSF_logos.jpg)
 
