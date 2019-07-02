@@ -63,23 +63,21 @@ When the job has finished, refresh VSF application to verify that all the produc
 
 ## See it in action
 
-<table style="border:0">
-  <tbody>
-    <tr>
-      <td align="center" valign="middle">
+<div style="display:block; position:relative;">
+    <div style="width:50%">
         <a href="mailto:grzegorz.kalucki@makingwaves.com">
-            <img src="doc/diagrams/Request_demo.jpg" style="float: left; clear:both; width=50% " title="Request a demo " />
+            <img src="doc/diagrams/Request_demo.jpg" style="float: left; clear:both; " title="Request a demo " align="left" />
         </a>
-      </td>
-      <td align="left" valign="top">
-      Are you interested in learning more about Vue Storefront & EpiServer Commerce intergation or testing our demo site? 
-      <br/><br/>
+    </div>
+    <div>
+    <div style="vertical-align:middle">
+        <br/><br/>
+        Are you interested in learning more about Vue Storefront & EpiServer Commerce intergation or testing our demo site? 
+        <br/><br/>
         <a href="mailto:grzegorz.kalucki@makingwaves.com">Contact us</a> and we'll be more than happy to have an online call to tell you more details or present our demo solution with all featres available.
-      </td>
-    </tr>
-  </tbody>
-</table>
-
+    </div>
+</div>
+<div style="display:block; clear:both;"></div>
 
 ## About Making Waves
 
