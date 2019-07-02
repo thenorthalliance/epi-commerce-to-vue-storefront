@@ -63,21 +63,22 @@ When the job has finished, refresh VSF application to verify that all the produc
 
 ## See it in action
 
-<div style="display:block; position:relative;">
-    <div style="width:50%">
+<table style="border:0">
+  <tbody>
+    <tr>
+      <td align="center" valign="middle">
         <a href="mailto:grzegorz.kalucki@makingwaves.com">
-            <img src="doc/diagrams/Request_demo.jpg" style="float: left; clear:both; " title="Request a demo " align="left" />
+            <img src="doc/diagrams/Request_demo.jpg" style="float: left; clear:both; width=50% " title="Request a demo " />
         </a>
-    </div>
-    <div>
-    <div style="vertical-align:middle">
-        <br/><br/>
-        Are you interested in learning more about Vue Storefront & EpiServer Commerce intergation or testing our demo site? 
-        <br/><br/>
+      </td>
+      <td align="left" valign="top">
+      Are you interested in learning more about Vue Storefront & EpiServer Commerce intergation or testing our demo site? 
+      <br/><br/>
         <a href="mailto:grzegorz.kalucki@makingwaves.com">Contact us</a> and we'll be more than happy to have an online call to tell you more details or present our demo solution with all featres available.
-    </div>
-</div>
-<div style="display:block; clear:both;"></div>
+      </td>
+    </tr>
+  </tbody>
+</table>
 
 ## About Making Waves
 
@@ -89,5 +90,5 @@ We create digital consumer products and platforms with a strong emphasis on desi
 
 The Krakow office of [**Making Waves**](https://makingwaves.com) specialises in multichannel ecosystems for e-commerce. We are a Core Partner of Vue Storefront.
  
-If you have any questions, don’t hesitate to [contact us](post-poland@makingwaves.com)
+If you have any questions, don’t hesitate to [contact us](mailto:grzegorz.kalucki@makingwaves.com)
 
