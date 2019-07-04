@@ -32,7 +32,7 @@ Setting up your e-commerce platform with the connector of Making Waves has a num
 
 
 ## How to start?
-This project is based on the [Episerver Commerce Quicksilver sample e-comerce site](https://github.com/episerver/Quicksilver).
+This project is based on the [Episerver Commerce Quicksilver sample e-commerce site](https://github.com/episerver/Quicksilver).
 
 In order to run this demo you'll have to install and run the following components:
 1. Install Vue Storefront depending on your development environment: [Windows Installation](https://docs.vuestorefront.io/guide/installation/windows.html) or [Linux Installation](https://docs.vuestorefront.io/guide/installation/linux-mac.html)
@@ -44,9 +44,9 @@ In order to run this demo you'll have to install and run the following component
 
 ![Episerver Commerce](doc/diagrams/VSF_Epi_architecture_overview.jpg)
 
-Vue Storefront integration pattern always consist two parts:
+Vue Storefront integration pattern always consists of two parts:
 
-1. **ApiBridge** - implements web api required by VSF
+1. **ApiBridge** - implements API required by VSF
 2. **DataExporter** - reading, converting and exporting data models from EpiServer to Elasticsearch (where it can be accessed by VSF)
 
 
