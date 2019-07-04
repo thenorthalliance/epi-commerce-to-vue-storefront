@@ -81,7 +81,7 @@ When the job has finished, refresh the VSF application to verify that all the pr
 
 ## About Making Waves
 
-<img src="doc/diagrams/MW_VSF_logos.jpg" style="float:right;" title="Making Waves Core Partner of Vue Storefront " width="50%" >
+<img src="doc/diagrams/MW_VSF_logos.jpg" align="right" title="Making Waves Core Partner of Vue Storefront " width="50%" >
      
 [**Making Waves**](https://makingwaves.com) is a trusted technology partner that combines the skills and strengths of a creative software house, a digital agency and a content editing business.
 
